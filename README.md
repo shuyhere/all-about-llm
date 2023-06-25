@@ -1,5 +1,63 @@
 # all-about-llm
 大语言模型训练和服务调研
+## 目录
+
+- [all-about-llm](#all-about-llm)
+  - [目录](#目录)
+  - [LLM](#llm)
+    - [1. 百川大模型](#1-百川大模型)
+      - [概述](#概述)
+      - [数据](#数据)
+      - [模型结构](#模型结构)
+      - [训练算力](#训练算力)
+      - [模型推理](#模型推理)
+    - [2. Aquila 悟道天鹰系列商用开源模型](#2-aquila-悟道天鹰系列商用开源模型)
+      - [概述](#概述-1)
+      - [模型下载](#模型下载)
+    - [3. Chinese-Vicuna: A Chinese Instruction-following LLaMA-based Model —— 一个中文低资源的llama+lora方案](#3-chinese-vicuna-a-chinese-instruction-following-llama-based-model--一个中文低资源的llamalora方案)
+      - [概述](#概述-2)
+      - [数据](#数据-1)
+      - [模型](#模型)
+      - [4.  Chinese-LLaMA-Alpaca 开源中文LLaMA模型和指令精调的Alpaca大模型](#4--chinese-llama-alpaca-开源中文llama模型和指令精调的alpaca大模型)
+      - [概述](#概述-3)
+      - [模型](#模型-1)
+      - [量化推理和部署](#量化推理和部署)
+      - [数据](#数据-2)
+    - [5.  BELLE: Be Everyone's Large Language Model Engine](#5--belle-be-everyones-large-language-model-engine)
+    - [6.Tigerbot](#6tigerbot)
+      - [概述](#概述-4)
+      - [数据](#数据-3)
+      - [模型下载](#模型下载-1)
+    - [7. Fastchat](#7-fastchat)
+    - [8. Vicuna](#8-vicuna)
+      - [概述](#概述-5)
+      - [数据](#数据-4)
+      - [训练过程](#训练过程)
+    - [模型](#模型-2)
+    - [9. Koala: A Dialogue Model for Academic Research 考拉对话模型](#9-koala-a-dialogue-model-for-academic-research-考拉对话模型)
+    - [10.Firefly（流萤）: 中文对话式大语言模型](#10firefly流萤-中文对话式大语言模型)
+    - [11. Stanford Alpaca: An Instruction-following LLaMA Model](#11-stanford-alpaca-an-instruction-following-llama-model)
+    - [12. GPT4all](#12-gpt4all)
+  - [多模态 Model \& 多模态任务实现方案](#多模态-model--多模态任务实现方案)
+      - [1. I-JEPA (the Image-based Joint-Embedding Predictive Architecture)](#1-i-jepa-the-image-based-joint-embedding-predictive-architecture)
+    - [2. Video-LLaMA: An Instruction-tuned Audio-Visual Language Model for Video Understanding](#2-video-llama-an-instruction-tuned-audio-visual-language-model-for-video-understanding)
+    - [3. MM-React](#3-mm-react)
+    - [4. Chameleon: Plug-and-Play Compositional Reasoning with Large Language Models](#4-chameleon-plug-and-play-compositional-reasoning-with-large-language-models)
+  - [大模型有关项目实现 工具\&参考项目](#大模型有关项目实现-工具参考项目)
+    - [优化方向](#优化方向)
+    - [数据准备](#数据准备)
+    - [数据处理](#数据处理)
+    - [模型下载\&转换，训练\&微调](#模型下载转换训练微调)
+    - [模型量化推理和部署](#模型量化推理和部署)
+    - [框架](#框架)
+    - [效果评估](#效果评估)
+    - [常见bug解决](#常见bug解决)
+  - [参考资料](#参考资料)
+    - [Paper](#paper)
+    - [工具网址](#工具网址)
+    - [一些值得关注的issues](#一些值得关注的issues)
+    - [LLM成长路线图](#llm成长路线图)
+
 ## LLM
 ### 1. [百川大模型](https://github.com/baichuan-inc/baichuan-7B)
 	
@@ -16,7 +74,7 @@
 
 ####  概述
 
-基于Transformer结构，在大约1.2万亿tokens上训练的70亿参数模型，支持中英双语，上下文窗口长度为**4096**
+基于Transformer结构，在大约1.2万亿tokens上训练的70亿参数模型，支持中英双语，上下文窗口长度为**4096**P
 
 **针对chat的微调方案（非官方）**：
 - MedicalGPT：https://github.com/shibing624/MedicalGPT/blob/main/README.md
@@ -395,39 +453,53 @@ https://arxiv.org/abs/2306.02858
 3. 优化 LLM 模型，使得给定提问相同情况下，得到更理想的推理/回答结果。
 
 ### 数据准备
-- 分词工具 GitHub - google/sentencepiece: Unsupervised text tokenizer for Neural Network-based text generation. 在chinese-llama&aplace项目中用于词表扩充
-- 网站爬虫工具 https://apify.com/apify/website-content-crawler
-- PDF等文本解析组件：
-  1、PDFminer
-  PDFMiner是一个Python的PDF解析器，可以从PDF文档中提取信息。与其他PDF相关的工具不同，它侧重的是获取和分析文本数据。PDFMiner允许获取某一页中文本的准确位置和一些诸如字体、行数的信息。它包括一个PDF转换器，可以把PDF文件转换成HTML等格式。还有一个扩展的PDF解析器，可以用于除文本分析以外的其他用途。
-  PDFMiner内置两个工具：pdf2txt.py和dumppdf.py：
-  pdf2txt.py从PDF文件中提取所有文本内容。但不能识别画成图片的文本，这需要特征识别。对于加密的PDF你需要提供一个密码才能解析，对于没有提取权限的PDF文档你得不到任何文本。
-  地址：https://pdfminersix.readthedocs.io
-  2、pdfplumber
-  pdfplumber库按页处理 pdf ，获取页面文字，提取表格等操作。
-  地址：https://github.com/jsvine/pdfplumber
-  3、pypdf2
-  PyPDF2是一个纯Python PDF库，可以读取文档信息（标题，作者等）、写入、分割、合并PDF文档，它还可以对pdf文档进行添加水印、加密解密等。
-  地址：https://pythonhosted.org/PyPDF2
-  4、pymupdf
-  PyMuPDF是支持MuPDF的Python绑定。
-  使用PyMuPDF，可以访问扩展名为“.pdf”、“.xps”、“.oxps”、“.cbz”、“.fb2”或“.epub”。此外，大约10种流行的图像格式也可以像文档一样处理:“.png”，“.jpg”，“.bmp”，“.tiff”等。
-  地址：https://pypi.org/project/PyMuPDF/
-  5、ppstructure
-  PP-StructureV2支持对图片/pdf形式的文档进行版面分析，可以划分文字、标题、表格、图片、公式等区域；支持通用的中英文表格检测任务；支持表格区域进行结构化识别，最终结果输出Excel文件；
-  PP-Structure是PaddleOCR团队自研的智能文档分析系统，旨在帮助开发者更好的完成版面分析、表格识别等文档理解相关任务。
-  版面分析任务中，图像首先经过版面分析模型，将图像划分为文本、表格、图像等不同区域，随后对这些区域分别进行识别，如，将表格区域送入表格识别模块进行结构化识别，将文本区域送入OCR引擎进行文字识别，最后使用版面恢复模块将其恢复为与原始图像布局一致的word或者pdf格式的文件。
-  地址：https://github.com/PaddlePaddle/PaddleOCR/blob/dygraph/ppstructure
+- **分词工具**
+  1. [SentencePiece](https://github.com/google/sentencepiece)  
+  在chinese-llama&aplace项目中用于词表扩充
+- **网站爬虫工具** https://apify.com/apify/website-content-crawler
+- **PDF等文本解析组件**：
+  1. PDFminer 项目地址：https://pdfminersix.readthedocs.io
+
+      （比较古老效率比较低，但是有很多示例，推荐指数：🌟）
+
+      PDFMiner是一个Python的PDF解析器，可以从PDF文档中提取信息。与其他PDF相关的工具不同，它侧重的是获取和分析文本数据。PDFMiner允许获取某一页中文本的准确位置和一些诸如字体、行数的信息。它包括一个PDF转换器，可以把PDF文件转换成HTML等格式。还有一个扩展的PDF解析器，可以用于除文本分析以外的其他用途。
+
+      PDFMiner内置两个工具：pdf2txt.py和dumppdf.py：
+      pdf2txt.py从PDF文件中提取所有文本内容。但不能识别画成图片的文本，这需要特征识别。
+  
+  2. pdfplumber 项目地址：https://github.com/jsvine/pdfplumber
+  
+      pdfplumber库按页处理 pdf ，获取页面文字，提取表格等操作。
+  
+  3. pypdf2 项目地址：https://pythonhosted.org/PyPDF2
+  
+      PyPDF2是一个纯Python PDF库，可以读取文档信息（标题，作者等）、写入、分割、合并PDF文档，它还可以对pdf文档进行添加水印、加密解密等。
+  
+  4. pymupdf 项目地址：https://pypi.org/project/PyMuPDF/
+  
+      使用PyMuPDF，可以访问扩展名为“.pdf”、“.xps”、“.oxps”、“.cbz”、“.fb2”或“.epub”。此外，大约10种流行的图像格式也可以像文档一样处理:“.png”，“.jpg”，“.bmp”，“.tiff”等。
+  
+  5. ppstructure 项目地址：https://github.com/PaddlePaddle/PaddleOCR/blob/dygraph/ppstructure
+  
+      PP-StructureV2支持对图片/pdf形式的文档进行版面分析，可以划分文字、标题、表格、图片、公式等区域；支持通用的中英文表格检测任务；支持表格区域进行结构化识别，最终结果输出Excel文件；
+      
+      PP-Structure是PaddleOCR团队自研的智能文档分析系统，旨在帮助开发者更好的完成版面分析、表格识别等文档理解相关任务。
+      版面分析任务中，图像首先经过版面分析模型，将图像划分为文本、表格、图像等不同区域，随后对这些区域分别进行识别，如，将表格区域送入表格识别模块进行结构化识别，将文本区域送入OCR引擎进行文字识别，最后使用版面恢复模块将其恢复为与原始图像布局一致的word或者pdf格式的文件。
+
 
 - 文本向量化组件
-  1、text2vec
-  实现了Word2Vec、RankBM25、BERT、Sentence-BERT、CoSENT等多种文本表征、文本相似度计算模型，并在文本语义匹配（相似度计算）任务上比较了各模型的效果。
-  地址：https://github.com/shibing624/text2vec
-     2、SGPT
-  SGPT：GPT Sentence Embeddings for Semantic Search，是一个使用GPT架构生成embedding的方法，与BERT模式不同。
-  地址：https://arxiv.org/abs/2202.08904
-   3、M3E
-  Moka Massive Mixed Embedding的缩写，由MokaAI训练，训练脚本使用 uniem，评测BenchMark使用MTEB-zh，通过千万级 (2200w+) 的中文句对数据集进行训练。
+  1. text2vec 地址：https://github.com/shibing624/text2vec
+   
+      实现了Word2Vec、RankBM25、BERT、Sentence-BERT、CoSENT等多种文本表征、文本相似度计算模型，并在文本语义匹配（相似度计算）任务上比较了各模型的效果。
+
+
+  2. SGPT 地址：https://arxiv.org/abs/2202.08904
+   
+      SGPT：GPT Sentence Embeddings for Semantic Search，是一个使用GPT架构生成embedding的方法，与BERT模式不同。
+      
+  3. M3E
+   
+        Moka Massive Mixed Embedding的缩写，由MokaAI训练，训练脚本使用 uniem，评测BenchMark使用MTEB-zh，通过千万级 (2200w+) 的中文句对数据集进行训练。
 
 
 ### 数据处理
@@ -451,6 +523,16 @@ https://arxiv.org/abs/2306.02858
 - Deepseed
 
 ### 模型量化推理和部署
+
+- 大模型高效推理与服务库vllm ：推理内存友好，高吞吐量 引入了PagedAttention
+  
+    fschat+vllm 例子 ：https://github.com/lm-sys/FastChat/blob/main/fastchat/serve/vllm_worker.py
+
+    post：https://vllm.ai/
+
+    git：https://github.com/vllm-project/vllm
+
+    文档：https://vllm.readthedocs.io/en/latest/getting_started/installation.html
 
 - 模型量化 https://github.com/qwopqwop200/GPTQ-for-LLaMa
 - Chinese-Llama-Aplace项目整理   具体内容请参考本项目 >>> 📚 https://github.com/ymcui/Chinese-LLaMA-Alpaca/wiki/%E6%A8%A1%E5%9E%8B%E6%8E%A8%E7%90%86%E4%B8%8E%E9%83%A8%E7%BD%B2
@@ -495,7 +577,9 @@ https://arxiv.org/abs/2306.02858
 ### 一些值得关注的issues
 - Retrieval-Augmented Generation 检错增强技术 
 RAG——使用检索增强生成构建特定行业的大型语言模型
-- 是否要进行词表扩充  [常见问题](https://github.com/ymcui/Chinese-LLaMA-Alpaca/wiki/%E5%B8%B8%E8%A7%81%E9%97%AE%E9%A2%98#%E9%97%AE%E9%A2%984%E4%B8%BA%E4%BB%80%E4%B9%88%E8%A6%81%E6%89%A9%E5%85%85%E8%AF%8D%E8%A1%A8%E7%9B%B4%E6%8E%A5%E5%9C%A8%E5%8E%9F%E7%89%88llama%E4%B8%8A%E7%94%A8%E4%B8%AD%E6%96%87%E9%A2%84%E8%AE%AD%E7%BB%83%E4%B8%8D%E8%A1%8C%E5%90%97)
+- 是否要进行词表扩充  
+  
+  [常见问题](https://github.com/ymcui/Chinese-LLaMA-Alpaca/wiki/%E5%B8%B8%E8%A7%81%E9%97%AE%E9%A2%98#%E9%97%AE%E9%A2%984%E4%B8%BA%E4%BB%80%E4%B9%88%E8%A6%81%E6%89%A9%E5%85%85%E8%AF%8D%E8%A1%A8%E7%9B%B4%E6%8E%A5%E5%9C%A8%E5%8E%9F%E7%89%88llama%E4%B8%8A%E7%94%A8%E4%B8%AD%E6%96%87%E9%A2%84%E8%AE%AD%E7%BB%83%E4%B8%8D%E8%A1%8C%E5%90%97)
 “LLaMA词表中仅包含很少的中文字符，所以在切词时会把中文切地更碎，需要多个byte token才能拼成一个完整的汉字，进而导致信息密度降低。比如，在扩展词表后的模型中，单个汉字倾向于被切成1个token，而在原版LLaMA中可能就需要2-3个才能组合成一个汉字，显著降低编解码的效率。”  （这可能就是在用vicuna的时候虽然是2048tokns但是实际用起来上下文很短的原因）
 
 - “垂直领域的数据量过大会导致模型失去泛用能力，甚至失去语言能力，即说人话的能力”：https://github.com/Facico/Chinese-Vicuna/issues/68
