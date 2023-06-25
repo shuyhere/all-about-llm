@@ -38,11 +38,14 @@
     - [10.Firefly（流萤）: 中文对话式大语言模型](#10firefly流萤-中文对话式大语言模型)
     - [11. Stanford Alpaca: An Instruction-following LLaMA Model](#11-stanford-alpaca-an-instruction-following-llama-model)
     - [12. GPT4all](#12-gpt4all)
+    - [13. WizardLM: An Instruction-following LLM Using Evol-Instruct](#13-wizardlm-an-instruction-following-llm-using-evol-instruct)
+    - [14. 文心千帆大模型平台](#14-文心千帆大模型平台)
   - [多模态 Model \& 多模态任务实现方案](#多模态-model--多模态任务实现方案)
-      - [1. I-JEPA (the Image-based Joint-Embedding Predictive Architecture)](#1-i-jepa-the-image-based-joint-embedding-predictive-architecture)
+    - [1. I-JEPA (the Image-based Joint-Embedding Predictive Architecture)](#1-i-jepa-the-image-based-joint-embedding-predictive-architecture)
     - [2. Video-LLaMA: An Instruction-tuned Audio-Visual Language Model for Video Understanding](#2-video-llama-an-instruction-tuned-audio-visual-language-model-for-video-understanding)
     - [3. MM-React](#3-mm-react)
     - [4. Chameleon: Plug-and-Play Compositional Reasoning with Large Language Models](#4-chameleon-plug-and-play-compositional-reasoning-with-large-language-models)
+    - [5. Brain-inspired multimodal hybrid neural network for robot place recognition](#5-brain-inspired-multimodal-hybrid-neural-network-for-robot-place-recognition)
   - [大模型有关项目实现 工具\&参考项目](#大模型有关项目实现-工具参考项目)
     - [优化方向](#优化方向)
     - [数据准备](#数据准备)
@@ -53,7 +56,7 @@
     - [效果评估](#效果评估)
     - [常见bug解决](#常见bug解决)
   - [参考资料](#参考资料)
-    - [Paper](#paper)
+    - [Paper\&Blog](#paperblog)
     - [工具网址](#工具网址)
     - [一些值得关注的issues](#一些值得关注的issues)
     - [LLM成长路线图](#llm成长路线图)
@@ -430,8 +433,12 @@ https://huggingface.co/datasets/YeungNLP/firefly-train-1.1M
 
 ### 12. [GPT4all](https://github.com/nomic-ai/gpt4all)
 
+### 13. [WizardLM: An Instruction-following LLM Using Evol-Instruct](https://github.com/nlpxucan/WizardLM)
+
+### 14. [文心千帆大模型平台](https://login.bce.baidu.com/?account=&redirect=http%3A%2F%2Fconsole.bce.baidu.com%2Fai%2F%3F_%3D1687657920924#/ai/wenxinworkshop/create/home)
+
 ## 多模态 Model & 多模态任务实现方案
-#### 1. [I-JEPA (the Image-based Joint-Embedding Predictive Architecture)](https://arxiv.org/pdf/2301.08243.pdf)
+### 1. [I-JEPA (the Image-based Joint-Embedding Predictive Architecture)](https://arxiv.org/pdf/2301.08243.pdf)
 meta开源
 首个世界背景知识学习模型 
 图像补全任务 https://github.com/facebookresearch/ijepa
@@ -443,6 +450,9 @@ https://arxiv.org/abs/2306.02858
 
 ### 4. Chameleon: Plug-and-Play Compositional Reasoning with Large Language Models
 
+### 5. Brain-inspired multimodal hybrid neural network for robot place recognition
+
+  大脑启发的多模态混合神经网络，用于机器人位置识别 (🐎着可能以后有用)
 
 
 ## 大模型有关项目实现 工具&参考项目
@@ -556,6 +566,7 @@ https://arxiv.org/abs/2306.02858
   
 
 ### 效果评估
+* [Evaluating instruction following on more user-oriented data](https://github.com/tatsu-lab/alpaca_farm/) :AlpacaFarm是一个模拟沙盒，能够快速、廉价地对从人类反馈中学习的方法进行实验。它用API LLMs模拟人类反馈，提供一个经过验证的评估协议，并提供一套参考方法的实现。研究人员可以快速迭代模型开发，并将他们的方法转移到人类数据上进行训练，以最大限度地提高性能。
 * Evaluating instruction following on more user-oriented data
 * C-Eval: A Multi-Level Multi-Discipline Chinese Evaluation Suite for Foundation Models  
 
@@ -567,12 +578,14 @@ https://arxiv.org/abs/2306.02858
 
 ## 参考资料
 
-### Paper
+### Paper&Blog
 - A Survey of Large Language Models
 - Transformer models: an introduction and catalog — 2023 Edition
+- [LLM Learning Lab](https://lightning.ai/pages/llm-learning-lab/)
 
 ### 工具网址
 - https://civitai.com/
+- - 提供需求生成代码仓库 https://github.com/AntonOsika/gpt-engineer
   
 ### 一些值得关注的issues
 - Retrieval-Augmented Generation 检错增强技术 
