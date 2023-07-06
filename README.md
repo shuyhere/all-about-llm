@@ -18,7 +18,7 @@
       - [概述](#概述-2)
       - [数据](#数据-1)
       - [模型](#模型)
-      - [4.  Chinese-LLaMA-Alpaca 开源中文LLaMA模型和指令精调的Alpaca大模型](#4--chinese-llama-alpaca-开源中文llama模型和指令精调的alpaca大模型)
+    - [4.  Chinese-LLaMA-Alpaca 开源中文LLaMA模型和指令精调的Alpaca大模型](#4--chinese-llama-alpaca-开源中文llama模型和指令精调的alpaca大模型)
       - [概述](#概述-3)
       - [模型](#模型-1)
       - [量化推理和部署](#量化推理和部署)
@@ -33,7 +33,7 @@
       - [概述](#概述-5)
       - [数据](#数据-4)
       - [训练过程](#训练过程)
-    - [模型](#模型-2)
+      - [模型](#模型-2)
     - [9. Koala: A Dialogue Model for Academic Research 考拉对话模型](#9-koala-a-dialogue-model-for-academic-research-考拉对话模型)
     - [10.Firefly（流萤）: 中文对话式大语言模型](#10firefly流萤-中文对话式大语言模型)
     - [11. Stanford Alpaca: An Instruction-following LLaMA Model](#11-stanford-alpaca-an-instruction-following-llama-model)
@@ -53,13 +53,42 @@
     - [模型下载\&转换，训练\&微调](#模型下载转换训练微调)
     - [模型量化推理和部署](#模型量化推理和部署)
     - [框架](#框架)
+    - [大模型如何使用外部工具](#大模型如何使用外部工具)
+      - [TALM: tool augmented language models](#talm-tool-augmented-language-models)
+      - [PAL: Program-aided Language Models](#pal-program-aided-language-models)
+      - [Atlas: Few-shot Learning with Retrieval Augmented Language Models](#atlas-few-shot-learning-with-retrieval-augmented-language-models)
+      - [Toolformer: Language Models Can Teach Themselves to Use Tools](#toolformer-language-models-can-teach-themselves-to-use-tools)
+      - [ART: Automatic multi-step reasoning and tool-use for large language models](#art-automatic-multi-step-reasoning-and-tool-use-for-large-language-models)
+      - [ReAct: Synergizing Reasoning and Acting in Language Models](#react-synergizing-reasoning-and-acting-in-language-models)
+      - [CRITIC: Large Language Models Can Self-Correct with Tool-Interactive Critiquing](#critic-large-language-models-can-self-correct-with-tool-interactive-critiquing)
+      - [Making Language Models Better Tool Learners with Execution Feedback](#making-language-models-better-tool-learners-with-execution-feedback)
     - [效果评估](#效果评估)
     - [常见bug解决](#常见bug解决)
   - [参考资料](#参考资料)
-    - [Paper\&Blog](#paperblog)
+    - [Paper\&Post](#paperpost)
     - [工具网址](#工具网址)
+    - [项目整合](#项目整合)
     - [一些值得关注的issues](#一些值得关注的issues)
     - [LLM成长路线图](#llm成长路线图)
+    - [LLM术语](#llm术语)
+      - [Adapter](#adapter)
+      - [Alpaca](#alpaca)
+      - [Attention](#attention)
+      - [Cosine Similarity](#cosine-similarity)
+      - [Embedding](#embedding)
+      - [GPTQ](#gptq)
+      - [Instruction Tuning](#instruction-tuning)
+      - [LoRA](#lora)
+      - [Prefix tuning https://arxiv.org/abs/2101.00190](#prefix-tuning-httpsarxivorgabs210100190)
+      - [Prompt Tuning](#prompt-tuning)
+      - [QLoRA](#qlora)
+      - [RLHF](#rlhf)
+      - [Self-instruction](#self-instruction)
+      - [semantic search](#semantic-search)
+      - [Tokenization](#tokenization)
+      - [Topic Modeling](#topic-modeling)
+      - [Transformer](#transformer)
+  - [Reference](#reference)
 
 ## LLM
 ### 1. [百川大模型](https://github.com/baichuan-inc/baichuan-7B)
@@ -71,6 +100,7 @@
 注意仓库中的评测结果是基于sft和RLHF 但是目前开源的model是pretrain版本	
 
 预训练模型续写的句子有比较大的问题（可能来自于语料问题？）
+
 {'text': '今天天气是真的有点热,我走在街上的时候,发现了很多人的脸上泛了红色的......\n我走在街上的时候,发现了很多人的脸上泛了红色的,我问老爸:为什么现在有这么多人的脸上都长了斑呢?老爸说:因为天气太热了,脸上没有汗水的滋润,皮肤没有光泽了。你别问了,我现在正在去开会的地方的路上。'}
 
 **7b预计在A100占用显存 ：27689MB  ； 4090占用显存23.6G 推理速度很慢**
@@ -103,14 +133,15 @@ https://github.com/hiyouga/LLaMA-Efficient-Tuning
 | Vocab Size    | 64,000       | 32,000 | 65,024 | 50,254  | 130,344 | 106,029         |
 
 #### 数据
-![数据处理流程][def2]
+![数据处理流程][./figure/image.png]
 
 #### 模型结构
 整体模型基于标准的 Transformer 结构，采用了和 LLaMA 一样的模型设计
-![模型结构][def]
+![模型结构][figure/image0.png]
 - **位置编码** rotary-embedding 是现阶段被大多模型采用的位置编码方案，具有更好的外延效果。虽然训练过程中最大长度为4096，但是实际测试中模型可以很好的扩展到 5000 tokens 上，如下图：
-  ![Alt text][def3]
+  ![Alt text][figure/image1.png]
 - **具体参数**
+
 	| **Hyperparameter** | **Value**  |
 	|--------------------|------------|
 	| n_parameters       | 7000559616 |
@@ -121,19 +152,18 @@ https://github.com/hiyouga/LLaMA-Efficient-Tuning
 	| sequence length    | 4096       |
 
 
-  
-
 - 激活层：SwiGLU, Feedforward 变化为(8/3)倍的隐含层大小，即11008
 - Layer-Normalization: 基于 RMSNorm 的 Pre-Normalization
 #### 训练算力
 千卡A800机器上达到了7B模型182Tflops的吞吐，GPU峰值算力利用率高达58.3% 。训练稳定性和吞吐
 #### 模型推理
+
 [huggingface](https://huggingface.co/baichuan-inc/baichuan-7B)
 
 
 ### 2. [Aquila 悟道天鹰系列商用开源模型](https://github.com/FlagAI-Open/FlagAI/blob/master/examples/Aquila/README.md)
 
-发布团队：智源社区
+**发布团队**：智源社区
 要用flagAI框架（这个框架源码&依赖的兼容性还有一些错误）
 关注issue：https://github.com/FlagAI-Open/FlagAI/issues/334
 这个问题官方正在修复
@@ -144,6 +174,7 @@ Aquila语言大模型在技术上继承了GPT-3、LLaMA等的架构设计优点�
 **最低硬件需求**： **运行Aquila-7B系列需要内存30G, 显存18G，生成最大长度 2048 tokens。**
 
 Aquila模型所采用的tokenizer是由从头开始训练的，支持中英双语。我们在处理英文、中文以及代码数据时，采用了不同的分词器对一万个样本进行了抽取。Aquila tokenizer与其他tokenizer的参数对比见下表:
+
 | **模型/Model** | **词表大小/Vocab size** | **说明/Note** | **英文平均tokens量/Avg tokens \(English \)** | **中文平均tokens量/Avg tokens \(Chinesse \)** | **代码平均tokens量/Avg tokens \(code\)** |
 |--------------|---------------------|-------------|---------------------------------------|----------------------------------------|------------------------------------|
 | GPT2         | 50527               | bpe         | 1717                                  | 1764                                   | 2323                               |
@@ -155,7 +186,6 @@ Aquila模型所采用的tokenizer是由从头开始训练的，支持中英双�
 -  FlagOpen 模型仓库下载 https://model.baai.ac.cn/models
 
 其他信息等待六月底官方技术报告
-
 
 
 ### 3. [Chinese-Vicuna: A Chinese Instruction-following LLaMA-based Model —— 一个中文低资源的llama+lora方案](https://github.com/Facico/Chinese-Vicuna)
@@ -179,6 +209,7 @@ git仓库提供了一个针对llama系列工程很好的QA文档：https://githu
 - 这是一套比较简单的代码，基本思路就是用PEFT的lora接口+transformer的trainer+instruction的数据配置
 **训练算力配置：**（来源为项目github）
 	4090的算力约为3090两倍，A100-40G的int8算力与4090相近
+  
 	| **Model** | **GPU** | **lora+fp16+512** |  | **lora+int8+256** |  | **lora+int8+512** |  | **lora+int8+2048** | |
 	|-----------|---------|--------------------|------|--------------------|------|--------------------|------|---------------------|------|
 	|           |         | speed              | size | speed              | size | speed              | size | speed               | size |
@@ -213,7 +244,7 @@ git仓库提供了一个针对llama系列工程很好的QA文档：https://githu
   - 模型使用的是8bit+lora+256 tokens
   - 更多模型：https://huggingface.co/Chinese-Vicuna
 
-#### 4.  [Chinese-LLaMA-Alpaca 开源中文LLaMA模型和指令精调的Alpaca大模型](https://github.com/ymcui/Chinese-LLaMA-Alpaca)
+### 4.  [Chinese-LLaMA-Alpaca 开源中文LLaMA模型和指令精调的Alpaca大模型](https://github.com/ymcui/Chinese-LLaMA-Alpaca)
 
 chinese-vicuna中提到这个项目：**做了词表扩充但是效果不及没有扩充词表的fastchat-vicuna**
 
@@ -272,6 +303,7 @@ chinese-vicuna中提到这个项目：**做了词表扩充但是效果不及没�
 | 已知问题                     | 如果不控制终止，则会一直写下去，直到达到输出长度上限。 | 目前版本模型生成的文本长度相对短一些，比较惜字如金。可在指令中要求详细回答。  |
 
 **Lora下载：**
+
 | **模型名称**                     | **训练数据** | **重构模型**     | **大小** | **LoRA下载** |
 |------------------------------|----------|-------------------|-------------|-----------------|
 | Chinese\-LLaMA\-7B           | 通用20G    | 原版LLaMA\-7B       | 770M        | [百度网盘](https://pan.baidu.com/s/1xV1UXjh1EPrPtXg6WyG7XQ?pwd=923e) [googledrive](https://drive.google.com/file/d/1JvFhBpekYiueWiUL3AF1TtaWDb3clY5D/view?usp=sharing)    |          |
@@ -291,6 +323,7 @@ chinese-vicuna中提到这个项目：**做了词表扩充但是效果不及没�
 在预训练阶段，使用约20G左右的通用中文语料（与中文BERT-wwm、MacBERT、LERT、PERT中使用的语料一致）在原版LLaMA权重的基础上进一步进行预训练
 
 **指令精调语料**
+
 | **数据**              | **量级** | **来源** | **说明**                         |
 |---------------------|--------|--------|--------------------------------|
 | 中英翻译数据              | 500K   | [外部链接](https://github.com/brightmart/nlp_chinese_corpus#5%E7%BF%BB%E8%AF%91%E8%AF%AD%E6%96%99translation2019zh)   | 在原数据集的基础上进行了采样\+规则筛选           |
@@ -306,7 +339,7 @@ chinese-vicuna中提到这个项目：**做了词表扩充但是效果不及没�
 相比如何做好大语言模型的预训练，BELLE更关注如何在开源预训练大语言模型的基础上，帮助每一个人都能够得到一个属于自己的、效果尽可能好的具有指令表现能力的语言模型，降低大语言模型、特别是中文大语言模型的研究和应用门槛.
 
 ### 6.[Tigerbot](https://github.com/TigerResearch/TigerBot)
-  - [ ] 为什么tigerbot使用100w数据指令微调的结果比不上vicuna使用50k数据微调的结果，是pretraining模型有问题还是bloom底座就是不行呢（用basemodel测试一下）
+- [ ] 为什么tigerbot使用100w数据指令微调的结果比不上vicuna使用50k数据微调的结果，是pretraining模型有问题还是bloom底座就是不行呢（用basemodel测试一下）
   
 模型对标instuctGPT-6B 目前7b模型的效果一般 可能训练过程有很多脏数据 比较明显的问题是会输出各种多余的符号
 
@@ -377,7 +410,8 @@ FastChat 是一个开放平台，用于训练、服务和评估基于大型语�
 用 ShareGPT 收集的对话数据微调 LLaMA实现   用GPT-4评价效果
 不擅长数学推理、编码任务，语言逻辑上整体是英文逻辑（比如中文任务会导致状语后置&夹杂英文单词等）
 
-![Alt text][def4]
+![Alt text](./figure/image2.png)
+
 使用openai [moderation](https://platform.openai.com/docs/guides/moderation/overview) api来进行审核 
 
 #### 概述
@@ -388,6 +422,7 @@ FastChat 是一个开放平台，用于训练、服务和评估基于大型语�
 **算力需求**：训练 ：8 个 A100 GPU
 
 官方[blog](https://lmsys.org/blog/2023-03-30-vicuna/#how-good-is-vicuna)提供了一个对比表格：
+
  **Model Name**          | **LLaMA**                                | **Alpaca**                                           | **Vicuna**                                 | **Bard/ChatGPT** |
 |-------------------------|------------------------------------------|------------------------------------------------------|--------------------------------------------|------------------|
 | Dataset                 | Publicly available datasets\(1T token\) | Self\-instruct from davinci\-003 API\(52K samples\) | User\-shared conversations\(70K samples\) | N/A              |
@@ -407,16 +442,22 @@ FastChat 是一个开放平台，用于训练、服务和评估基于大型语�
 - 多轮对话：调整训练损失以考虑多轮对话，并仅根据聊天机器人的输出计算微调损失。 
 - 通过 Spot Instance降低成本：40 倍大的数据集和 4 倍的训练序列长度对训练费用提出了相当大的挑战。 vicuna使用 **SkyPilot managed spot**来降低成本（利用更便宜的点实例以及自动恢复抢占和自动区域切换）。 该解决方案将 7B 模型的训练成本从 500 美元削减至 140 美元左右，将 13B 模型的训练成本从 1000 美元左右削减至 300 美元。 （AlpaServe ）
 
-### 模型 
-**地址**: https://huggingface.co/lmsys
+#### 模型 
+地址: https://huggingface.co/lmsys
 
-还是delta的格式发布权重 类似这样转换 ↓
-需要资源：30GB of CPU RAM（7b） 60GB of CPU RAM（13b）提供了 Low CPU Memory `Conversion 方式：--low-cpu-mem 
+还是delta的格式发布权重 
+
+类似这样转换 ↓
+需要资源：30GB of CPU RAM（7b） 60GB of CPU RAM（13b）
+
+提供了 Low CPU Memory `Conversion 方式：--low-cpu-mem 
+```
 python3 -m fastchat.model.apply_delta \
     --base-model-path /path/to/llama-7b \
     --target-model-path /path/to/output/vicuna-7b \
     --delta-path lmsys/vicuna-7b-delta-v1.1  
 --low-cpu-mem`
+```
 
 ### 9. [Koala: A Dialogue Model for Academic Research 考拉对话模型](https://bair.berkeley.edu/blog/2023/04/03/koala/)
 
@@ -562,9 +603,122 @@ https://arxiv.org/abs/2306.02858
 ### 框架
 - Langchain
 - llama-index
-- YuLan-IR/RETA-LLM at main · RUC-GSAI/YuLan-IR  YuLan-RETA-LLM：在大语言模型中使用检索
-  
 
+
+### 大模型如何使用外部工具
+
+#### TALM: tool augmented language models
+
+论文：https://arxiv.org/abs/2205.12255
+
+时间：2022.05
+
+基于transformer的语言模型可以通过提升规模来提升它在各种任务当中的表现。但是，对于一些需要访问特定数据（如：训练时没有见过的数据、经常发生变化的数据、隐私数据等）的任务，语言模型就无法单纯的使用提升规模的方式来提升在这些任务上的表现。针对这个问题，本文提出了TALM，基于文本的方式，使用外部工具来增强语言模型的表现。
+
+使用预训练好的T5作为基座模型，使用文本到文本的方法进行微调：**首先，训练语言模型根据问题输出需要使用的工具和工具相关的参数。然后，根据模型的输出相同相应的外部工具并返回相关结果。最后，训练模型根据问题和外部工具返回的结果，输出最终的答案**。
+
+![Alt text](figure/image6.png)
+![Alt text](figure/image5.png)
+
+
+为了能够解决样例不足的问题，作者提出了self-play技术。首先，使用一个较小的数据集合D训练得到一个TALM，然后针对数据集中的每一个样例，尝试使用不同的工具来解决这个问题。如果TALM能够正确的解决这个问题，那么就把这条数据及其相关的工具加入到数据集合D中，不断对训练集进行扩充，以得到一个大规模的数据集。 
+
+![Alt text](figure/image7.png)
+
+在实验方面，作者使用Natural Question和MathQA两个数据集对TALM进行了测试，结果表明使用了外部工具进行增强的语言模型能够更好的处理这些问答相关的问题。同时，作者还对模型不同参数量的版本进行了测试，实验发现随着参数量的提升，语言模型能够更好的使用外部工具。
+
+#### PAL: Program-aided Language Models
+
+论文：https://arxiv.org/abs/2211.10435
+
+发布日期：2022.11
+
+代码：http://reasonwithpal.com/
+
+在推理任务当中，尽管推理问题能够被正确地拆解，大语言模型经常会在推理过程中出现逻辑错误或者计算错误。为了解决这个问题，作者提出了一种新的方法**PAL**，将**自然语言形式的推理问题作为大语言模型的输入，并要求大模型以代码的形式输出相关的推理过程，最后使用外部工具（如：编译器、执行器）来执行代码并得到最终的答案**。
+
+![Alt text](figure/image8.png)
+
+#### Atlas: Few-shot Learning with Retrieval Augmented Language Models
+
+发布日期：2022.08
+论文：https://arxiv.org/abs/2208.03299
+
+在知识密集型任务当中，使用检索增强的语言模型能够拥有很好的表现，并且不需要很大的参数量。但是，对于few-shot场景下，检索能否有效增强语言模型的能力还不得而知。基于这个问题，作者提出了Atlas，一个预训练的检索增强语言模型，只需要使用非常少的训练样本就能够学习和处理知识密集型任务。
+
+具体来说，作者使用的检索模块是Contriever，使用的预训练语言模型为T5。在训练过程中，作者使用了ADist，EMDR^2，PDist和LOOP四个训练目标对检索器和语言模型进行联合训练。同时，作者也使用了无监督的方式进行联合训练，包括Prefix language modeling，Masked language modeling和Title to section generation。在实验方面，使用了KILT，MMLU和一些其他的问答数据集对Atlas进行了测试，证明了检索增强的有效性。
+
+![Alt text](figure/image9.png)
+
+#### Toolformer: Language Models Can Teach Themselves to Use Tools
+
+论文：https://arxiv.org/abs/2302.04761
+发布日期：2022.02
+
+在众多任务上，大模型展现出了令人印象深刻的能力。仅仅使用很少的样例或者文本形式的指令，大语言模型就能够很好的完成相关任务。但是，大模型在一些场景下仍然存在困难，需要外部工具来辅助以更好的解决这些任务。在这篇工作中，**作者提出了一个新的方法，让语言模型自己教自己学习使用外部工具**。
+
+具体来说，**作者构造了一个包含外部工具API使用方法的数据集**，使用这个数据集对语言模型进行微调，是模型能够掌握工具的使用方法。在数据集的构造当中，作者采样了一些位置加入了对工具的API调用，并比较了插入API和未插入API时二者的损失函数，过滤出了一些构造较为合理的数据，将这些数据进行整合获得了包含API调用的数据集。使用这个数据集，就能够对语言模型进行微调，使他们能够掌握工具的使用方式。在下游任务的推理当中，如果模型生成了相关的API调用，就会停止生成，并使用外部工具根据模型生成的内容获得结果返回给模型，模型在进行后续的生成。
+
+在实验方面，作者使用GPT-J作为基座模型，在推理任务上超越了baseline。
+
+
+
+![Alt text](figure/image10.png)
+
+
+#### ART: Automatic multi-step reasoning and tool-use for large language models
+
+论文：https://arxiv.org/abs/2303.09014
+发布日期：2022.05
+
+大语言模型可以在few-shot或者zero-shot设置下通过生成推理过程来进行推理。同时，外部工具可以用来辅助模型处理下游任务。在前人的工作中，对于一个新的任务或者新的工具，需要手动构造相关的样例用于提示大模型。作者提出了ART，**它能够冻结大模型并自动以程序的形式生成中间的推理步骤**。
+
+具体来说，ART分为三个部分：**prompt构建、生成、人类反馈**。其中，人类反馈的步骤是一个可选的步骤。在prompt构建的过程中，ART从任务库中检索出相似的任务作为样例。在生成过程中，大模型生成相关的代码，ART在外部工具被调用的时候停止大模型的生成过程，并调用外部工具返回结果。在人类反馈过程中，人类可以添加新的解离后的样例到任务库当中，或者修改工具库中工具的使用。
+![Alt text](figure/image11.png)
+
+#### ReAct: Synergizing Reasoning and Acting in Language Models
+
+论文：https://arxiv.org/abs/2210.03629
+
+代码：https://react-lm.github.io/
+
+前人的研究表明，大语言模型具有很强的推理能力和执行规划能力。在这篇工作中，作者探究了使用模型去生成推理过程和任务特定的行动。总的来说，推理过程有助于模型归纳、跟踪和更新行动计划以及处理异常，任务特定的行动能够是模型与外部环境或工具进行对接并收集额外信息。
+
+具体来说，对于一个通用的框架，在某一步的推理过程中，模型接收到一个来自外部环境的结果，并根据历史推理过程中外部环境的结果和行动过程来确定下一步需要采取的行动。在ReAct中，可以执行的行动的范围不仅仅是与外部环境的交互，同时也包括了自然语言的推理（可以成为thought或者reasoning trace）。语言模型可以根据上下文决定下一步的行动。
+
+同时，作者认为ReAct方式有以下几个优点：
+1. ReAct所需的prompt非常直观且易于设计；
+2. ReAct是通用并且灵活的；
+3. ReAct能够给模型带来性能提升并且具有较强的鲁棒性；4. ReAct是能够与对齐人类偏好并且是可控的。在实验方面，在知识密集型任务HotpotQA和FEVER上的测试都辨明了ReAct的有效性。
+![Alt text](figure/image12.png)
+
+
+#### CRITIC: Large Language Models Can Self-Correct with Tool-Interactive Critiquing
+
+论文：https://arxiv.org/abs/2305.11738
+
+发布日期：2022.05
+
+代码：https://github.com/microsoft/ProphetNet/tree/master/CRITIC
+
+大语言模型在推理的过程中，可能出现不一致或者有问题的行为，例如幻象、生成存在缺陷的代码、生成有害的内容等。作者模仿人类使用工具验证的行为，提出了CRITIC。语言模型根据问题生成出相关答案之后，可以和外部工具进行交互，使用适当的工具对生成的内容进行评估，根据得到的反馈对之前生成的内容进行修改。
+
+具体来说，大语言模型被作为一个黑箱，根据任务相关的输入得到一个原始输出。然后，和外部工具进行交互，包括知识图谱，代码解释器、搜索引擎等。通过和外部工具的交互，能够获得一系列的结果，大模型根据这些结果生成相关的反馈。最后，根据任务相关的输入、原始输出、与工具交互的结果等多方面的内容，大模型对原始输出进行修改，等到新的输出。改过程可以迭代进行，多次修正输出的内容。在实验方面，作者使用AmbigNQ、TriviaQA和HotpotQA三个问答数据集进行评测，CRITIC能够超越普通CoT和ReAct等方法，取得了良好的表现。
+![Alt text](figure/image13.png)
+
+#### Making Language Models Better Tool Learners with Execution Feedback
+
+论文：https://arxiv.org/abs/2305.13068
+
+代码：https://github.com/zjunlp/trice
+
+前人的工作表明了AI系统可以利用工具增强自己的能力并和外界进行交互。但是如何引导模型正确使用工具，仍然是一个需要探究的问题。在这篇工作中，作者提出了TRICE。这是一个两阶段的端到端的框架，能够使语言模型通过工具执行的结果的反馈进行持续地学习，可以让模型高效地学习何时与如何使用工具。
+
+具体来说，训练过程的两个阶段分别为：Behavior Cloning，RLEF。在Behavior Cloning阶段，模型根据任务输入，输出相关的工具的使用方案。在RLEF阶段，使用强化学习的框架，根据工具的结果设计奖励函数，对模型进行强化学习，继续增强模型使用工具的能力。在实验方面，作者使用Alpaca-7B作为基座模型，比较了Toolformer等基线方法，在数学相关任务上进行评测，证明了TRICE的有效性。
+
+![Alt text](figure/image14.png)
+
+参考资料：https://mp.weixin.qq.com/s/3CW6OrU5zwDktr9UIbcoGg
 ### 效果评估
 * [Evaluating instruction following on more user-oriented data](https://github.com/tatsu-lab/alpaca_farm/) :AlpacaFarm是一个模拟沙盒，能够快速、廉价地对从人类反馈中学习的方法进行实验。它用API LLMs模拟人类反馈，提供一个经过验证的评估协议，并提供一套参考方法的实现。研究人员可以快速迭代模型开发，并将他们的方法转移到人类数据上进行训练，以最大限度地提高性能。
 * Evaluating instruction following on more user-oriented data
@@ -578,14 +732,20 @@ https://arxiv.org/abs/2306.02858
 
 ## 参考资料
 
-### Paper&Blog
+### Paper&Post
 - A Survey of Large Language Models
 - Transformer models: an introduction and catalog — 2023 Edition
 - [LLM Learning Lab](https://lightning.ai/pages/llm-learning-lab/)
+- [高质量的llm开发教程] (https://fullstackdeeplearning.com/llm-bootcamp/)
+
+
 
 ### 工具网址
 - https://civitai.com/
-- - 提供需求生成代码仓库 https://github.com/AntonOsika/gpt-engineer
+- 提供需求生成代码仓库 https://github.com/AntonOsika/gpt-engineer
+
+### 项目整合
+- YuLan-IR/RETA-LLM at main · RUC-GSAI/YuLan-IR  YuLan-RETA-LLM：在大语言模型中使用检索
   
 ### 一些值得关注的issues
 - Retrieval-Augmented Generation 检错增强技术 
@@ -602,14 +762,51 @@ RAG——使用检索增强生成构建特定行业的大型语言模型
 
 - 优化方向 https://github.com/imClumsyPanda/langchain-ChatGLM/issues/14
   
-- fintuning数据准备问题  https://github.com/THUDM/ChatGLM-6B/issues/364
+- fintuning数据准备问题   https://github.com/THUDM/ChatGLM-6B/issues/364
   doc2query/msmarco-chinese-mt5-base-v1， 根据doc生成问题
 
 ### LLM成长路线图
 
 示例：https://github.com/LAION-AI/Open-Assistant#the-plan
 
-[def]: ./figure/image0.png
-[def2]: ./figure/image.png
-[def3]: ./figure/image1.png
-[def4]: ./figure/image2.png
+
+### LLM术语
+
+#### Adapter
+
+Adapter是一种轻量级的适应方法，它在预先训练的模型中添加少量可学习的参数，在保留其原始知识的同时实现高效的微调，从而实现高质量的响应并提高各种任务的性能。
+
+#### Alpaca 
+Alpaca 是在 52K 指令跟踪演示上对 LLaMA 7B 模型进行微调的模型。它的行为在质量上与 OpenAI 的 text-davinci-003 相似，同时出人意料地小且易于/廉价复制（<600 美元）
+#### Attention
+注意力机制是大型语言模型中使用的一个组件，用于在处理过程中关注输入序列的特定部分，根据元素的相关性为元素分配不同的权重。它有助于捕获依赖性并提高模型生成上下文相关预测或输出的能力。
+#### Cosine Similarity
+余弦相似度是通过计算两个向量之间角度的余弦来确定两个向量之间相似度的度量。其范围为 -1 到 1，值越接近 1 表示相似度越高，值越接近 -1 表示不相似度。
+#### Embedding
+嵌入是连续向量空间中单词、句子或其他语言单元的密集、低维表示，捕获语义和上下文信息。它们是通过无监督方法学习的，并用于各种自然语言处理任务。
+#### GPTQ
+GPTQ 是一种基于近似二阶信息的一次性权重量化方法，能够有效压缩具有 1750 亿个参数的 GPT 模型，同时保持精度，允许单 GPU 执行并比 FP16 显着加速推理。
+#### Instruction Tuning
+在大型语言模型的背景下，指令调优是一种通过根据特定输入指令或示例优化其响应来微调模型的技术，从而提高其为给定提示或上下文生成相关且准确的输出的性能。
+#### LoRA
+LoRA 通过学习排序分解矩阵并结合冻结原始权重，实现大型语言模型中的参数减少。这显着减少了特定于任务的适应的存储需求，促进部署期间的高效任务切换，而不会引入推理延迟，并且与适配器、前缀调整和微调等其他适应方法相比，表现出卓越的性能。
+#### Prefix tuning https://arxiv.org/abs/2101.00190
+前缀调优是自然语言生成任务微调的轻量级替代方案。它保持语言模型参数冻结，但优化一个小的连续特定于任务的向量（称为前缀）。前缀调整从提示中汲取灵感，允许后续令牌关注此前缀，就好像它是“虚拟令牌”一样。
+#### Prompt Tuning
+Promp tuning是一种经济有效的方法，可以在不重新训练模型并更新其权重的情况下使人工智能基础模型适应新的下游任务。
+#### QLoRA
+QLoRA 是一种高效的微调方法，可显着降低内存需求，从而能够在单个 48GB GPU 上微调 650 亿个参数模型，而不会影响 16 位微调任务的性能。
+#### RLHF
+根据人类反馈进行强化学习（RLHF），也称为根据人类偏好进行强化学习，是一种利用人类反馈来训练“奖励模型”的技术。然后将该模型用作奖励函数，通过强化学习 (RL) 优化代理的策略。这是通过使用诸如近端策略优化之类的优化算法来实现的。
+#### Self-instruction
+Self-instruct是一种结合自监督学习和强化学习来训练大型语言模型的方法。它涉及使用模型自身的预测作为训练目标，使其能够从生成的数据中学习并提高其在特定任务上的性能。
+#### semantic search
+语义搜索是一种搜索技术，旨在理解用户查询和搜索内容背后的含义和意图。它超越了简单的关键字匹配，并考虑了查询和文档的上下文和语义，从而产生更准确和相关的搜索结果。
+#### Tokenization
+Tokenization是将文本分割成更小的单元以供 LLM 模型处理的过程。Byte Pair Encoding (BPE) 或 WordPiece 等子字算法用于将文本分割成更小的单元，从而捕获频繁和罕见的单词。
+#### Topic Modeling
+主题建模是一种统计技术，用于发现文档集合中的潜在主题或主题。它为单词分配概率分布，并根据单词共现模式识别主题，有助于理解文本语料库中存在的主要主题和结构。
+#### Transformer
+Transformer 是《Attention Is All You Need》论文中介绍的一种神经网络架构，广泛应用于大型语言模型中。它用注意力机制和自注意力层取代了传统的循环神经网络 (RNN)，用于捕获依赖性并改进顺序数据任务中的并行处理。
+## Reference
+- LLM大模型低资源微调p tuning v2和lora区别 
