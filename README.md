@@ -133,13 +133,13 @@ https://github.com/hiyouga/LLaMA-Efficient-Tuning
 | Vocab Size    | 64,000       | 32,000 | 65,024 | 50,254  | 130,344 | 106,029         |
 
 #### 数据
-![数据处理流程][./figure/image.png]
+![数据处理流程](figure/image.png)
 
 #### 模型结构
 整体模型基于标准的 Transformer 结构，采用了和 LLaMA 一样的模型设计
-![模型结构][figure/image0.png]
+![模型结构](figure/image0.png)
 - **位置编码** rotary-embedding 是现阶段被大多模型采用的位置编码方案，具有更好的外延效果。虽然训练过程中最大长度为4096，但是实际测试中模型可以很好的扩展到 5000 tokens 上，如下图：
-  ![Alt text][figure/image1.png]
+  ![Alt text](figure/image1.png)
 - **具体参数**
 
 	| **Hyperparameter** | **Value**  |
