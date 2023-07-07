@@ -62,6 +62,11 @@
       - [ReAct: Synergizing Reasoning and Acting in Language Models](#react-synergizing-reasoning-and-acting-in-language-models)
       - [CRITIC: Large Language Models Can Self-Correct with Tool-Interactive Critiquing](#critic-large-language-models-can-self-correct-with-tool-interactive-critiquing)
       - [Making Language Models Better Tool Learners with Execution Feedback](#making-language-models-better-tool-learners-with-execution-feedback)
+    - [人工智能体 AI Agent](#人工智能体-ai-agent)
+      - [项目1：斯坦福、谷歌「西部世界](#项目1斯坦福谷歌西部世界)
+      - [项目2：Camel](#项目2camel)
+      - [项目3：BabyAGI](#项目3babyagi)
+      - [项目4：AutoGPT](#项目4autogpt)
     - [效果评估](#效果评估)
     - [常见bug解决](#常见bug解决)
   - [参考资料](#参考资料)
@@ -88,7 +93,6 @@
       - [Tokenization](#tokenization)
       - [Topic Modeling](#topic-modeling)
       - [Transformer](#transformer)
-  - [Reference](#reference)
 
 ## LLM
 ### 1. [百川大模型](https://github.com/baichuan-inc/baichuan-7B)
@@ -136,8 +140,8 @@ https://github.com/hiyouga/LLaMA-Efficient-Tuning
 ![数据处理流程](figure/image.png)
 
 #### 模型结构
-整体模型基于标准的 Transformer 结构，采用了和 LLaMA 一样的模型设计
-![模型结构](figure/image0.png)
+  整体模型基于标准的 Transformer 结构，采用了和 LLaMA 一样的模型设计
+   ![模型结构](figure/image0.png)
 - **位置编码** rotary-embedding 是现阶段被大多模型采用的位置编码方案，具有更好的外延效果。虽然训练过程中最大长度为4096，但是实际测试中模型可以很好的扩展到 5000 tokens 上，如下图：
   ![Alt text](figure/image1.png)
 - **具体参数**
@@ -538,7 +542,7 @@ https://arxiv.org/abs/2306.02858
       版面分析任务中，图像首先经过版面分析模型，将图像划分为文本、表格、图像等不同区域，随后对这些区域分别进行识别，如，将表格区域送入表格识别模块进行结构化识别，将文本区域送入OCR引擎进行文字识别，最后使用版面恢复模块将其恢复为与原始图像布局一致的word或者pdf格式的文件。
 
 
-- 文本向量化组件
+- **文本向量化组件**
   1. text2vec 地址：https://github.com/shibing624/text2vec
    
       实现了Word2Vec、RankBM25、BERT、Sentence-BERT、CoSENT等多种文本表征、文本相似度计算模型，并在文本语义匹配（相似度计算）任务上比较了各模型的效果。
@@ -603,7 +607,10 @@ https://arxiv.org/abs/2306.02858
 ### 框架
 - Langchain
 - llama-index
+- Emerging Architectures for LLM Applications （a16z：LLM应用的新兴架构）：https://a16z.com/2023/06/20/emerging-architectures-for-llm-applications/ 
+  ![Alt text](./figure/image15.png)
 
+  提供了一个LLM应用开发工具的表格
 
 ### 大模型如何使用外部工具
 
@@ -719,6 +726,84 @@ https://arxiv.org/abs/2306.02858
 ![Alt text](figure/image14.png)
 
 参考资料：https://mp.weixin.qq.com/s/3CW6OrU5zwDktr9UIbcoGg
+
+### 人工智能体 AI Agent
+
+**概念**：是一种自动智能体，以最简单的形式中在循环中运行，每次迭代时，生成自我导向的指令和操作，不依赖人类来指导对话，并且是高度可扩展的。
+
+#### 项目1：[斯坦福、谷歌「西部世界](https://arxiv.org/abs/2304.03442)
+
+它用三个重要的架构基本要素——记忆、反思和规划，将一个大语言模型做了扩展。
+
+    1）记忆和检索
+    记忆流包含每个智能体的观察列表，其中，每个观察都有自己的时间戳。
+    观察可以是智能体执行的行为，也可以是智能体从其他人那里感知到的行为。记忆流很长，但并不是所有观察都是重要的。
+    为了检索最重要的记忆以传递给语言模型，有三个因素需要考虑：
+    1. 最近性：近期的记忆更重要。
+    2. 重要性：智能体认为重要的记忆。例如，与某人分手比吃早餐更重要。
+    3. 相关性：与情境相关的记忆，即查询记忆。例如，在讨论如何为化学考试学习时，学校作业记忆更重要。
+      
+    2）反思
+    反思是一种高层次的抽象思考，可以帮助智能体进行概括和推理。
+    反思会定期产生以下两个问题：「关于陈述中的主题，我们可以回答哪3个最突出的高层次问题？，你能从上述陈述中推断出哪5个高层次的见解？」
+
+    3）规划
+    规划很重要，因为行动不仅应该集中在当下，而且应该集中在更长的时间范围内，这样，行动才能够连贯和可信。
+    规划同样存储在记忆流中。智能体可以根据规划创建行动，并根据记忆流中的其他观察结果做出反应和更新计划。
+
+#### 项目2：[Camel](https://arxiv.org/abs/2303.17760 )
+
+Camel以「角色扮演」而闻名。
+作为一个探索大语言模型社会「心智」的交流智能体，它提出了一个角色扮演智能体框架，可以实现两个人工智能智能体的交流：
+1）AI用户智能体：向AI助手提供指令，目标是完成任务
+2）AI助手智能体：遵循AI用户的指令，并以解决任务的方法进行回应
+3）任务指定智能体：这个智能体的作用，是为AI用户和AI助手构思一个具体的任务。这样，它就可以自主编写一个具体的任务提示，而不用用户去花时间定义了。
+
+一直循环下去直到达成结束条件
+
+可以用langchain实现↓
+
+    在LangChain的实现中，用的是Camel论文中给出的提示，并定义了三个智能体：
+    1）task_specify_agent（任务指定智能体）
+    2）assistant_agent（助手智能体）
+    3）user_agent（用户智能体）。
+    然后，使用一个while循环来循环进行助手智能体和用户智能体之间的对话：
+
+目前还没有调用外部工具
+
+#### 项目3：[BabyAGI](https://yoheinakajima.com/task-driven-autonomous-agent-utilizing-gpt-4-pinecone-and-langchain-for-diverse-applications/)
+
+BabyAGI的关键特点是只有三个智能体：任务执行智能体（Task Execution Agent）、任务创建智能体（Task Creation Agent）和任务优先级智能体（Task Prioritization Agent）。
+
+    步骤：
+
+    1）任务执行智能体按顺序完成列表中的任务
+
+    2）任务创建智能体根据先前任务的目标和结果创建新任务
+
+    3）任务优先级智能体对任务进行重新排序
+
+    然后，这个简单的过程将会不断地重复
+
+BabyAGI + LangChain ↓
+ 
+    在LangChain框架中，运行BabyAGI非常简单。
+
+    首先，创建一个BabyAGI控制器，其中包含三个链：
+
+    1）任务创建链（TaskCreationChain）
+
+    2）任务优先级链（TaskPrioritizationChain）
+
+    3）执行链（ExecutionChain）
+
+    然后，在一个（潜在的）无限循环中运行它们。
+
+    通过Langchain，可以定义最大迭代次数，这样它就不会无限运行并消耗掉所有的OpenAI API额度。
+
+
+#### 项目4：[AutoGPT](https://github.com/Significant-Gravitas/Auto-GPT)
+
 ### 效果评估
 * [Evaluating instruction following on more user-oriented data](https://github.com/tatsu-lab/alpaca_farm/) :AlpacaFarm是一个模拟沙盒，能够快速、廉价地对从人类反馈中学习的方法进行实验。它用API LLMs模拟人类反馈，提供一个经过验证的评估协议，并提供一套参考方法的实现。研究人员可以快速迭代模型开发，并将他们的方法转移到人类数据上进行训练，以最大限度地提高性能。
 * Evaluating instruction following on more user-oriented data
@@ -733,22 +818,27 @@ https://arxiv.org/abs/2306.02858
 ## 参考资料
 
 ### Paper&Post
-- A Survey of Large Language Models
-- Transformer models: an introduction and catalog — 2023 Edition
+- [A Survey of Large Language Models](https://arxiv.org/pdf/2303.18223.pdf)
+- [Transformer models: an introduction and catalog — 2023 Edition](https://amatriain.net/blog/transformer-models-an-introduction-and-catalog-2d1e9039f376/)
 - [LLM Learning Lab](https://lightning.ai/pages/llm-learning-lab/)
-- [高质量的llm开发教程] (https://fullstackdeeplearning.com/llm-bootcamp/)
+- [高质量的llm开发教程](https://fullstackdeeplearning.com/llm-bootcamp/)
+- [LLM大模型低资源微调p tuning v2和lora区别](https://zhuanlan.zhihu.com/p/622810394)
 
 
 
 ### 工具网址
 - https://civitai.com/
-- 提供需求生成代码仓库 https://github.com/AntonOsika/gpt-engineer
+- 提供需求生成代码仓库 <https://github.com/AntonOsika/gpt-engineer>
+- 开源llm openai格式接口调用 <https://github.com/xusenlinzy/api-for-open-llm/tree/master>
+- fachat 也用于接口调用：<https://github.com/lm-sys/FastChat>
 
 ### 项目整合
-- YuLan-IR/RETA-LLM at main · RUC-GSAI/YuLan-IR  YuLan-RETA-LLM：在大语言模型中使用检索
+- YuLan-RETA-LLM：<https://github.com/RUC-GSAI/YuLan-IR> 
+  
+  检索增强LLM流程
   
 ### 一些值得关注的issues
-- Retrieval-Augmented Generation 检错增强技术 
+- Retrieval-Augmented Generation 检索增强技术 
 RAG——使用检索增强生成构建特定行业的大型语言模型
 - 是否要进行词表扩充  
   
@@ -808,5 +898,3 @@ Tokenization是将文本分割成更小的单元以供 LLM 模型处理的过程
 主题建模是一种统计技术，用于发现文档集合中的潜在主题或主题。它为单词分配概率分布，并根据单词共现模式识别主题，有助于理解文本语料库中存在的主要主题和结构。
 #### Transformer
 Transformer 是《Attention Is All You Need》论文中介绍的一种神经网络架构，广泛应用于大型语言模型中。它用注意力机制和自注意力层取代了传统的循环神经网络 (RNN)，用于捕获依赖性并改进顺序数据任务中的并行处理。
-## Reference
-- LLM大模型低资源微调p tuning v2和lora区别 
