@@ -5,41 +5,42 @@
 - [all-about-llm](#all-about-llm)
   - [目录](#目录)
   - [LLM](#llm)
-    - [1. 百川大模型](#1-百川大模型)
+    - [1. 《GPT-4 Architecture, Infrastructure, Training Dataset, Costs, Vision, MoE》](#1-gpt-4-architecture-infrastructure-training-dataset-costs-vision-moe)
+    - [2. 百川大模型](#2-百川大模型)
       - [概述](#概述)
       - [数据](#数据)
       - [模型结构](#模型结构)
       - [训练算力](#训练算力)
       - [模型推理](#模型推理)
-    - [2. Aquila 悟道天鹰系列商用开源模型](#2-aquila-悟道天鹰系列商用开源模型)
+    - [3. Aquila 悟道天鹰系列商用开源模型](#3-aquila-悟道天鹰系列商用开源模型)
       - [概述](#概述-1)
       - [模型下载](#模型下载)
-    - [3. Chinese-Vicuna: A Chinese Instruction-following LLaMA-based Model —— 一个中文低资源的llama+lora方案](#3-chinese-vicuna-a-chinese-instruction-following-llama-based-model--一个中文低资源的llamalora方案)
+    - [4. Chinese-Vicuna: A Chinese Instruction-following LLaMA-based Model —— 一个中文低资源的llama+lora方案](#4-chinese-vicuna-a-chinese-instruction-following-llama-based-model--一个中文低资源的llamalora方案)
       - [概述](#概述-2)
       - [数据](#数据-1)
       - [模型](#模型)
-    - [4.  Chinese-LLaMA-Alpaca 开源中文LLaMA模型和指令精调的Alpaca大模型](#4--chinese-llama-alpaca-开源中文llama模型和指令精调的alpaca大模型)
+    - [5.  Chinese-LLaMA-Alpaca 开源中文LLaMA模型和指令精调的Alpaca大模型](#5--chinese-llama-alpaca-开源中文llama模型和指令精调的alpaca大模型)
       - [概述](#概述-3)
       - [模型](#模型-1)
       - [量化推理和部署](#量化推理和部署)
       - [数据](#数据-2)
-    - [5.  BELLE: Be Everyone's Large Language Model Engine](#5--belle-be-everyones-large-language-model-engine)
-    - [6.Tigerbot](#6tigerbot)
+    - [6.  BELLE: Be Everyone's Large Language Model Engine](#6--belle-be-everyones-large-language-model-engine)
+    - [7.Tigerbot](#7tigerbot)
       - [概述](#概述-4)
       - [数据](#数据-3)
       - [模型下载](#模型下载-1)
-    - [7. Fastchat](#7-fastchat)
-    - [8. Vicuna](#8-vicuna)
+    - [8. Fastchat](#8-fastchat)
+    - [9. Vicuna](#9-vicuna)
       - [概述](#概述-5)
       - [数据](#数据-4)
       - [训练过程](#训练过程)
       - [模型](#模型-2)
-    - [9. Koala: A Dialogue Model for Academic Research 考拉对话模型](#9-koala-a-dialogue-model-for-academic-research-考拉对话模型)
-    - [10.Firefly（流萤）: 中文对话式大语言模型](#10firefly流萤-中文对话式大语言模型)
-    - [11. Stanford Alpaca: An Instruction-following LLaMA Model](#11-stanford-alpaca-an-instruction-following-llama-model)
-    - [12. GPT4all](#12-gpt4all)
-    - [13. WizardLM: An Instruction-following LLM Using Evol-Instruct](#13-wizardlm-an-instruction-following-llm-using-evol-instruct)
-    - [14. 文心千帆大模型平台](#14-文心千帆大模型平台)
+    - [10. Koala: A Dialogue Model for Academic Research 考拉对话模型](#10-koala-a-dialogue-model-for-academic-research-考拉对话模型)
+    - [11.Firefly（流萤）: 中文对话式大语言模型](#11firefly流萤-中文对话式大语言模型)
+    - [12. Stanford Alpaca: An Instruction-following LLaMA Model](#12-stanford-alpaca-an-instruction-following-llama-model)
+    - [13. GPT4all](#13-gpt4all)
+    - [14. WizardLM: An Instruction-following LLM Using Evol-Instruct](#14-wizardlm-an-instruction-following-llm-using-evol-instruct)
+    - [15. 文心千帆大模型平台](#15-文心千帆大模型平台)
   - [多模态 Model \& 多模态任务实现方案](#多模态-model--多模态任务实现方案)
     - [1. I-JEPA (the Image-based Joint-Embedding Predictive Architecture)](#1-i-jepa-the-image-based-joint-embedding-predictive-architecture)
     - [2. Video-LLaMA: An Instruction-tuned Audio-Visual Language Model for Video Understanding](#2-video-llama-an-instruction-tuned-audio-visual-language-model-for-video-understanding)
@@ -98,7 +99,12 @@
       - [Transformer](#transformer)
 
 ## LLM
-### 1. [百川大模型](https://github.com/baichuan-inc/baichuan-7B)
+### 1. [《GPT-4 Architecture, Infrastructure, Training Dataset, Costs, Vision, MoE》](https://www.semianalysis.com/p/gpt-4-architecture-infrastructure)
+
+
+
+
+### 2. [百川大模型](https://github.com/baichuan-inc/baichuan-7B)
 	
 完全支持商用的模型
 发布团队：百川智能
@@ -168,7 +174,7 @@ https://github.com/hiyouga/LLaMA-Efficient-Tuning
 [huggingface](https://huggingface.co/baichuan-inc/baichuan-7B)
 
 
-### 2. [Aquila 悟道天鹰系列商用开源模型](https://github.com/FlagAI-Open/FlagAI/blob/master/examples/Aquila/README.md)
+### 3. [Aquila 悟道天鹰系列商用开源模型](https://github.com/FlagAI-Open/FlagAI/blob/master/examples/Aquila/README.md)
 
 **发布团队**：智源社区
 要用flagAI框架（这个框架源码&依赖的兼容性还有一些错误）
@@ -195,7 +201,7 @@ Aquila模型所采用的tokenizer是由从头开始训练的，支持中英双�
 其他信息等待六月底官方技术报告
 
 
-### 3. [Chinese-Vicuna: A Chinese Instruction-following LLaMA-based Model —— 一个中文低资源的llama+lora方案](https://github.com/Facico/Chinese-Vicuna)
+### 4. [Chinese-Vicuna: A Chinese Instruction-following LLaMA-based Model —— 一个中文低资源的llama+lora方案](https://github.com/Facico/Chinese-Vicuna)
 
 这种方案可能会降低模型的泛化能力
 
@@ -251,7 +257,7 @@ git仓库提供了一个针对llama系列工程很好的QA文档：https://githu
   - 模型使用的是8bit+lora+256 tokens
   - 更多模型：https://huggingface.co/Chinese-Vicuna
 
-### 4.  [Chinese-LLaMA-Alpaca 开源中文LLaMA模型和指令精调的Alpaca大模型](https://github.com/ymcui/Chinese-LLaMA-Alpaca)
+### 5.  [Chinese-LLaMA-Alpaca 开源中文LLaMA模型和指令精调的Alpaca大模型](https://github.com/ymcui/Chinese-LLaMA-Alpaca)
 
 chinese-vicuna中提到这个项目：**做了词表扩充但是效果不及没有扩充词表的fastchat-vicuna**
 
@@ -341,11 +347,11 @@ chinese-vicuna中提到这个项目：**做了词表扩充但是效果不及没�
 
 本项目提供了一个动态生成不同领域和指令类型的prompt爬取脚本 `script/crawl_prompt.py`
 
-### 5.  [BELLE: Be Everyone's Large Language Model Engine](https://github.com/LianjiaTech/BELLE)
+### 6.  [BELLE: Be Everyone's Large Language Model Engine](https://github.com/LianjiaTech/BELLE)
 
 相比如何做好大语言模型的预训练，BELLE更关注如何在开源预训练大语言模型的基础上，帮助每一个人都能够得到一个属于自己的、效果尽可能好的具有指令表现能力的语言模型，降低大语言模型、特别是中文大语言模型的研究和应用门槛.
 
-### 6.[Tigerbot](https://github.com/TigerResearch/TigerBot)
+### 7.[Tigerbot](https://github.com/TigerResearch/TigerBot)
 - [ ] 为什么tigerbot使用100w数据指令微调的结果比不上vicuna使用50k数据微调的结果，是pretraining模型有问题还是bloom底座就是不行呢（用basemodel测试一下）
   
 模型对标instuctGPT-6B 目前7b模型的效果一般 可能训练过程有很多脏数据 比较明显的问题是会输出各种多余的符号
@@ -404,7 +410,7 @@ demo网页：https://tigerbot.com/chat
 | tigerbot\-180b\-sft             | 16       | 347\.6           |
 | tigerbot\-180b\-sft\-4bit\-128g | 4        | 108\.5           |
 
-### 7. [Fastchat](https://github.com/lm-sys/FastChat)
+### 8. [Fastchat](https://github.com/lm-sys/FastChat)
 
 FastChat 是一个开放平台，用于训练、服务和评估基于大型语言模型的聊天机器人。核心功能包括：
 
@@ -412,7 +418,7 @@ FastChat 是一个开放平台，用于训练、服务和评估基于大型语�
 具有 Web UI 和与 OpenAI 兼容的 RESTful API 的分布式多模型服务系统。
 
 
-### 8. Vicuna
+### 9. Vicuna
 
 用 ShareGPT 收集的对话数据微调 LLaMA实现   用GPT-4评价效果
 不擅长数学推理、编码任务，语言逻辑上整体是英文逻辑（比如中文任务会导致状语后置&夹杂英文单词等）
@@ -465,24 +471,24 @@ python3 -m fastchat.model.apply_delta \
 --low-cpu-mem`
 ```
 
-### 9. [Koala: A Dialogue Model for Academic Research 考拉对话模型](https://bair.berkeley.edu/blog/2023/04/03/koala/)
+### 10. [Koala: A Dialogue Model for Academic Research 考拉对话模型](https://bair.berkeley.edu/blog/2023/04/03/koala/)
 
 ![Alt text](./figure/image3.png)
 
-### 10.[Firefly（流萤）: 中文对话式大语言模型](https://github.com/yangjianxin1/Firefly)
+### 11.[Firefly（流萤）: 中文对话式大语言模型](https://github.com/yangjianxin1/Firefly)
 
 **家族** : bloom 
 - 开源QLoRA的训练代码，使用一张显卡对bloom-7b1进行微调，开源firefly-7b1-qlora-v0.1模型 。
 https://huggingface.co/datasets/YeungNLP/firefly-train-1.1M
 本数据应用于项目：Firefly（流萤）: 中文对话式大语言模型 ，训练后得到的模型[firefly-1b4](https://huggingface.co/YeungNLP/firefly-bloom-1b4-sft)
 
-### 11. Stanford Alpaca: An Instruction-following LLaMA Model 
+### 12. Stanford Alpaca: An Instruction-following LLaMA Model 
 
-### 12. [GPT4all](https://github.com/nomic-ai/gpt4all)
+### 13. [GPT4all](https://github.com/nomic-ai/gpt4all)
 
-### 13. [WizardLM: An Instruction-following LLM Using Evol-Instruct](https://github.com/nlpxucan/WizardLM)
+### 14. [WizardLM: An Instruction-following LLM Using Evol-Instruct](https://github.com/nlpxucan/WizardLM)
 
-### 14. [文心千帆大模型平台](https://login.bce.baidu.com/?account=&redirect=http%3A%2F%2Fconsole.bce.baidu.com%2Fai%2F%3F_%3D1687657920924#/ai/wenxinworkshop/create/home)
+### 15. [文心千帆大模型平台](https://login.bce.baidu.com/?account=&redirect=http%3A%2F%2Fconsole.bce.baidu.com%2Fai%2F%3F_%3D1687657920924#/ai/wenxinworkshop/create/home)
 
 ## 多模态 Model & 多模态任务实现方案
 ### 1. [I-JEPA (the Image-based Joint-Embedding Predictive Architecture)](https://arxiv.org/pdf/2301.08243.pdf)
@@ -825,6 +831,7 @@ BabyAGI + LangChain ↓
 - [LLM Learning Lab](https://lightning.ai/pages/llm-learning-lab/)
 - [高质量的llm开发教程](https://fullstackdeeplearning.com/llm-bootcamp/)
 - [LLM大模型低资源微调p tuning v2和lora区别](https://zhuanlan.zhihu.com/p/622810394)
+- [Flamingo: a Visual Language Model for Few-Shot Learning](https://arxiv.org/abs/2204.14198)
 
 
 
@@ -850,6 +857,8 @@ BabyAGI + LangChain ↓
 ### 一些值得关注的issues
 - Retrieval-Augmented Generation 检索增强技术 
 RAG——使用检索增强生成构建特定行业的大型语言模型
+- [The AI Brick Wall – A Practical Limit For Scaling Dense Transformer Models, and How GPT 4 Will Break Past It](https://www.semianalysis.com/p/the-ai-brick-wall-a-practical-limit)
+
 - 是否要进行词表扩充  
   
   [常见问题](https://github.com/ymcui/Chinese-LLaMA-Alpaca/wiki/%E5%B8%B8%E8%A7%81%E9%97%AE%E9%A2%98#%E9%97%AE%E9%A2%984%E4%B8%BA%E4%BB%80%E4%B9%88%E8%A6%81%E6%89%A9%E5%85%85%E8%AF%8D%E8%A1%A8%E7%9B%B4%E6%8E%A5%E5%9C%A8%E5%8E%9F%E7%89%88llama%E4%B8%8A%E7%94%A8%E4%B8%AD%E6%96%87%E9%A2%84%E8%AE%AD%E7%BB%83%E4%B8%8D%E8%A1%8C%E5%90%97)
