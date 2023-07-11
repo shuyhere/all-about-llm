@@ -72,6 +72,9 @@
   - [参考资料](#参考资料)
     - [Paper\&Post](#paperpost)
     - [工具网址](#工具网址)
+    - [API tools](#api-tools)
+      - [搜索类：](#搜索类)
+      - [自动化工作类：](#自动化工作类)
     - [项目整合](#项目整合)
     - [一些值得关注的issues](#一些值得关注的issues)
     - [LLM成长路线图](#llm成长路线图)
@@ -419,7 +422,6 @@ FastChat 是一个开放平台，用于训练、服务和评估基于大型语�
 使用openai [moderation](https://platform.openai.com/docs/guides/moderation/overview) api来进行审核 
 
 #### 概述
-
 
 **数据**：70K 对话对
 **训练**：增强了 Alpaca 提供的训练脚本，以更好地处理多轮对话和长序列。一天内在 8 个 A100 GPU 上使用 PyTorch FSDP 完成
@@ -810,7 +812,7 @@ BabyAGI + LangChain ↓
 * C-Eval: A Multi-Level Multi-Discipline Chinese Evaluation Suite for Foundation Models  
 
 ### 常见bug解决
-在python=3.9环境中运行langchian时候遇到not a class错误：
+在python=3.9环境中运行langchian时候遇到TypeError: issubclass() arg 1 must be a class类型的错误：
 
 `pip install typing-inspect==0.8.0 typing_extensions==4.5.0`
 
@@ -827,15 +829,23 @@ BabyAGI + LangChain ↓
 
 
 ### 工具网址
+
 - https://civitai.com/
 - 提供需求生成代码仓库 <https://github.com/AntonOsika/gpt-engineer>
 - 开源llm openai格式接口调用 <https://github.com/xusenlinzy/api-for-open-llm/tree/master>
 - fachat 也用于接口调用：<https://github.com/lm-sys/FastChat>
-
+### API tools
+#### 搜索类：
+* https://newsapi.org
+* https://serpapi.com
+* https://www.themoviedb.org/documentation/api
+#### 自动化工作类：
+* https://mailchimp.com 自动发送邮件和广告
+* https://randomuser.me 随机创建用户数据
 ### 项目整合
 - YuLan-RETA-LLM：<https://github.com/RUC-GSAI/YuLan-IR> 
   
-  检索增强LLM流程
+  检索增强的LLM流程
   
 ### 一些值得关注的issues
 - Retrieval-Augmented Generation 检索增强技术 
