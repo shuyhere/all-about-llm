@@ -737,6 +737,7 @@ https://arxiv.org/abs/2306.02858
 
 ### 人工智能体 AI Agent
 
+访谈[Transformer作者：指令型智能体的构建之法](https://hub.baai.ac.cn/view/27802)
 **概念**：是一种自动智能体，以最简单的形式中在循环中运行，每次迭代时，生成自我导向的指令和操作，不依赖人类来指导对话，并且是高度可扩展的。
 
 #### 项目1：[斯坦福、谷歌「西部世界](https://arxiv.org/abs/2304.03442)
@@ -855,6 +856,9 @@ BabyAGI + LangChain ↓
   检索增强的LLM流程
   
 ### 一些值得关注的issues
+- **模型个性和特定的prompt的问题：**
+  
+  在Aiden Gomez的[访谈](https://www.youtube.com/watch?v=zBK2CPka5jo)中提到：“我希望未来不再需要提示。我很喜欢早期有关语言大模型的类比，当时语言大模型就好比是一种外星技术，我们需要学习如何与之交谈。然而，要做到这一点非常困难，你需要对语言大模型从网上学到的语言做逆向工程，这需要耗费大量心血，随着模型越来越强大，微调越来越精细，我希望掌握和了解特定语言模型不再是一种负担或优势。不同的模型有不同的个性，“个性”是指如果想要模型按照你的意图行事，那么就必须要学会与模型交流。由于训练数据集存在差异，我们可能需要学习不同的语言，这意味着模型的每次更新，都必须重新调整与模型对话的内部表示。因此，包括我在内的行业里大多数语言大模型建造者希望能够逐渐减少并克服这一问题。”
 - Retrieval-Augmented Generation 检索增强技术 
 RAG——使用检索增强生成构建特定行业的大型语言模型
 - [The AI Brick Wall – A Practical Limit For Scaling Dense Transformer Models, and How GPT 4 Will Break Past It](https://www.semianalysis.com/p/the-ai-brick-wall-a-practical-limit)

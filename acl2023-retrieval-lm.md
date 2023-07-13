@@ -43,8 +43,8 @@ and non-parametric models）
 
 ## 2. Definition & Preliminaries
 
-1. A Retrieval-based LM: Definition - A language model (LM) that usesan external datastore at test time  在测试期间使用外部数据存储的语言模型
-2. A language model (LM): Categories
+**1. A Retrieval-based LM: Definition** - A language model (LM) that usesan external datastore at test time  在测试期间使用外部数据存储的语言模型
+**2. A language model (LM): Categories**
 	 ![Alt text](/figure/image17.png)
 	 这里有一个问题是**为什么Decoder-only模型几乎成为了现在LLM的主流架构**？
 	 参考博客：https://kexue.fm/archives/9529  https://www.zhihu.com/question/588325646
@@ -67,11 +67,11 @@ and non-parametric models）
 
 		即，encoder-decoder在multitask finetuning上的优势在大参数量时被LLM的推理能力给拉平了。
 
-3. A language model (LM): Prompting
+**3. A language model (LM): Prompting**
       	 
 	通过不同的prompt使LM完成不通的任务
 
-4. A language model (LM): Often evaluated with
+**4. A language model (LM): Often evaluated with**
 	给出评价指标：1. Perplexity 2. Downstream accuracy (Zero-shot or few-shot in-context learning,or fine-tuning) 会在第五节详细介绍
 
 	一个问题：**为啥要用perplexity（困惑度）来作为本课程的主要指标**
@@ -79,10 +79,10 @@ and non-parametric models）
 	“在比较参数化的语言模型时，困惑度（PPL）经常被用到。但困惑度的改善能否转化为下游应用仍然是一个研究问题。
 
 	现已有研究表明，**困惑度与下游任务（尤其是生成任务）有很好的相关性，并且困惑度通常可提供非常稳定的结果，它可以在大规模评估数据上进行评估**（相对于下游任务来说，评估数据是没有标签的，而下游任务可能会受到提示的敏感性和缺乏大规模标记数据的影响，从而导致结果不稳定）。”
-5. Inference: Datastore
+**5. Inference: Datastore**
 	![Alt text](/figure/image18.png)
 
-6. Inference: Index 
+**6. Inference: Index**
    
 	目标：在数据存储中找到与查询最相似的一小部分元素
 
@@ -95,4 +95,109 @@ and non-parametric models）
 	参考：https://github.com/facebookresearch/faiss/wiki
 
 ## 3. Retrieval-based LM: Architecture
+**1. Categorization of retrieval-based LMs**
 
+![Alt text](/figure/image20.png)
+
+**2. Roadmap**
+
+根据 检索什么，如何使用检索，在什么时候检索将最近的研究总结展示在下面的路线图：
+
+![Alt text](/figure/image21.png)
+###  [REALM (Guu et al 2020)](https://arxiv.org/abs/2002.08909)--10 Feb 2020**
+
+本段开始介绍第一个结构 REALM：Retrieval-Augmented Language Model Pre-Training--检索增强的预训练语言模型
+![Alt text](/figure/image22.png)
+知乎上一些阅读笔记：
+* https://zhuanlan.zhihu.com/p/111255083
+* https://zhuanlan.zhihu.com/p/360635601
+
+**动机**：预训练语言模型能够从无监督文本语料中学习到很多公共知识。然而，这些知识存储在参数中，有以下两个缺点：1. 这些知识是隐式的，使用时难以解释模型储存、使用的知识；2. 模型学习到的知识的量级和模型大小（参数量）相关，因此为了学习到更多的知识，需要扩充模型大小。
+
+**预训练阶段的流程**：1. 从预训练语料中采样 ，并将部分token mask（the [MASK] at the top of the pyramid）；2. 通过检索模块，根据样本 去外部知识库（如维基百科文档）中检索能够帮助恢复mask token的文档 （The pyramidion on top allows for lessmaterial higher up the pyramid）；3. 使用样本 x 内部的信息，以及检索到的文档 中的信息，共同预测被mask掉的token（pyramidion）；
+
+**模型结构**：模型的pre-training和fine-tuning都建模为retrieve-then-predict的过程，作者将$z$
+ 视为一个隐变量，将最后的任务目标$y|x)$建模为对于所有潜在文档$z$的边缘概率：
+ $$p(y|x)=\sum_{z\in\mathcal{Z}}p(y|z,x)p(z|x)$$
+
+ **两个部分**：the neural knowledge retriever(神经知识检索器), which models $p(z | x)$, and the knowledge-augmented encoder(知识增强的encoder), which models $p(y | z, x)$.
+ ![Alt text](/figure/image23.png)
+ ![Alt text](/figure/image24.png)
+ 在预训练阶段，任务为MLM；在fine-tune阶段，任务为Open-domain QA
+
+**训练细节**：针对数据量教大的解决办法-**pretraining阶段使用Maximum Inner Product Search（最大内积搜索-内积空间下的KNN，MIPS）的算法来找到top-k个最相关文档**，为了避免一直刷新MIPS索引造成耗时严重，每隔若干step才刷新一次MIPS索引（该索引仅用来选择top-k个文档，而在每一步训练[梯度反传](#梯度反传)的时候，仍然使用的是最新的retreiver的参数）。**在fine-tune阶段，MIPS索引仅在一开始建立一次**（使用预训练的retriever参数），之后便不再更新。作者认为在预训练阶段检索器就已经学习到了足够好的文档相关性表征，但作者认为如果同样在fine-tune阶段迭代更新MIPS索引的话，效果可能会更好。
+
+**trick**：1. Salient span masking（SSM）：即在MLM预训练阶段，遮盖关键的实体/数字，而不是随机token；2. null document：部分MLM样本不需要外部文档支持；3. 避免信息泄漏：当MLM的训练语料和检索语料有重叠时，避免直接搜索到样本x的原文；4. 检索器的初始化、冷启动问题：如果一开始随机初始化检索器，那么文档将会大概率是完全无关的，模型得不到有效的梯度；为了避免这个问题，作者使用Inverse Cloze Test（ICT逆完形填空）任务来初始化训练检索器。
+
+**相关工作总结**：
+REALM and subsequent work
+* **REALM (Guu et al 2020)**: MLM followed by fine-tuning, focusing on open-domain QA
+* **DPR (Karpukhin et al 2020)**: Pipeline training instead of joint training, focusing on open-domain QA (no explicit language modeling)
+* **RAG (Lewis et al 2020)**: “Generative” instead of “masked language modeling”, focusing on open-domain QA & knowledge intensive tasks (no explicit language modeling)
+* **Atlas (Izcard et al 2022)**: Combine RAG with retrieval-based language model pre-training based on the encoder-decoder architecture (more to come in Section 4), focusing on open-domain QA & knowledge intensive tasks
+* Papers that follow this approach focusing on LM perplexity have come out quite recently (Shi et al. 2023, Ram et al. 2023) ：**Ram et al. 2023**. “In-Context Retrieval-Augmented Language Models”&**Shi et al. 2023**.“REPLUG: Retrieval-Augmented Black-Box Language Models
+
+
+### Retrieval-in-context LM
+
+**相关论文：**
+
+[In-Context Retrieval-Augmented Language Models](https://arxiv.org/abs/2302.00083)
+
+在上面这篇论文中有一些实验结论:1. Retrieval helps over all sizes of LMs 2. Shorter prefix (more recent tokens) as a query helps 3. Retrieving more frequently helps(但是会消耗更多的推理时间成本)
+
+[REPLUG: Retrieval-Augmented Black-Box Language Models](https://arxiv.org/abs/2301.12652)
+
+
+![Alt text](/figure/image25.png)
+
+### [RETRO (Borgeaud et al. 2021)-以小25倍参数量媲美GPT-3的检索增强自回归语言模型](https://arxiv.org/abs/2112.04426)
+
+“Incorporation in the “intermediate layer” instead of the “input” layer
+→ designed for many chunks, frequently, more efficiently”
+
+合并到中间层而不是输入层 + 数据规模的增加
+
+相关笔记：
+ 
+https://zhuanlan.zhihu.com/p/475346411
+https://www.cnblogs.com/Matrix_Yao/p/16480698.html
+
+![Alt text](/figure/image28.png)
+
+
+**动机**：模型参数↑ 模型数据量↑ 容易发生数据集难理解、增加模型偏差等一系列问题，为了解决这个问题，DeepMind团队研发一种**带有互联网规模检索的高效预训练模型**。使用 RETRO，**模型不仅限于训练期间看到的数据，它还可以通过检索机制访问整个训练数据集**。与具有相同数量参数的标准 Transformer 相比，这会带来显着的性能提升。
+
+RETRO(Retrieval-Enhanced Transformer )-- improving language models through **explicit memory** at unprecedented scale
+
+**数据集**：[MassiveText数据集](https://paperswithcode.com/dataset/massivetext)(来自gopher模型论文)
+
+提出了一种**避免数泄露的方法**：检索的过程就能直接访问训练集所以防止数据泄露很重要-为此论文作者提出了一种衡量测试文档与训练集接近程度的评估方式[Deduplicating Training Data Makes Language Models Better](https://arxiv.org/abs/2107.06499)
+
+**模型结构** RETRO模型架构由一个编码器堆栈（处理近邻）和一个解码器堆栈（处理输入）组成：
+编码器堆栈由标准的 Transformer 编码器块组成；解码器堆栈包含了Transformer解码器块和RETRO 解码器块（ATTN + **Chunked cross attention (CCA)** + FFNN（Feed-forward neural network））。
+
+
+![Alt text](/figure/image26.png)
+
+简化流程：
+![Alt text](/figure/image27.png)
+
+
+
+
+
+
+
+
+
+## 附录：概念补充
+
+### 梯度反传
+
+其实就是梯度下降和反向传播
+参考：<https://atcold.github.io/pytorch-Deep-Learning/zh/week02/02-1/>
+### 梯度反转
+
+用于领域自适应
+参考： <https://zhuanlan.zhihu.com/p/75470256>
