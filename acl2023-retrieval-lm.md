@@ -178,12 +178,31 @@ RETRO(Retrieval-Enhanced Transformer )-- improving language models through **exp
 编码器堆栈由标准的 Transformer 编码器块组成；解码器堆栈包含了Transformer解码器块和RETRO 解码器块（ATTN + **Chunked cross attention (CCA)** + FFNN（Feed-forward neural network））。
 
 
+- [ ] *ppt中详细解释了模型整个流程，这里标注和待补充*
+
 ![Alt text](/figure/image26.png)
 
 简化流程：
 ![Alt text](/figure/image27.png)
 
 
+对比：
+![Alt text](figure/image29.png)
+
+**思考**：除了检索split成chunks，还可以怎么处理db中的数据？
+
+↓
+
+### [kNN-LM (Khandelwal et al. 2020) -- Generalization through Memorization: Nearest Neighbor Language Models](https://arxiv.org/abs/1911.00172) 
+
+提出kNN-LMs，把语义编码特征向量的k最近邻和一般的语言模型结合从而显著提高语言模型的效果
+
+* “A different way of using retrieval, where the LM outputs a 
+nonparametric distribution over every token in the data.” 另一种使用检索的方法，其中LM在数据中的每个标记上输出一个非参数分布。
+
+* “Can be seen as an incorporation in the ‘output’ layer”  可以看做是在输出层的一个合并
+
+动机：语言模型（Language Model, LM）指的是利用链式法则给出一个句子的概率，主要要解决两个问题：（1）得到上文表示；（2）用上文表示预测下一个token。这两个问题一般使用一个autoregressive模型解决。使用AR模型去进行语言建模的一个普遍问题是：**难以充分建立长距离依赖**。由此出发，本文提出通过计算上文表示的k最近邻去结合语言模型从而**更好地捕捉上下文之间的语义关系**。
 
 
 
