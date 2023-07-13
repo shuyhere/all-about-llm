@@ -832,8 +832,8 @@ BabyAGI + LangChain ↓
 - [高质量的llm开发教程](https://fullstackdeeplearning.com/llm-bootcamp/)
 - [LLM大模型低资源微调p tuning v2和lora区别](https://zhuanlan.zhihu.com/p/622810394)
 - [Flamingo: a Visual Language Model for Few-Shot Learning](https://arxiv.org/abs/2204.14198)
-
-
+- [Inside language models](https://lifearchitect.ai/models/)
+- [retrieval-based-NLP](http://ai.stanford.edu/blog/retrieval-based-NLP/)
 
 ### 工具网址
 
