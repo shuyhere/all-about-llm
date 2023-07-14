@@ -2,12 +2,39 @@
 
 Akari Asai, Sewon Min, Zexuan Zhong, Danqi Chen
 
+
+
+
 这里主要中文总结本教程中的一些重点内容
 
 讲者说明：
 本教程是最前沿的，与参数化llm相比，我们还远远不能理解如何最好地开发基于检索的lm，这个教程主要分享：
 * 现有研究的分类和关键见解
 * 我们对当前挑战和开放问题的看法
+
+## 目录
+
+- [ACL 2023 Tutorial:Retrieval-based Language Models and Applications](#acl-2023-tutorialretrieval-based-language-models-and-applications)
+	- [目录](#目录)
+	- [1. Introduction](#1-introduction)
+	- [2. Definition \& Preliminaries](#2-definition--preliminaries)
+	- [3. Retrieval-based LM: Architecture](#3-retrieval-based-lm-architecture)
+		- [REALM (Guu et al 2020)--10 Feb 2020\*\*](#realm-guu-et-al-2020--10-feb-2020)
+		- [Retrieval-in-context LM](#retrieval-in-context-lm)
+		- [RETRO (Borgeaud et al. 2021)-以小25倍参数量媲美GPT-3的检索增强自回归语言模型](#retro-borgeaud-et-al-2021-以小25倍参数量媲美gpt-3的检索增强自回归语言模型)
+		- [kNN-LM (Khandelwal et al. 2020) -- Generalization through Memorization: Nearest Neighbor Language Models](#knn-lm-khandelwal-et-al-2020----generalization-through-memorization-nearest-neighbor-language-models)
+		- [Adaptive retrieval for efficiency](#adaptive-retrieval-for-efficiency)
+			- [Active Retrieval Augmented Generation--Forward-Looking Active REtrieval augmented generation(FLARE)](#active-retrieval-augmented-generation--forward-looking-active-retrieval-augmented-generationflare)
+			- [Adaptive retrieval of tokens -Judge necessity-- Efficient Nearest Neighbor Language Models](#adaptive-retrieval-of-tokens--judge-necessity---efficient-nearest-neighbor-language-models)
+			- [Adaptive retrieval of tokens Use local info -- RETOMATON -- Neuro-Symbolic Language Modeling with Automaton-augmented Retrieval](#adaptive-retrieval-of-tokens-use-local-info----retomaton----neuro-symbolic-language-modeling-with-automaton-augmented-retrieval)
+		- [实体专家模型](#实体专家模型)
+			- [Entities as Experts:Entities as Experts: Sparse Memory Access with Entity Supervision](#entities-as-expertsentities-as-experts-sparse-memory-access-with-entity-supervision)
+			- [从每个实体一个向量到每个实体提及一个向量的转变--Mention Memory:incorporating textual knowledge into Transformers through entity mention attention通过实体提及注意力将文本知识融入transformer中](#从每个实体一个向量到每个实体提及一个向量的转变--mention-memoryincorporating-textual-knowledge-into-transformers-through-entity-mention-attention通过实体提及注意力将文本知识融入transformer中)
+			- [**总结：**](#总结)
+	- [附录：概念补充](#附录概念补充)
+		- [梯度反传](#梯度反传)
+		- [梯度反转](#梯度反转)
+
 
 ## 1. Introduction
 
@@ -224,8 +251,7 @@ KNN-LM的优点:更细粒度；可以更好地处理罕见的模式&域外数据
 
 ### Adaptive retrieval for efficiency
 
-分为两类：Adaptive retrieval of text chunks (following retrieve-in-context)；Adaptive retrieval of
-tokens (following kNN-LM)--
+分为两类：Adaptive retrieval of **text chunks** (following retrieve-in-context)；Adaptive retrieval of **tokens** (following kNN-LM)
 
 #### [Active Retrieval Augmented Generation--Forward-Looking Active REtrieval augmented generation(FLARE)](https://arxiv.org/abs/2305.06983)
 
@@ -237,6 +263,49 @@ tokens (following kNN-LM)--
 FLARE迭代生成一个临时的下一个句子，如果它包含low-probability tokens，则将其用作检索相关文档的查询，并重新生成下一个句子句子直到结束。
 
 思考：什么是low-probability tokens 如何界定
+
+![Alt text](figure/image34.png)
+
+详细流程参考slides
+
+#### Adaptive retrieval of tokens -Judge necessity-- [Efficient Nearest Neighbor Language Models](https://arxiv.org/abs/2109.04212)
+
+![Alt text](figure/image35.png)
+
+####  Adaptive retrieval of tokens Use local info -- RETOMATON -- [Neuro-Symbolic Language Modeling with Automaton-augmented Retrieval](https://arxiv.org/abs/2201.12431)
+
+![Alt text](figure/image36.png)
+
+**总结**：
+![Alt text](figure/image37.png)
+
+思考: What else beyond text chunks and tokens to retrieve? ↓
+### 实体专家模型
+#### [Entities as Experts:Entities as Experts: Sparse Memory Access with Entity Supervision](https://arxiv.org/abs/2004.07202)
+
+Introduce a new model—Entities as Experts (EAE)that can access distinct memories of the entities mentioned in a piece of text . 提出“实体专家”模型，可以访问文本中提到的实体的不同memories，与其他将实体特定知识注入序列模型的努力不同，本模型从文本中学习实体表示以及所有其他模型参数。
+
+![Alt text](figure/image39.png)
+上图可与看到，传统的Transformer需要根据“Charles”和“Darwin”这两个词构建 Charles Darwin 的内部表示，这两个词都可以也指不同的实体，例如查尔斯河或达尔文市。相反，EAE 可以访问“查尔斯·达尔文”的专用表示，它是先前提到过该实体的所有上下文的记忆。
+
+![Alt text](figure/image38.png)
+
+#### 从每个实体一个向量到每个实体提及一个向量的转变--[Mention Memory:incorporating textual knowledge into Transformers through entity mention attention](https://arxiv.org/abs/2110.06176)通过实体提及注意力将文本知识融入transformer中
+
+**摘要翻译**：
+
+诸如开放域问答之类的自然语言理解任务通常需要从多个来源检索和吸收事实信息。我们建议通过**将大型文本语料库的半参数表示集成到 Transformer 模型中作为事实知识的来源来解决这个问题。**
+
+具体来说，我们的方法用“提及记忆”来表示知识，“提及记忆”是语料库中提及的每个实体的密集向量表示表。所提出的模型 - TOME - 是一个 Transformer，它通过内部记忆层访问信息，其中输入段落中提及的每个实体都涉及提及记忆。这种方法可以在单个 Transformer 模型中对许多不同的信息源进行综合和推理。在使用 1.5 亿条维基百科提及的内存进行的实验中，TOME 在多个开放领域知识密集型任务上取得了出色的性能，包括声明验证基准 HoVer 和 FEVER 以及多个基于实体的 QA 基准。我们还表明，该模型在没有任何直接监督的情况下学会了关注informative mentions。最后，我们证明该模型可以通过更新内存而无需重新训练来推广到新的看不见的实体。
+
+![Alt text](figure/image40.png)
+
+#### **总结：**
+![Alt text](figure/image41.png)
+
+对于以实体为中心的任务很有效&空间高效
+
+额外的实体检测
 
 
 
