@@ -204,6 +204,40 @@ nonparametric distribution over every token in the data.” 另一种使用检�
 
 动机：语言模型（Language Model, LM）指的是利用链式法则给出一个句子的概率，主要要解决两个问题：（1）得到上文表示；（2）用上文表示预测下一个token。这两个问题一般使用一个autoregressive模型解决。使用AR模型去进行语言建模的一个普遍问题是：**难以充分建立长距离依赖**。由此出发，本文提出通过计算上文表示的k最近邻去结合语言模型从而**更好地捕捉上下文之间的语义关系**。
 
+**模型结构：**
+
+![Alt text](figure/image30.png)
+具体的流程可以去看slide讲的很清楚
+
+**模型实验结果:**
+![Alt text](figure/image31.png)
+![Alt text](figure/image32.png)
+Can use in-domain datastore even if parameters were not trained in-domain
+
+**对比总结**：
+
+KNN-LM的优点:更细粒度；可以更好地处理罕见的模式&域外数据，可以非常高效（因为KNN搜索很快）；缺点:输入和检索结果之间没有交叉注意；Datastore消耗比较大
+![Alt text](figure/image33.png)
+
+**思考**: 在when to retrieve中，every n tokens和every tokens是否可以去做 adaptive ？ ↓
+
+
+### Adaptive retrieval for efficiency
+
+分为两类：Adaptive retrieval of text chunks (following retrieve-in-context)；Adaptive retrieval of
+tokens (following kNN-LM)--
+
+#### [Active Retrieval Augmented Generation--Forward-Looking Active REtrieval augmented generation(FLARE)](https://arxiv.org/abs/2305.06983)
+
+**动机和概述**：大多数现有的检索增强型语言模型都采用retrieve-and-generate设置，根据query进行一次信息检索。然而，在涉及生成长文本的更一般场景中，**在整个生成过程中不断收集信息**至关重要。过去已经有一些在生成输出时多次检索信息的努力，这些努力大多使用先前的上下文作为查询以固定的时间间隔检索文档。在这项工作中，**我们提供了主动检索增强生成**的概括视图，**即在生成过程中主动决定何时检索以及检索什么内容的方法**。我们提出了前瞻性主动检索增强生成（FLARE），这是一种通用的检索增强生成方法，它迭代地使用对即将到来的句子的预测来预测未来的内容，然后如果它包含低可信度令牌，则将其用作查询来检索相关文档以重新生成句子。
+
+由长文本生成任务引出：**一次检索并不能满足需要**，与人类在创建论文或书籍等内容时逐渐收集信息的方式类似，使用 LM 进行长格式生成需要在整个生成过程中收集多种知识。 本文采取的方法是通过生成临时的下一个句子，将其作为检索相关文档的查询，然后根据检索到的文档重新生成下一个句子来预测未来。
+
+
+FLARE迭代生成一个临时的下一个句子，如果它包含low-probability tokens，则将其用作检索相关文档的查询，并重新生成下一个句子句子直到结束。
+
+思考：什么是low-probability tokens 如何界定
+
 
 
 
