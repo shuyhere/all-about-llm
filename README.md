@@ -930,7 +930,7 @@ Transformer 是《Attention Is All You Need》论文中介绍的一种神经网�
 A Survey of Large Language Models
 - Renmin University of China
 - https://arxiv.org/pdf/2303.18223.pdf
-- 通过介绍背景、主要发现和主流技术来回顾法学硕士的最新进展。重点关注LLM的四个主要方面，即预训练、适应调优、利用和能力评估。此外，总结了发展法学硕士的可用资源，并讨论了未来方向的剩余问题。
+- 通过介绍背景、主要发现和主流技术来回顾LLMs的最新进展。重点关注LLM的四个主要方面，即预训练、适应调优、利用和能力评估。此外，总结了发展LLMs的可用资源，并讨论了未来方向的剩余问题。
 
 Augmented Language Models: a Survey
 - Meta AI
