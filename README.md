@@ -570,6 +570,9 @@ https://arxiv.org/abs/2306.02858
 效果： 匹配效果针对于中文不太好，但是识别文字的能力，界面的设置，文字的章节识别等很好，数据库式管理，适合批量处理文档
 	![Alt text](./figure/image4.png)
 
+- 用pgvector替换Faiss：
+  https://github.com/pgvector/pgvector
+
 ### 模型下载&转换，训练&微调
 - Training Open Instruction-following Language Models https://github.com/allenai/open-instruct
 - 各种模型的低资源量化和部署 https://github.com/jianzhnie/Efficient-Tuning-LLMs
