@@ -31,6 +31,8 @@ Akari Asai, Sewon Min, Zexuan Zhong, Danqi Chen
 			- [Entities as Experts:Entities as Experts: Sparse Memory Access with Entity Supervision](#entities-as-expertsentities-as-experts-sparse-memory-access-with-entity-supervision)
 			- [从每个实体一个向量到每个实体提及一个向量的转变--Mention Memory:incorporating textual knowledge into Transformers through entity mention attention通过实体提及注意力将文本知识融入transformer中](#从每个实体一个向量到每个实体提及一个向量的转变--mention-memoryincorporating-textual-knowledge-into-transformers-through-entity-mention-attention通过实体提及注意力将文本知识融入transformer中)
 			- [**总结：**](#总结)
+		- [Retrieval for long-range LM](#retrieval-for-long-range-lm)
+			- [Wu et al. 2022. Memorizing Transformers (Figure source)](#wu-et-al-2022-memorizing-transformers-figure-source)
 	- [附录：概念补充](#附录概念补充)
 		- [梯度反传](#梯度反传)
 		- [梯度反转](#梯度反转)
@@ -303,9 +305,26 @@ Introduce a new model—Entities as Experts (EAE)that can access distinct memori
 #### **总结：**
 ![Alt text](figure/image41.png)
 
-对于以实体为中心的任务很有效&空间高效
+优势：对于以实体为中心的任务很有效&空间高效
 
-额外的实体检测
+劣势：需要额外的实体检测
+
+上面所有的模型都是基于外部文本的，还有其他方法吗？↓
+### Retrieval for long-range LM
+
+#### [Wu et al. 2022. Memorizing Transformers (Figure source)](https://arxiv.org/abs/2203.08913)
+
+
+语言模型通常需要进行训练或微调才能获取新知识，这涉及更新其权重。相反，我们设想语言模型可以在推理时简单地读取和记忆新数据，从而立即获取新知识。在这项工作中，我们扩展了语言模型，使其能够记住过去输入的内部表示。我们证明，对最近（键、值）对的不可微记忆进行近似 kNN 查找可以改进跨各种基准和任务的语言建模，包括通用网络文本 (C4)、数学论文 (arXiv)、书籍 (PG-19)、代码（Github），以及形式定理（Isabelle）。我们表明，当我们将内存大小增加到 262K 令牌时，性能会稳步提高。在包括代码和数学在内的基准测试中，我们发现该模型能够在测试期间使用新定义的函数和定理。(基于KNN去做检索)
+
+对长序列的注意力作为快速学习的一种形式也很有用。以权重矩阵形式存储的事实和信息必须经过数十万个训练步骤缓慢训练。然而，通过使用注意力，模型可以通过将事实（例如函数定义）作为（键，值）对存储在长期记忆中来简单地记住它们，然后通过创建关注它们的查询来检索这些事实。在这种情况下，注意力充当信息检索的一种形式，允许模型查找它以前见过的事实。
+
+![Alt text](figure/image42.png)
+
+↑扩展 Transformer 来访问先前看到的子序列的（键，值）对。
+
+
+**Bertsch** et al. 2023. Unlimiformer: Long-Range Transformers with Unlimited Length Input
 
 
 
