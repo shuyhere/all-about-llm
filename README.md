@@ -97,6 +97,7 @@
       - [Tokenization](#tokenization)
       - [Topic Modeling](#topic-modeling)
       - [Transformer](#transformer)
+  - [LLMs Surveys](#llms-surveys)
 
 ## LLM
 ### 1. [《GPT-4 Architecture, Infrastructure, Training Dataset, Costs, Vision, MoE》](https://www.semianalysis.com/p/gpt-4-architecture-infrastructure)
@@ -838,6 +839,7 @@ BabyAGI + LangChain ↓
 - [Flamingo: a Visual Language Model for Few-Shot Learning](https://arxiv.org/abs/2204.14198)
 - [Inside language models](https://lifearchitect.ai/models/)
 - [retrieval-based-NLP](http://ai.stanford.edu/blog/retrieval-based-NLP/)
+- [ACL2023tutorial 知识检索增强型大模型前言教程-中文理解加各种补充(自己扣的可能有些观点不是很精确)](./acl2023-retrieval-lm.md#)
 
 ### 工具网址
 
