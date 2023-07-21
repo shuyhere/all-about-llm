@@ -1,6 +1,6 @@
 # all-about-llm
 大语言模型训练和服务调研
-# 东西太多了感觉会没条理，打算写到gitbook上：https://bbb-fullstack-aier.gitbook.io/all-about-llm/
+东西太多了感觉会没条理，写到gitbook上了：https://bbb-fullstack-aier.gitbook.io/all-about-llm/
 
 ## 目录
 
