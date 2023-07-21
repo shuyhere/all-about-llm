@@ -15,7 +15,7 @@ Akari Asai, Sewon Min, Zexuan Zhong, Danqi Chen
 
 Retrieval-based LMs = Retrieval + LMs
 
-![LM  retrieves from an external datastore (at least during inference time)](figure/image16.png) 语言模型从外部数据存储中进行检索（至少在推理期间）这样的模型也被称为半参数模型和非参数模型（semiparametric and non-parametric models）
+![LM  retrieves from an external datastore (at least during inference time)](../../Tutorial\&Workshop/figure/image16.png) 语言模型从外部数据存储中进行检索（至少在推理期间）这样的模型也被称为半参数模型和非参数模型（semiparametric and non-parametric models）
 
 **2. The age of large language models (LLMs)：主要介绍目前大语言模型的一些特点**
 
@@ -41,7 +41,7 @@ LM推动了大量关于密集检索的更好算法的研究，例如，DPR，Col
 
 ## 2. Definition & Preliminaries
 
-**1. A Retrieval-based LM: Definition** - A language model (LM) that usesan external datastore at test time 在测试期间使用外部数据存储的语言模型 **2. A language model (LM): Categories** ![Alt text](../../figure/image17.png) 这里有一个问题是**为什么Decoder-only模型几乎成为了现在LLM的主流架构**？ 参考博客：https://kexue.fm/archives/9529 https://www.zhihu.com/question/588325646
+**1. A Retrieval-based LM: Definition** - A language model (LM) that usesan external datastore at test time 在测试期间使用外部数据存储的语言模型 **2. A language model (LM): Categories** ![Alt text](../../../figure/image17.png) 这里有一个问题是**为什么Decoder-only模型几乎成为了现在LLM的主流架构**？ 参考博客：https://kexue.fm/archives/9529 https://www.zhihu.com/question/588325646
 
 ```
  主要观点:任何NLP任务都可以分解为“输入”跟“输出”两部分，我们可以把处理“输入”的模型叫做Encoder，生成“输出”的模型叫做Decoder，那么所有任务都可以从“Encoder-Decoder”的视角来理解，而不同模型之间的差距在于Encoder、Decoder的注意力模式以及是否共享参数,比如：
@@ -79,7 +79,7 @@ LM推动了大量关于密集检索的更好算法的研究，例如，DPR，Col
 现已有研究表明，**困惑度与下游任务（尤其是生成任务）有很好的相关性，并且困惑度通常可提供非常稳定的结果，它可以在大规模评估数据上进行评估**（相对于下游任务来说，评估数据是没有标签的，而下游任务可能会受到提示的敏感性和缺乏大规模标记数据的影响，从而导致结果不稳定）。”
 ```
 
-**5. Inference: Datastore** ![Alt text](../../figure/image18.png)
+**5. Inference: Datastore** ![Alt text](../../../figure/image18.png)
 
 **6. Inference: Index**
 
@@ -99,17 +99,17 @@ LM推动了大量关于密集检索的更好算法的研究，例如，DPR，Col
 
 **1. Categorization of retrieval-based LMs**
 
-![Alt text](../../figure/image20.png)
+![Alt text](../../../figure/image20.png)
 
 **2. Roadmap**
 
 根据 检索什么，如何使用检索，在什么时候检索将最近的研究总结展示在下面的路线图：
 
-![Alt text](../../figure/image21.png)
+![Alt text](../../../figure/image21.png)
 
 ### [REALM (Guu et al 2020)](https://arxiv.org/abs/2002.08909)--10 Feb 2020\*\*
 
-本段开始介绍第一个结构 REALM：Retrieval-Augmented Language Model Pre-Training--检索增强的预训练语言模型 ![Alt text](../../figure/image22.png) 知乎上一些阅读笔记：
+本段开始介绍第一个结构 REALM：Retrieval-Augmented Language Model Pre-Training--检索增强的预训练语言模型 ![Alt text](../../../figure/image22.png) 知乎上一些阅读笔记：
 
 * https://zhuanlan.zhihu.com/p/111255083
 * https://zhuanlan.zhihu.com/p/360635601
@@ -120,7 +120,7 @@ LM推动了大量关于密集检索的更好算法的研究，例如，DPR，Col
 
 **模型结构**：模型的pre-training和fine-tuning都建模为retrieve-then-predict的过程，作者将$z$ 视为一个隐变量，将最后的任务目标$y|x)$建模为对于所有潜在文档$z$的边缘概率： $$p(y|x)=\sum_{z\in\mathcal{Z}}p(y|z,x)p(z|x)$$
 
-**两个部分**：the neural knowledge retriever(神经知识检索器), which models $p(z | x)$, and the knowledge-augmented encoder(知识增强的encoder), which models $p(y | z, x)$. ![Alt text](../../figure/image23.png) ![Alt text](../../figure/image24.png) 在预训练阶段，任务为MLM；在fine-tune阶段，任务为Open-domain QA
+**两个部分**：the neural knowledge retriever(神经知识检索器), which models $p(z | x)$, and the knowledge-augmented encoder(知识增强的encoder), which models $p(y | z, x)$. ![Alt text](../../../figure/image23.png) ![Alt text](../../../figure/image24.png) 在预训练阶段，任务为MLM；在fine-tune阶段，任务为Open-domain QA
 
 **训练细节**：针对数据量教大的解决办法-**pretraining阶段使用Maximum Inner Product Search（最大内积搜索-内积空间下的KNN，MIPS）的算法来找到top-k个最相关文档**，为了避免一直刷新MIPS索引造成耗时严重，每隔若干step才刷新一次MIPS索引（该索引仅用来选择top-k个文档，而在每一步训练[梯度反传](acl2023-retrieval-lm.md#梯度反传)的时候，仍然使用的是最新的retreiver的参数）。**在fine-tune阶段，MIPS索引仅在一开始建立一次**（使用预训练的retriever参数），之后便不再更新。作者认为在预训练阶段检索器就已经学习到了足够好的文档相关性表征，但作者认为如果同样在fine-tune阶段迭代更新MIPS索引的话，效果可能会更好。
 
@@ -144,7 +144,7 @@ LM推动了大量关于密集检索的更好算法的研究，例如，DPR，Col
 
 [REPLUG: Retrieval-Augmented Black-Box Language Models](https://arxiv.org/abs/2301.12652)
 
-![Alt text](../../figure/image25.png)
+![Alt text](../../../figure/image25.png)
 
 ### [RETRO (Borgeaud et al. 2021)-以小25倍参数量媲美GPT-3的检索增强自回归语言模型](https://arxiv.org/abs/2112.04426)
 
@@ -156,7 +156,7 @@ LM推动了大量关于密集检索的更好算法的研究，例如，DPR，Col
 
 https://zhuanlan.zhihu.com/p/475346411 https://www.cnblogs.com/Matrix\_Yao/p/16480698.html
 
-![Alt text](../../figure/image28.png)
+![Alt text](../../../figure/image28.png)
 
 **动机**：模型参数↑ 模型数据量↑ 容易发生数据集难理解、增加模型偏差等一系列问题，为了解决这个问题，DeepMind团队研发一种**带有互联网规模检索的高效预训练模型**。使用 RETRO，**模型不仅限于训练期间看到的数据，它还可以通过检索机制访问整个训练数据集**。与具有相同数量参数的标准 Transformer 相比，这会带来显着的性能提升。
 
@@ -170,11 +170,11 @@ RETRO(Retrieval-Enhanced Transformer )-- improving language models through **exp
 
 * [ ] _ppt中详细解释了模型整个流程，这里标注和待补充_
 
-![Alt text](../../figure/image26.png)
+![Alt text](../../../figure/image26.png)
 
-简化流程： ![Alt text](../../figure/image27.png)
+简化流程： ![Alt text](../../../figure/image27.png)
 
-对比： ![Alt text](figure/image29.png)
+对比： ![Alt text](../../Tutorial\&Workshop/figure/image29.png)
 
 **思考**：除了检索split成chunks，还可以怎么处理db中的数据？
 
@@ -191,13 +191,13 @@ RETRO(Retrieval-Enhanced Transformer )-- improving language models through **exp
 
 **模型结构：**
 
-![Alt text](figure/image30.png) 具体的流程可以去看slide讲的很清楚
+![Alt text](../../Tutorial\&Workshop/figure/image30.png) 具体的流程可以去看slide讲的很清楚
 
-**模型实验结果:** ![Alt text](figure/image31.png) ![Alt text](figure/image32.png) Can use in-domain datastore even if parameters were not trained in-domain
+**模型实验结果:** ![Alt text](../../Tutorial\&Workshop/figure/image31.png) ![Alt text](../../Tutorial\&Workshop/figure/image32.png) Can use in-domain datastore even if parameters were not trained in-domain
 
 **对比总结**：
 
-KNN-LM的优点:更细粒度；可以更好地处理罕见的模式&域外数据，可以非常高效（因为KNN搜索很快）；缺点:输入和检索结果之间没有交叉注意；Datastore消耗比较大 ![Alt text](figure/image33.png)
+KNN-LM的优点:更细粒度；可以更好地处理罕见的模式&域外数据，可以非常高效（因为KNN搜索很快）；缺点:输入和检索结果之间没有交叉注意；Datastore消耗比较大 ![Alt text](../../Tutorial\&Workshop/figure/image33.png)
 
 **思考**: 在when to retrieve中，every n tokens和every tokens是否可以去做 adaptive ？ ↓
 
@@ -215,7 +215,7 @@ FLARE迭代生成一个临时的下一个句子，如果它包含low-probability
 
 思考：什么是low-probability tokens 如何界定
 
-![Alt text](figure/image34.png)
+![Alt text](../../Tutorial\&Workshop/figure/image34.png)
 
 详细流程参考slides
 
@@ -225,9 +225,9 @@ FLARE迭代生成一个临时的下一个句子，如果它包含low-probability
 
 #### Adaptive retrieval of tokens Use local info -- RETOMATON -- [Neuro-Symbolic Language Modeling with Automaton-augmented Retrieval](https://arxiv.org/abs/2201.12431)
 
-![Alt text](figure/image36.png)
+![Alt text](../../Tutorial\&Workshop/figure/image36.png)
 
-**总结**： ![Alt text](figure/image37.png)
+**总结**： ![Alt text](../../Tutorial\&Workshop/figure/image37.png)
 
 思考: What else beyond text chunks and tokens to retrieve? ↓
 
@@ -237,9 +237,9 @@ FLARE迭代生成一个临时的下一个句子，如果它包含low-probability
 
 Introduce a new model—Entities as Experts (EAE)that can access distinct memories of the entities mentioned in a piece of text . 提出“实体专家”模型，可以访问文本中提到的实体的不同memories，与其他将实体特定知识注入序列模型的努力不同，本模型从文本中学习实体表示以及所有其他模型参数。
 
-![Alt text](../figure/image39.png) 上图可与看到，传统的Transformer需要根据“Charles”和“Darwin”这两个词构建 Charles Darwin 的内部表示，这两个词都可以也指不同的实体，例如查尔斯河或达尔文市。相反，EAE 可以访问“查尔斯·达尔文”的专用表示，它是先前提到过该实体的所有上下文的记忆。
+![Alt text](../../figure/image39.png) 上图可与看到，传统的Transformer需要根据“Charles”和“Darwin”这两个词构建 Charles Darwin 的内部表示，这两个词都可以也指不同的实体，例如查尔斯河或达尔文市。相反，EAE 可以访问“查尔斯·达尔文”的专用表示，它是先前提到过该实体的所有上下文的记忆。
 
-![Alt text](figure/image38.png)
+![Alt text](../../Tutorial\&Workshop/figure/image38.png)
 
 #### 从每个实体一个向量到每个实体提及一个向量的转变--[Mention Memory:incorporating textual knowledge into Transformers through entity mention attention](https://arxiv.org/abs/2110.06176)通过实体提及注意力将文本知识融入transformer中
 
@@ -249,11 +249,11 @@ Introduce a new model—Entities as Experts (EAE)that can access distinct memori
 
 具体来说，我们的方法用“提及记忆”来表示知识，“提及记忆”是语料库中提及的每个实体的密集向量表示表。所提出的模型 - TOME - 是一个 Transformer，它通过内部记忆层访问信息，其中输入段落中提及的每个实体都涉及提及记忆。这种方法可以在单个 Transformer 模型中对许多不同的信息源进行综合和推理。在使用 1.5 亿条维基百科提及的内存进行的实验中，TOME 在多个开放领域知识密集型任务上取得了出色的性能，包括声明验证基准 HoVer 和 FEVER 以及多个基于实体的 QA 基准。我们还表明，该模型在没有任何直接监督的情况下学会了关注informative mentions。最后，我们证明该模型可以通过更新内存而无需重新训练来推广到新的看不见的实体。
 
-![Alt text](figure/image40.png)
+![Alt text](../../Tutorial\&Workshop/figure/image40.png)
 
 #### **总结：**
 
-![Alt text](figure/image41.png)
+![Alt text](../../Tutorial\&Workshop/figure/image41.png)
 
 优势：对于以实体为中心的任务很有效&空间高效
 
@@ -269,7 +269,7 @@ Introduce a new model—Entities as Experts (EAE)that can access distinct memori
 
 对长序列的注意力作为快速学习的一种形式也很有用。以权重矩阵形式存储的事实和信息必须经过数十万个训练步骤缓慢训练。然而，通过使用注意力，模型可以通过将事实（例如函数定义）作为（键，值）对存储在长期记忆中来简单地记住它们，然后通过创建关注它们的查询来检索这些事实。在这种情况下，注意力充当信息检索的一种形式，允许模型查找它以前见过的事实。
 
-![Alt text](../../figure/image42.png)
+![Alt text](../../../figure/image42.png)
 
 ↑扩展 Transformer 来访问先前看到的子序列的（键，值）对。
 
