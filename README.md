@@ -49,6 +49,7 @@
     - [5. Brain-inspired multimodal hybrid neural network for robot place recognition](#5-brain-inspired-multimodal-hybrid-neural-network-for-robot-place-recognition)
   - [大模型有关项目实现 工具\&参考项目](#大模型有关项目实现-工具参考项目)
     - [优化方向](#优化方向)
+    - [一些思考](#一些思考)
     - [数据准备](#数据准备)
     - [数据处理](#数据处理)
     - [模型下载\&转换，训练\&微调](#模型下载转换训练微调)
@@ -100,6 +101,7 @@
   - [LLMs Surveys](#llms-surveys)
 
 ## LLM
+
 ### 1. [《GPT-4 Architecture, Infrastructure, Training Dataset, Costs, Vision, MoE》](https://www.semianalysis.com/p/gpt-4-architecture-infrastructure)
 
 
@@ -515,6 +517,10 @@ https://arxiv.org/abs/2306.02858
 1. 优化 text_split 算法，使匹配出的结果作为上下文时能够提供更合理的推理/回答依据；
 2. 优化 embedding 模型，提升语义向量化的效果，使得语义匹配过程中能够匹配出最满足要求的文本段落作为上下文；
 3. 优化 LLM 模型，使得给定提问相同情况下，得到更理想的推理/回答结果。
+
+### 一些思考
+* 大模型的人格特征，究竟要怎么样去塑造大模型的人格特征呢
+* 我们现在用lora等方法去进行知识注入，应该就是让大模型记住了答案。我们问，大模型答，其实最后只是搞出了问答机器。但是对问题的应该有怎么样的答案应该是基于大模型成长过程中的经历的，比如一个小孩经常受到鼓励的话他会更积极一些，这个是外部的反馈决定模型的认知，和我们现在训练lora的方式好像是相反的，所以lora是不是应该按照RLHF去做？每个lora当做一个事件，大模型经历了这个事件所以获得了什么收获又拥有了那些新的人格特质？（只是一些思考）
 
 ### 数据准备
 - **分词工具**
