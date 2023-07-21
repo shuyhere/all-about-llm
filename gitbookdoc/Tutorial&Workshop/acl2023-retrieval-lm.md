@@ -1,7 +1,5 @@
 # 🧎♀ ACL 2023 Tutorial:Retrieval-based Language Models and Applications
 
-Akari Asai, Sewon Min, Zexuan Zhong, Danqi Chen
-
 这里主要中文总结本教程中的一些重点内容
 
 **讲者说明**： 本教程是最前沿的，与参数化llm相比，我们还远远不能理解如何最好地开发基于检索的lm，这个教程主要分享：
@@ -15,7 +13,11 @@ Akari Asai, Sewon Min, Zexuan Zhong, Danqi Chen
 
 Retrieval-based LMs = Retrieval + LMs
 
-![LM  retrieves from an external datastore (at least during inference time)](figure/image16.png) 语言模型从外部数据存储中进行检索（至少在推理期间）这样的模型也被称为半参数模型和非参数模型（semiparametric and non-parametric models）
+![LM  retrieves from an external datastore (at least during inference time)](figure/image16.png)&#x20;
+
+
+
+语言模型从外部数据存储中进行检索（至少在推理期间）这样的模型也被称为半参数模型和非参数模型（semiparametric and non-parametric models）
 
 **2. The age of large language models (LLMs)：主要介绍目前大语言模型的一些特点**
 
@@ -25,31 +27,49 @@ Retrieval-based LMs = Retrieval + LMs
 
 **3. Retrieval for knowledge-intensive NLP tasks** 对知识密集型任务的检索
 
-**Representative tasks**: open-domain QA, fact checking, entity linking...
+**Representative tasks**: open-domain QA, fact-checking, entity linking...
 
 LM推动了大量关于密集检索的更好算法的研究，例如，DPR，ColBERT,ANCE,Contriever，..
 
 **4. Why** retrieval-based LMs?
 
-```
 * LLMs can’t memorize all (long-tail) knowledge in their parameters 大模型的参数对知识的记忆有限
-* LLMs’ knowledge is easily outdated and hard to update 大模型的知识容易过时，难以更新--**现有的知识编辑方法仍然是不可扩展的**（研究方向！）而数据存储可以很容易地更新和扩展——甚至不需要重新训练模型
+* LLMs’ knowledge is easily outdated and hard to update 大模型的知识容易过时，难以更新----现有的知识编辑方法仍然是**不可扩展**的（研究方向！）而数据存储可以很容易地更新和扩展——甚至不需要重新训练模型
 * LLMs’ output is challenging to interpret and verify 大模型的输出难以验证和解释--从检索结果中更新知识来源可以获得更好的解释性和控制性（Generating text with citations，like newbing）
-* LLMs are shown to easily leak private training data 大模型容易泄漏私有训练数据 ，所以可以通过将私人数据存储在数据存储器中，从而对其进行个性化处理（而不是直接参与模型参数训练？）
-* LLMs are *large* and expensive to train and run 大模型训练和运行成本高，而数据存储器可以在推理期间进行检索，因此可以**减少模型的大小和成本** --Long-term goal: can we possibly reduce the training and inference costs, and scale down the size of LLMs?
-```
+* LLMs are shown to easily leak private training data **大模型容易泄漏私有训练数据** ，所以可以通过将私人数据存储在数据存储器中，从而对其进行个性化处理（而不是直接参与模型参数训练？）
+* LLMs are large and expensive to train and run 大模型训练和运行成本高，而数据存储器可以在推理期间进行检索，因此可以**减少模型的大小和成本** --Long-term goal: can we possibly reduce the training and inference costs, and scale down the size of LLMs?
 
 ## 2. Definition & Preliminaries
 
-**1. A Retrieval-based LM: Definition** - A language model (LM) that usesan external datastore at test time 在测试期间使用外部数据存储的语言模型 **2. A language model (LM): Categories** ![Alt text](../../figure/image17.png) 这里有一个问题是**为什么Decoder-only模型几乎成为了现在LLM的主流架构**？ 参考博客：https://kexue.fm/archives/9529 https://www.zhihu.com/question/588325646
+**1. A Retrieval-based LM: Definition** - A language model (LM) that usesan external datastore at test time 在测试期间使用外部数据存储的语言模型&#x20;
+
+**2. A language model (LM): Categories**
+
+<figure><img src="../../figure/image17.png" alt=""><figcaption></figcaption></figure>
+
+这里有一个问题是**为什么Decoder-only模型几乎成为了现在LLM的主流架构**？&#x20;
+
+参考博客：
+
+[https://kexue.fm/archives/9529](https://kexue.fm/archives/9529)
+
+[https://www.zhihu.com/question/588325646](https://www.zhihu.com/question/588325646)
+
+主要观点:任何NLP任务都可以分解为“输入”跟“输出”两部分，我们可以把处理“输入”的模型叫做Encoder，生成“输出”的模型叫做Decoder，那么所有任务都可以从“Encoder-Decoder”的视角来理解，而不同模型之间的差距在于Encoder、Decoder的注意力模式以及是否共享参数,比如:
+
+
+
+\| Model |  Encoder 注意力 |  Dncoder 注意力 | 是否共享参数 |
+
+\|-------|--------------|--------------|--------|
+
+\| GPT   | 单向           | 单向           | 是      |
+
+\| UniLM | 双向           | 单向           | 是      |
+
+\| T5    | 双向           | 单向           | 否      |
 
 ```
- 主要观点:任何NLP任务都可以分解为“输入”跟“输出”两部分，我们可以把处理“输入”的模型叫做Encoder，生成“输出”的模型叫做Decoder，那么所有任务都可以从“Encoder-Decoder”的视角来理解，而不同模型之间的差距在于Encoder、Decoder的注意力模式以及是否共享参数,比如：
-| Model |  Encoder 注意力 |  Dncoder 注意力 | 是否共享参数 |
-|-------|--------------|--------------|--------|
-| GPT   | 单向           | 单向           | 是      |
-| UniLM | 双向           | 单向           | 是      |
-| T5    | 双向           | 单向           | 否      |
 
 这里的GPT就是Decoder-only的代表作；UniLM则是跟GPT相似的Decoder架构，但它是混合的注意力模式；T5则是Encoder-Decoder架构的代表作，主要是Google比较感兴趣。
 
