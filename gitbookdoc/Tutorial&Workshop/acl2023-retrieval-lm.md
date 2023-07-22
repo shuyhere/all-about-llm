@@ -11,13 +11,11 @@
 
 **1. 什么是Retrieval-based language models (LMs)？**
 
-Retrieval-based LMs = Retrieval + LMs
+Retrieval-based LMs = Retrieval + LMs 语言模型从外部数据存储中进行检索（至少在推理期间）
 
-![LM  retrieves from an external datastore (at least during inference time)](figure/image16.png)&#x20;
+<figure><img src="figure/image16.png" alt="" width="563"><figcaption></figcaption></figure>
 
-
-
-语言模型从外部数据存储中进行检索（至少在推理期间）这样的模型也被称为半参数模型和非参数模型（semiparametric and non-parametric models）
+这样的模型也被称为半参数模型和非参数模型（semiparametric and non-parametric models）
 
 **2. The age of large language models (LLMs)：主要介绍目前大语言模型的一些特点**
 
@@ -45,7 +43,7 @@ LM推动了大量关于密集检索的更好算法的研究，例如，DPR，Col
 
 **2. A language model (LM): Categories**
 
-<figure><img src="../../figure/image17.png" alt=""><figcaption></figcaption></figure>
+<figure><img src="../../figure/image17.png" alt="" width="563"><figcaption></figcaption></figure>
 
 这里有一个问题是**为什么Decoder-only模型几乎成为了现在LLM的主流架构**？&#x20;
 
@@ -55,65 +53,64 @@ LM推动了大量关于密集检索的更好算法的研究，例如，DPR，Col
 
 [https://www.zhihu.com/question/588325646](https://www.zhihu.com/question/588325646)
 
-主要观点:任何NLP任务都可以分解为“输入”跟“输出”两部分，我们可以把处理“输入”的模型叫做Encoder，生成“输出”的模型叫做Decoder，那么所有任务都可以从“Encoder-Decoder”的视角来理解，而不同模型之间的差距在于Encoder、Decoder的注意力模式以及是否共享参数,比如:
+主要观点: 任何NLP任务都可以分解为“输入”跟“输出”两部分，我们可以把处理“输入”的模型叫做Encoder，生成“输出”的模型叫做Decoder，那么所有任务都可以从“Encoder-Decoder”的视角来理解，而不同模型之间的差距在于Encoder、Decoder的注意力模式以及是否共享参数,比如:
 
+| Model  | Encoder 注意力  | Dncoder 注意力 | 是否共享参数  |
+| ------ | ------------ | ----------- | ------- |
+| GPT    | 单向           | 单向          | 是       |
+| UniLM  | 双向           | 单向          | 是       |
+| T5     | 双向           | 单向          | 否       |
 
-
-\| Model |  Encoder 注意力 |  Dncoder 注意力 | 是否共享参数 |
-
-\|-------|--------------|--------------|--------|
-
-\| GPT   | 单向           | 单向           | 是      |
-
-\| UniLM | 双向           | 单向           | 是      |
-
-\| T5    | 双向           | 单向           | 否      |
-
-```
+{% code overflow="wrap" %}
+```markdown
 
 这里的GPT就是Decoder-only的代表作；UniLM则是跟GPT相似的Decoder架构，但它是混合的注意力模式；T5则是Encoder-Decoder架构的代表作，主要是Google比较感兴趣。
 
-1. GPT和UniLM的对比实验，结果说明：“**输入部分的注意力改为双向不会带来收益，Encoder-Decoder架构的优势很可能只是源于参数翻倍。**”
+1. GPT和UniLM的对比实验，结果说明：“输入部分的注意力改为双向不会带来收益，Encoder-Decoder架构的优势很可能只是源于参数翻倍。”
 
-2. **低秩问题**：众所周知，Attention矩阵一般是由一个低秩分解的矩阵加softmax而来，具体来说是一个n×d的矩阵与d×n的矩阵相乘后再加softmax（n≫d），这种形式的Attention的矩阵因为低秩问题而带来表达能力的下降，具体分析可以参考《Attention is Not All You Need: Pure Attention Loses Rank Doubly Exponentially with Depth》。而Decoder-only架构的Attention矩阵是一个下三角阵，注意三角阵的行列式等于它对角线元素之积，由于softmax的存在，对角线必然都是正数，所以它的行列式必然是正数，即Decoder-only架构的Attention矩阵一定是满秩的，满秩意味着理论上有更强的表达能力，也就是说，Decoder-only架构的Attention矩阵在理论上具有更强的表达能力，改为双向注意力反而会变得不足。（可以参考线性attention相关内容：《Attention is Not All You Need: Pure Attention Loses Rank Doubly Exponentially with Depth》&《Transformer升级之路》）
+2. 低秩问题：Attention矩阵一般是由一个低秩分解的矩阵加softmax而来，具体来说是一个n×d的矩阵与d×n的矩阵相乘后再加softmax（n≫d），这种形式的Attention的矩阵因为低秩问题而带来表达能力的下降，具体分析可以参考《Attention is Not All You Need: Pure Attention Loses Rank Doubly Exponentially with Depth》。而Decoder-only架构的Attention矩阵是一个下三角阵，注意三角阵的行列式等于它对角线元素之积，由于softmax的存在，对角线必然都是正数，所以它的行列式必然是正数，即Decoder-only架构的Attention矩阵一定是满秩的，满秩意味着理论上有更强的表达能力，也就是说， Decoder-only架构的Attention矩阵在理论上具有更强的表达能力，改为双向注意力反而会变得不足。（可以参考线性attention相关内容：《Attention is Not All You Need: Pure Attention Loses Rank Doubly Exponentially with Depth》&《Transformer升级之路》）
+
 3. 《Attention is Not All You Need: Pure Attention Loses Rank Doubly Exponentially with Depth》
-
-	论文最主要的一个结论是decoder-only模型在没有任何tuning数据的情况下、zero-shot表现最好，而encoder-decoder则需要在一定量的标注数据上做multitask finetuning才能激发最佳性能。而目前的Large LM的训练范式还是在大规模语料上做自监督学习，很显然，Zero-Shot性能更好的decoder-only架构才能更好地利用这些无标注数据。此外，Instruct GPT在自监督学习外还引入了RLHF作辅助学习。RLHF本身也不需要人工提供任务特定的标注数据，仅需要在LLM生成的结果上作排序。虽然目前没有太多有关RLHF + encoder-decoder的相关实验，直觉上RLHF带来的提升可能还是不如multitask finetuning，毕竟前者本质只是ranking、引入监督信号没有后者强。
-
-	即，encoder-decoder在multitask finetuning上的优势在大参数量时被LLM的推理能力给拉平了。
-```
-
-**3. A language model (LM): Prompting**
+论文最主要的一个结论是decoder-only模型在没有任何tuning数据的情况下、zero-shot表现最好，而encoder-decoder则需要在一定量的标注数据上做multitask finetuning才能激发最佳性能。而目前的Large LM的训练范式还是在大规模语料上做自监督学习，很显然，Zero-Shot性能更好的decoder-only架构才能更好地利用这些无标注数据。此外，Instruct GPT在自监督学习外还引入了RLHF作辅助学习。RLHF本身也不需要人工提供任务特定的标注数据，仅需要在LLM生成的结果上作排序。虽然目前没有太多有关RLHF + encoder-decoder的相关实验，直觉上RLHF带来的提升可能还是不如multitask finetuning，毕竟前者本质只是ranking、引入监督信号没有后者强。即，encoder-decoder在multitask finetuning上的优势在大参数量时被LLM的推理能力给拉平了。
 
 ```
-通过不同的prompt使LM完成不通的任务
-```
+{% endcode %}
 
-**4. A language model (LM): Often evaluated with** 给出评价指标：1. Perplexity 2. Downstream accuracy (Zero-shot or few-shot in-context learning,or fine-tuning) 会在第五节详细介绍
+链接阅读：
 
-```
-一个问题：**为啥要用perplexity（困惑度）来作为本课程的主要指标**
+[Transformer升级之路](https://spaces.ac.cn/archives/8338)
 
-“在比较参数化的语言模型时，困惑度（PPL）经常被用到。但困惑度的改善能否转化为下游应用仍然是一个研究问题。
+[Attention is Not All You Need: Pure Attention Loses Rank Doubly Exponentially with Depth](https://arxiv.org/abs/2103.03404)
 
-现已有研究表明，**困惑度与下游任务（尤其是生成任务）有很好的相关性，并且困惑度通常可提供非常稳定的结果，它可以在大规模评估数据上进行评估**（相对于下游任务来说，评估数据是没有标签的，而下游任务可能会受到提示的敏感性和缺乏大规模标记数据的影响，从而导致结果不稳定）。”
-```
+&#x20;**3. A language model (LM): Prompting**
 
-**5. Inference: Datastore** ![Alt text](../../figure/image18.png)
+即通过不同的prompt让llm完成不同的任务
+
+**4. A language model (LM): Often evaluated with**&#x20;
+
+给出评价指标：1. Perplexity  2. Downstream accuracy (Zero-shot or few-shot in-context learning,or fine-tuning) 会在第五节详细介绍
+
+一个问题：**为什么要用perplexity来作为本课程的主要指标**
+
+“在比较参数化的语言模型时，困惑度（PPL）经常被用到。但困惑度的改善能否转化为下游应用仍然是一个研究问题，现已有研究表明，<mark style="background-color:yellow;">困惑度与下游任务（尤其是生成任务）有很好的相关性，并且困惑度通常可提供非常稳定的结果，它可以在大规模评估数据上进行评估</mark>**。**(相对于下游任务来说，评估数据是没有标签的，而下游任务可能会受到提示的敏感性和缺乏大规模标记数据的影响，从而导致结果不稳定）。”
+
+**5. Inference: Datastore**
+
+<figure><img src="../../figure/image18.png" alt="" width="375"><figcaption></figcaption></figure>
 
 **6. Inference: Index**
 
-```
 目标：在数据存储中找到与查询最相似的一小部分元素
 
 **sim**：a similarity score between two pieces of text 下面是similarity score的一些例子
- ![Alt text](/figure/image19.png)
-**index**：给定query，通过fast nearest neighbor search（这也是一个研究方向-如何更加快快速和准确），输出sim最大的k个元素
+
+<figure><img src="../.gitbook/assets/image (1).png" alt="" width="375"><figcaption></figcaption></figure>
+
+index：给定query，通过fast nearest neighbor search（这也是一个研究方向-如何更加快快速和准确），输出sim最大的k个元素
 
 相关software: FAISS, Distributed FAISS, SCaNN, etc…
 
-参考：https://github.com/facebookresearch/faiss/wiki
-```
+参考：[Faiss](https://github.com/facebookresearch/faiss/wiki)
 
 ## 3. Retrieval-based LM: Architecture
 
@@ -127,22 +124,36 @@ LM推动了大量关于密集检索的更好算法的研究，例如，DPR，Col
 
 ![Alt text](../../figure/image21.png)
 
-### [REALM (Guu et al 2020)](https://arxiv.org/abs/2002.08909)--10 Feb 2020\*\*
+### [REALM (Guu et al 2020)](https://arxiv.org/abs/2002.08909)--10 Feb 2020
 
-本段开始介绍第一个结构 REALM：Retrieval-Augmented Language Model Pre-Training--检索增强的预训练语言模型 ![Alt text](../../figure/image22.png) 知乎上一些阅读笔记：
+本段开始介绍第一个结构 REALM：Retrieval-Augmented Language Model Pre-Training--检索增强的预训练语言模型
 
-* https://zhuanlan.zhihu.com/p/111255083
-* https://zhuanlan.zhihu.com/p/360635601
+<figure><img src="../../figure/image22.png" alt="" width="563"><figcaption></figcaption></figure>
+
+知乎上一些阅读笔记：
+
+* [https://zhuanlan.zhihu.com/p/111255083](https://zhuanlan.zhihu.com/p/111255083)
+* [https://zhuanlan.zhihu.com/p/360635601](https://zhuanlan.zhihu.com/p/360635601)
 
 **动机**：预训练语言模型能够从无监督文本语料中学习到很多公共知识。然而，这些知识存储在参数中，有以下两个缺点：1. 这些知识是隐式的，使用时难以解释模型储存、使用的知识；2. 模型学习到的知识的量级和模型大小（参数量）相关，因此为了学习到更多的知识，需要扩充模型大小。
 
 **预训练阶段的流程**：1. 从预训练语料中采样 ，并将部分token mask（the \[MASK] at the top of the pyramid）；2. 通过检索模块，根据样本 去外部知识库（如维基百科文档）中检索能够帮助恢复mask token的文档 （The pyramidion on top allows for lessmaterial higher up the pyramid）；3. 使用样本 x 内部的信息，以及检索到的文档 中的信息，共同预测被mask掉的token（pyramidion）；
 
-**模型结构**：模型的pre-training和fine-tuning都建模为retrieve-then-predict的过程，作者将$z$ 视为一个隐变量，将最后的任务目标$y|x)$建模为对于所有潜在文档$z$的边缘概率： $$p(y|x)=\sum_{z\in\mathcal{Z}}p(y|z,x)p(z|x)$$
+**模型结构**：模型的pre-training和fine-tuning都建模为retrieve-then-predict的过程，作者将$z$ 视为一个隐变量，将最后的任务目标$y|x)$建模为对于所有潜在文档 $$z$$ 的边缘概率：&#x20;
 
-**两个部分**：the neural knowledge retriever(神经知识检索器), which models $p(z | x)$, and the knowledge-augmented encoder(知识增强的encoder), which models $p(y | z, x)$. ![Alt text](../../figure/image23.png) ![Alt text](../../figure/image24.png) 在预训练阶段，任务为MLM；在fine-tune阶段，任务为Open-domain QA
+$$
+p(y|x)=\sum_{z\in\mathcal{Z}}p(y|z,x)p(z|x)
+$$
 
-**训练细节**：针对数据量教大的解决办法-**pretraining阶段使用Maximum Inner Product Search（最大内积搜索-内积空间下的KNN，MIPS）的算法来找到top-k个最相关文档**，为了避免一直刷新MIPS索引造成耗时严重，每隔若干step才刷新一次MIPS索引（该索引仅用来选择top-k个文档，而在每一步训练[梯度反传](acl2023-retrieval-lm.md#梯度反传)的时候，仍然使用的是最新的retreiver的参数）。**在fine-tune阶段，MIPS索引仅在一开始建立一次**（使用预训练的retriever参数），之后便不再更新。作者认为在预训练阶段检索器就已经学习到了足够好的文档相关性表征，但作者认为如果同样在fine-tune阶段迭代更新MIPS索引的话，效果可能会更好。
+**两个部分**：the neural knowledge retriever(神经知识检索器), -> $$p(z | x)$$, and the knowledge-augmented encoder(知识增强的encoder), -> $$p(y | z, x)$$.&#x20;
+
+<figure><img src="../../figure/image23.png" alt="" width="563"><figcaption></figcaption></figure>
+
+<figure><img src="../../figure/image24.png" alt="" width="563"><figcaption></figcaption></figure>
+
+在预训练阶段，任务为MLM；在fine-tune阶段，任务为Open-domain QA
+
+**训练细节**：针对数据量较大的解决办法--**pretraining阶段使用Maximum Inner Product Search（最大内积搜索--即内积空间下的KNN，MIPS）的算法来找到top-k个最相关文档**，为了避免一直刷新MIPS索引造成耗时严重，每隔若干step才刷新一次MIPS索引（该索引仅用来选择top-k个文档，而在每一步训练[梯度反传](acl2023-retrieval-lm.md#梯度反传)的时候，仍然使用的是最新的retreiver的参数）。**在fine-tune阶段，MIPS索引仅在一开始建立一次**（使用预训练的retriever参数），之后便不再更新。作者认为在预训练阶段检索器就已经学习到了足够好的文档相关性表征，但作者认为如果同样在fine-tune阶段迭代更新MIPS索引的话，效果可能会更好。
 
 **trick**：1. Salient span masking（SSM）：即在MLM预训练阶段，遮盖关键的实体/数字，而不是随机token；2. null document：部分MLM样本不需要外部文档支持；3. 避免信息泄漏：当MLM的训练语料和检索语料有重叠时，避免直接搜索到样本x的原文；4. 检索器的初始化、冷启动问题：如果一开始随机初始化检索器，那么文档将会大概率是完全无关的，模型得不到有效的梯度；为了避免这个问题，作者使用Inverse Cloze Test（ICT逆完形填空）任务来初始化训练检索器。
 
@@ -160,7 +171,7 @@ LM推动了大量关于密集检索的更好算法的研究，例如，DPR，Col
 
 [In-Context Retrieval-Augmented Language Models](https://arxiv.org/abs/2302.00083)
 
-在上面这篇论文中有一些实验结论:1. Retrieval helps over all sizes of LMs 2. Shorter prefix (more recent tokens) as a query helps 3. Retrieving more frequently helps(但是会消耗更多的推理时间成本)
+在上面这篇论文中有一些实验结论:1. Retrieval helps overall sizes of LMs 2. A shorter prefix (more recent tokens) as a query helps 3. Retrieving more frequently helps(但是会消耗更多的推理时间成本)
 
 [REPLUG: Retrieval-Augmented Black-Box Language Models](https://arxiv.org/abs/2301.12652)
 
@@ -170,17 +181,19 @@ LM推动了大量关于密集检索的更好算法的研究，例如，DPR，Col
 
 “Incorporation in the “intermediate layer” instead of the “input” layer → designed for many chunks, frequently, more efficiently”
 
+RETRO(Retrieval-Enhanced Transformer )-- improving language models through **explicit memory** at unprecedented scale
+
 合并到中间层而不是输入层 + 数据规模的增加
 
 相关笔记：
 
-https://zhuanlan.zhihu.com/p/475346411 https://www.cnblogs.com/Matrix\_Yao/p/16480698.html
+[https://zhuanlan.zhihu.com/p/475346411 ](https://zhuanlan.zhihu.com/p/475346411)
+
+[https://www.cnblogs.com/Matrix\_Yao/p/16480698.html](https://www.cnblogs.com/Matrix\_Yao/p/16480698.html)
 
 ![Alt text](../../figure/image28.png)
 
-**动机**：模型参数↑ 模型数据量↑ 容易发生数据集难理解、增加模型偏差等一系列问题，为了解决这个问题，DeepMind团队研发一种**带有互联网规模检索的高效预训练模型**。使用 RETRO，**模型不仅限于训练期间看到的数据，它还可以通过检索机制访问整个训练数据集**。与具有相同数量参数的标准 Transformer 相比，这会带来显着的性能提升。
-
-RETRO(Retrieval-Enhanced Transformer )-- improving language models through **explicit memory** at unprecedented scale
+**动机**：模型参数↑ 模型数据量↑ 容易发生数据集难理解、增加模型偏差等一系列问题，为了解决这个问题，DeepMind团队研发一种<mark style="background-color:yellow;">带有互联网规模检索的高效预训练模型</mark>。使用 RETRO，<mark style="background-color:yellow;">模型不仅限于训练期间看到的数据，它还可以通过检索机制访问整个训练数据集。</mark>与具有相同数量参数的标准 Transformer 相比，这会带来显着的性能提升。
 
 **数据集**：[MassiveText数据集](https://paperswithcode.com/dataset/massivetext)(来自gopher模型论文)
 
@@ -188,13 +201,17 @@ RETRO(Retrieval-Enhanced Transformer )-- improving language models through **exp
 
 **模型结构** RETRO模型架构由一个编码器堆栈（处理近邻）和一个解码器堆栈（处理输入）组成： 编码器堆栈由标准的 Transformer 编码器块组成；解码器堆栈包含了Transformer解码器块和RETRO 解码器块（ATTN + **Chunked cross attention (CCA)** + FFNN（Feed-forward neural network））。
 
-* [ ] _ppt中详细解释了模型整个流程，这里标注和待补充_
+* [ ] _这里标注和补充_
 
 ![Alt text](../../figure/image26.png)
 
-简化流程： ![Alt text](../../figure/image27.png)
+简化流程：&#x20;
 
-对比： ![Alt text](figure/image29.png)
+<figure><img src="../../figure/image27.png" alt="" width="532"><figcaption></figcaption></figure>
+
+对比：
+
+<figure><img src="figure/image29.png" alt="" width="563"><figcaption></figcaption></figure>
 
 **思考**：除了检索split成chunks，还可以怎么处理db中的数据？
 
@@ -207,17 +224,25 @@ RETRO(Retrieval-Enhanced Transformer )-- improving language models through **exp
 * “A different way of using retrieval, where the LM outputs a nonparametric distribution over every token in the data.” 另一种使用检索的方法，其中LM在数据中的每个标记上输出一个非参数分布。
 * “Can be seen as an incorporation in the ‘output’ layer” 可以看做是在输出层的一个合并
 
-动机：语言模型（Language Model, LM）指的是利用链式法则给出一个句子的概率，主要要解决两个问题：（1）得到上文表示；（2）用上文表示预测下一个token。这两个问题一般使用一个autoregressive模型解决。使用AR模型去进行语言建模的一个普遍问题是：**难以充分建立长距离依赖**。由此出发，本文提出通过计算上文表示的k最近邻去结合语言模型从而**更好地捕捉上下文之间的语义关系**。
+**动机**：语言模型（Language Model, LM）指的是利用链式法则给出一个句子的概率，主要要解决两个问题：（1）得到上文表示；（2）用上文表示预测下一个token。这两个问题一般使用一个autoregressive模型解决。使用AR模型去进行语言建模的一个普遍问题是：**难以充分建立长距离依赖**。由此出发，本文提出通过计算上文表示的k最近邻去结合语言模型从而**更好地捕捉上下文之间的语义关系**。
 
 **模型结构：**
 
-![Alt text](figure/image30.png) 具体的流程可以去看slide讲的很清楚
+<figure><img src="figure/image30.png" alt="" width="563"><figcaption></figcaption></figure>
 
-**模型实验结果:** ![Alt text](figure/image31.png) ![Alt text](figure/image32.png) Can use in-domain datastore even if parameters were not trained in-domain
+具体的流程可以去看slide讲的很清楚
+
+**模型实验结果:**
+
+&#x20;![Alt text](figure/image31.png) ![Alt text](figure/image32.png) Can use in-domain datastore even if parameters were not trained in-domain
 
 **对比总结**：
 
-KNN-LM的优点:更细粒度；可以更好地处理罕见的模式&域外数据，可以非常高效（因为KNN搜索很快）；缺点:输入和检索结果之间没有交叉注意；Datastore消耗比较大 ![Alt text](figure/image33.png)
+KNN-LM的优点:更细粒度；可以更好地处理罕见的模式&域外数据，可以非常高效（因为KNN搜索很快）
+
+缺点: <mark style="background-color:yellow;">输入和检索结果之间没有交叉注意；Datastore消耗比较大</mark>&#x20;
+
+<figure><img src="figure/image33.png" alt="" width="563"><figcaption></figcaption></figure>
 
 **思考**: 在when to retrieve中，every n tokens和every tokens是否可以去做 adaptive ？ ↓
 
@@ -233,7 +258,7 @@ KNN-LM的优点:更细粒度；可以更好地处理罕见的模式&域外数据
 
 FLARE迭代生成一个临时的下一个句子，如果它包含low-probability tokens，则将其用作检索相关文档的查询，并重新生成下一个句子句子直到结束。
 
-思考：什么是low-probability tokens 如何界定
+**思考**：什么是<mark style="color:green;">low-probability tokens</mark> 如何界定
 
 ![Alt text](figure/image34.png)
 
@@ -241,13 +266,17 @@ FLARE迭代生成一个临时的下一个句子，如果它包含low-probability
 
 #### Adaptive retrieval of tokens -Judge necessity-- [Efficient Nearest Neighbor Language Models](https://arxiv.org/abs/2109.04212)
 
-!\[Alt text]../figure/image35.png)
+<figure><img src="../.gitbook/assets/image.png" alt="" width="563"><figcaption></figcaption></figure>
 
 #### Adaptive retrieval of tokens Use local info -- RETOMATON -- [Neuro-Symbolic Language Modeling with Automaton-augmented Retrieval](https://arxiv.org/abs/2201.12431)
 
 ![Alt text](figure/image36.png)
 
-**总结**： ![Alt text](figure/image37.png)
+**总结**：
+
+&#x20;
+
+<figure><img src="figure/image37.png" alt="" width="563"><figcaption></figcaption></figure>
 
 思考: What else beyond text chunks and tokens to retrieve? ↓
 
