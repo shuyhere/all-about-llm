@@ -22,7 +22,7 @@ description: https://github.com/baichuan-inc
 
 处理流程：
 
-<figure><img src="../.gitbook/assets/image (2).png" alt="" width="563"><figcaption></figcaption></figure>
+<figure><img src="../../.gitbook/assets/image (2).png" alt="" width="563"><figcaption></figcaption></figure>
 
 * 开源的中英文数据+自行抓取的中文互联网数据+高质量知识性数据。
 * 数据过滤：参考相关数据工作，频率和质量是数据处理环节重点考虑的两个维度。基于启发式规则[（heuristic rules](https://en.wikipedia.org/wiki/Heuristic\_\(computer\_science\))）和质量模型打分，对原始数据集进行篇章和句子粒度的过滤。在全量数据上，利用[局部敏感哈希](https://zhuanlan.zhihu.com/p/225949044)方法，对篇章和句子粒度做滤重。
@@ -47,7 +47,7 @@ description: https://github.com/baichuan-inc
 
 基于transformer 采用了和llama一样的模型设计
 
-<figure><img src="../.gitbook/assets/image (3).png" alt="" width="563"><figcaption></figcaption></figure>
+<figure><img src="../../.gitbook/assets/image (3).png" alt="" width="563"><figcaption></figcaption></figure>
 
 * **Position Embedding**：采用 [rotary-embedding](https://arxiv.org/abs/2104.09864)，是现阶段被大多数模型采用的位置编码方案，具有很好的外推性。
 * **激活层 Feedforward Layer**：采用SwiGLU，Feedforward变化为(8/3)倍的隐含层大小，即11008。
