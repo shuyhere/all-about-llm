@@ -1,4 +1,10 @@
-# 🧎♀ ACL 2023 Tutorial:Retrieval-based Language Models and Applications
+---
+description: >-
+  Akari Asai, Sewon Min, Zexuan Zhong, Danqi Chen
+  https://acl2023-retrieval-lm.github.io/
+---
+
+# 🧎♀ ACL 2023 Tutorial: Retrieval-based Language Models and Applications
 
 这里主要中文总结本教程中的一些重点内容
 
