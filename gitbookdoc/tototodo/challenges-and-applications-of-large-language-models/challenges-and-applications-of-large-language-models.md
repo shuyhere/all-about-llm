@@ -6,7 +6,11 @@ description: 伦敦大学、MetaAI、StabilityAI联合发布70页综述，盘点
 
 论文链接：[https://arxiv.org/abs/2307.10169](https://arxiv.org/abs/2307.10169)
 
-论文解读：[https://mp.weixin.qq.com/s/JsCoUcuCg4ylKkPMvNouEw](https://mp.weixin.qq.com/s/JsCoUcuCg4ylKkPMvNouEw)
+相关解读：[https://mp.weixin.qq.com/s/JsCoUcuCg4ylKkPMvNouEw](https://mp.weixin.qq.com/s/JsCoUcuCg4ylKkPMvNouEw)
 
-<figure><img src="../../.gitbook/assets/image (3).png" alt="" width="563"><figcaption></figcaption></figure>
+<figure><img src="../../.gitbook/assets/image (3).png" alt="" width="375"><figcaption></figcaption></figure>
+
+#### 挑战 1：难以理解的数据集
+
+由于各团队在扩展预训练的数据量，随着现如今预训练数据集规模的扩大，**个人难以完整阅读和检查**整个文档的质量。
 
