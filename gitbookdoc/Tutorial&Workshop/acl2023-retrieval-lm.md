@@ -240,7 +240,13 @@ RETRO(Retrieval-Enhanced Transformer )-- improving language models through **exp
 
 **模型实验结果:**
 
-&#x20;![Alt text](figure/image31.png) ![Alt text](figure/image32.png) Can use in-domain datastore even if parameters were not trained in-domain
+&#x20;&#x20;
+
+<figure><img src="figure/image31.png" alt="" width="563"><figcaption></figcaption></figure>
+
+<figure><img src="figure/image32.png" alt="" width="563"><figcaption></figcaption></figure>
+
+Can use in-domain datastore even if parameters were not trained in-domain
 
 **对比总结**：
 
