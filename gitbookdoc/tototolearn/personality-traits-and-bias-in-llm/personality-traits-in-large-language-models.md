@@ -19,9 +19,7 @@ Since personality is an important factor determining the effectiveness of commun
 
 3）<mark style="background-color:purple;">LLM输出中的个性可以按照所需的维度进行塑造，以模仿特定的个性特征。</mark>
 
-
-
-## 主要内容
+## Introduction
 
 LLM开始满足类人对话、情境理解、连贯且相关的响应、适应性和学习、问题回答、对话和文本生成的大多数关键要求的能力（模仿人类语言的能力）主要来源： text from the Web, examples “in context” , and other sources of supervision, such as instruction datasets  and preference fine-tuning.
 
@@ -37,11 +35,59 @@ LLM<mark style="background-color:yellow;">接受的大量人类生成数据的�
 
 3\) If LLMs can meaningfully simulate personality, <mark style="background-color:purple;">can LLM-synthesized personality profiles be shaped and controlled? LLM合成的人格可以塑造和控制吗？</mark>
 
-
-
 <mark style="background-color:green;">本文贡献了一种独立于LLM的人格塑造机制，以可控的方式改变LLM观察到的人格特质水平。</mark>
 
+## Background
 
+**Personality Psychology 人格心理学（人格维度）**
 
+[<mark style="color:blue;">The Big Five model</mark>](https://en.wikipedia.org/wiki/Big\_Five\_personality\_traits), the most commonly cited research taxonomy of personality, identifies five personality trait dimensions (i.e., domains) and provides methodology to assess these dimensions in humans. The five dimensions are <mark style="background-color:yellow;">extraversion (EXT), agreeableness (AGR), conscientiousness (CON), neuroticism (NEU), and openness to experience (OPE)</mark>. Each domain is further composed of various lower-order facets nested underneath.
 
+五个维度是外向性（EXT）、宜人性（AGR）、尽责性（CON）、神经质（NEU）和体验开放性（OPE）。
+
+**Psychometrics 心理测量学（量化方式）**
+
+心理测量测试（例如调查工具、测量、多项目量表）是量化潜在心理结构（如性格）的工具。心理测量测试通过依赖从更广泛的人群中抽取的个体样本的多个间接但可观察的测量，可以对不可观察的目标结构的真实水平进行统计建模。
+
+例子：
+
+An example item under BFI Extraversion would read, “\[I see myself as someone who] is talkative.” Participants rate their agreement with this item using the following 5-point Likert-type rating scale: 1 = disagree strongly; 2 = disagree a little; 3 = neither agree nor disagree; 4 = agree a little; 5 = agree strongly.
+
+**Construct Validity: Are Measured Phenomena Valid? 构造有效性：测量结果有效吗（是否有效）**
+
+Since psychometric tests measure physically unobservable constructs, such as personality traits, it is imperative to establish that such tests <mark style="background-color:purple;">measure what they claim to measure</mark>.
+
+* Substantive Validity: _What exactly are we measuring? What are the theoretical bases of what we are measuring?_--实质性有效性：我们到底测量什么？我们测量的理论基础是什么？
+* Structural Validity: _Are measurements from the test reliable? Do items within a test correlate with each other in ways we expect? --_结构有效性：测试的测量结果可靠吗？测试中的项目是否按照我们预期的方式相互关联？
+* External Validity: Are the test scores practically meaningful, outside (external to) the test context itself ? 外部有效性：测试分数在测试环境本身之外是否具有实际意义？
+
+详细见原论文中的内容
+
+## Methods
+
+### LLM Personality Characterization
+
+The methodology for characterizing LLM personality and quantifying its ability to coherently emulate human personality traits consists of two steps. First, we administer psychometric tests to LLMs and collect the scores. Second, those scores are used to establish construct validity.
+
+表征LLM人格并量化其连贯地模拟人类人格特征的能力的方法包括两个步骤: 1. 法学硕士进行心理测试并收集分数；2. 这些分数用于建立结构效度。
+
+<figure><img src="../../.gitbook/assets/image (4).png" alt=""><figcaption></figcaption></figure>
+
+**Simulating Population Variance Through Prompting**
+
+prompt构成：提示指令+角色描述 +试题前中后
+
+<figure><img src="../../.gitbook/assets/1690177916958.png" alt=""><figcaption></figcaption></figure>
+
+### Shaping Personality in LLMs
+
+本文并没有真正的去塑造LLM的人格特征--只是用构造了一个词表，然后调整prompt让LLM更准确地展现特征：
+
+例如，为了定位中等高水平（即 7/9 级）的外向性，使用列表中针对域级别的外向性的五个高级形容词：
+
+For the following task, respond in a way that matches this description: "{PersonaChat description} I’m {extraverted, energetic, talkative, bold, active, assertive, and adventurous}."
+
+同样，针对略低于平均水平（即 4/9 级）外向性的提示示例，使用五个针对外向性的否定键形容词，如下所示：
+
+For the following task, respond in a way that matches this description: "{PersonaChat description} I’m {a bit introverted, a bit unenergetic, a bit silent, a bit timid, a bit inactive, a bit unassertive, and a bit unadventurous}."
 
