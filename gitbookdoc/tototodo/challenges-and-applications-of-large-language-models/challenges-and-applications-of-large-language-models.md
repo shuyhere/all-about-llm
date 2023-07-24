@@ -8,9 +8,15 @@ description: 伦敦大学、MetaAI、StabilityAI联合发布70页综述，盘点
 
 相关解读：[https://mp.weixin.qq.com/s/JsCoUcuCg4ylKkPMvNouEw](https://mp.weixin.qq.com/s/JsCoUcuCg4ylKkPMvNouEw)
 
-<figure><img src="../../.gitbook/assets/image (3).png" alt="" width="375"><figcaption></figcaption></figure>
+本文关注两个问题：
+
+(1) Challenges: What problems remain unresolved?&#x20;
+
+(2) Applications: Where are LLMs currently being applied, and how are the challenges constraining them?
 
 ## Challenges
+
+<figure><img src="../../.gitbook/assets/image (3).png" alt="" width="375"><figcaption></figcaption></figure>
 
 #### 挑战 1：难以理解的数据集
 
