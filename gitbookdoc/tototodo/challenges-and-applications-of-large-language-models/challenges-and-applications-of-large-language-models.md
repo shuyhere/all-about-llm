@@ -78,7 +78,7 @@ API 语言模型的定价政策（根据处理或生成的代币数量向用户�
 
 针对这个挑战，子词级别的输入则提供了词汇大小和序列长度之间的良好平衡。此外，Byte-Pair Encoding (BPE)和 WordPiece 是常用的子词分词算法。字节级输入是子词分词的一种替代方法，可以与子词分词器结合使用或定义一个有限的词汇表来编码所有可能的序列。还有一些研究提出了基于字节级输入的分词方法，在性能方面与基于子词的模型相媲美。
 
-#### High Pre-Training Costs
+#### ### High Pre-Training Costs
 
 大型语言模型的训练需要大量的计算资源和时间，这可能会对其广泛应用产生限制--不可持续
 
@@ -86,7 +86,7 @@ API 语言模型的定价政策（根据处理或生成的代币数量向用户�
 
 Unsustainable Loss Power-Law：通过增加计算预算，性能会提高，但如果模型或数据集大小固定，性能会降低，这反映了收益递减的幂律。
 
-<mark style="background-color:green;">现有的两种解决路线</mark>：
+<mark style="background-color:green;">**现有的两条解决路线**</mark>：
 
 **Compute-Optimal Training Recipes**--**计算最优训练方法**
 
@@ -102,9 +102,47 @@ _Given a particular budget, how large should the pretraining corpus and model be
 
 各种预训练目标（PTO）适合对LLM进行自我监督培训。 PTO 的准确选择会严重影响模型在预训练期间的数据效率，从而减少所需的迭代次数。
 
+A PTO typically is a <mark style="color:green;">function</mark> of the <mark style="background-color:yellow;">(i) architecture,</mark> <mark style="background-color:yellow;">(ii) input/targets construction</mark> (e.g., t<mark style="background-color:yellow;">arget span length, low/high corruption, see Fig. 4,</mark> and (<mark style="background-color:yellow;">iii) masking strategy (Fig. 3).</mark> While (i) and (ii) can be disentangled and should not be conflated conceptually, in practice, there exist popular combinations that achieve good performances.
+
+PTO通常是(i)架构，(ii)输入/目标结构(例如，目标跨度长度，低/高corruption (fig 4 )和(iii)掩蔽策略( fig 3)的函数。
+
+<figure><img src="../../.gitbook/assets/Screenshot 2023-07-24 at 8.36.23 PM.png" alt="" width="563"><figcaption><p>Figure 3: Masking Strategies. Each row denotes to which inputs xi (columns) a particular output yi (row) can attend to (uni- or bi-directional). 屏蔽策略。每一行表示可以attend to 的输入(列)的一个特定的输出(行)(uni -或bi-directional)</p></figcaption></figure>
+
+加入所有的token,如fig3所示(左),是最data-efficient策略,因为它使用上下文token之前和之后的预测。然而,由于这个原因,它不适合文本生成,因为它在预测中考虑了future context。我们通常用它来完成自然语言理解(NLU)任务。Next token prediction objective预测目标是最适合自然语言生成(NLG),但也data-efficient也是最低的,因为它只关注过去的上下文(fig3(中))。最近的研究目标是是找到一个middle-ground来提高效率的数据提供更强大和更多样化的训练信号,例如,Prefix LM,这中策略部分的关注past tokens,如fig3中所示(右)和下面讨论到的部分。
+
+**Masked Language Modeling (MLM; or Cloze)**：通过用特殊的 \[MASK] 标记替换隐藏sequence中一定比例的标记。一般将 MLM 目标用于non-autoregressive，即non-generative、bidirectional context models。其中模型使用目标token之前和之后的token进行预测，有着对其上下文比 NTP 目标更全面的理解。此外，我们可以使用每个输入句子在一次传递中预测多个屏蔽标记，而 NTP 目标通常通过一次预测一个标记来学习。
+
+[Bidirectional Language Models Are Also Few-shot Learners](https://arxiv.org/abs/2209.14500)中表明此类模型产生的表示更适合迁移学习；然而，它们在进行in-context learning时遇到困难。
+
+一种提升方式:[METRO: Efficient Denoising Pretraining of Large Scale Autoencoding Language Models with Model Generated Signals](https://arxiv.org/abs/2204.06644) --(i) 使用 MLM 目标训练 ALM(auxiliary language model)，(ii) 给定一些带有masked positions的输入，预测tokens（使用 ALM），(iii) 训练主模型以纠正插入masked positions的这些tokens，即 1) 预测 ALM 是否替换了标记，如果是，2) 预测原始标记。train the auxiliary and main model **jointly**.
+
+**Prefix Language Modeling**&#x20;
+
+Generalizes language modeling by allowing prefix tokens with a <mark style="background-color:yellow;">bidirectional receptive field</mark> to be added to the input (without prefix, it is equivalent to standard LM). 对比fig3左和右
+
+**Span Corruption** or span denoising
+
+将 MLM 推广到对给定文本中的连续标记序列（称为spans）进行去噪。去噪目标通常用单个唯一的掩蔽标记替换采样的span，并训练模型来填充它。可以提升训练的速度，因为：与破坏 i.i.d. 中的单个token相比，span corruption平均会产生更短的序列。
+
+**Mixture of Denoisers（MoD）**
+
+通过混合多个去噪目标来注入目标多样性
+
+**Fill In the Middle**
+
+通过在文档中打乱token来增强下一个token预测目标，以便我们根据前缀和后缀填充中间（FIM）
+
+**Meet in the Middle**
+
+通过启用双向上下文来构建更密集、数据效率更高的监督信号，同时保持自回归，从而扩展 FIM 目标
+
+**Parallelism Strategies**
+
+**Miscellaneous**
+
 <figure><img src="../../.gitbook/assets/image (4).png" alt=""><figcaption><p>Figure4：Self-Supervised Data Construction by Pre-Training Objectives. 通过预训练目标进行自我监督的数据构建，用灰色矩形表示屏蔽标记，这些标记成为目标，省略了特殊的标记。</p></figcaption></figure>
 
-
+### Challenge3：Fine-Tuning Overhead
 
 相关解读：
 
