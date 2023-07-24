@@ -2,9 +2,16 @@
 大语言模型训练和服务调研
 东西太多了感觉会没条理，写到gitbook上了：https://bbb-fullstack-aier.gitbook.io/all-about-llm/
 
+## GITBOOK 更新
+- 👋🏽2023 -07-21 [ACL2023 Tutorial 关于检索增强型大语言模型以及应用(未完待续)](https://bbb-fullstack-aier.gitbook.io/all-about-llm/tototolearn/Tutorial&Workshop/acl2023-retrieval-lm)
+- 👋🏽2023-07-23 [baichuan系列模型总结](https://bbb-fullstack-aier.gitbook.io/all-about-llm/tototolearn/openllm/bai-chuan-da-mo-xing)
+- 👋🏽2023-07-24 [Personality Traits in Large Language Models -Google DeepMind](https://bbb-fullstack-aier.gitbook.io/all-about-llm/tototolearn/personality-traits-and-bias-in-llm/personality-traits-in-large-language-models)
+
+
 ## 目录
 
 - [all-about-llm](#all-about-llm)
+  - [GITBOOK 更新](#gitbook-更新)
   - [目录](#目录)
   - [LLM](#llm)
     - [1. 《GPT-4 Architecture, Infrastructure, Training Dataset, Costs, Vision, MoE》](#1-gpt-4-architecture-infrastructure-training-dataset-costs-vision-moe)
