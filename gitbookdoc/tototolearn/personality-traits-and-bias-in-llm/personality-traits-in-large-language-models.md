@@ -71,7 +71,7 @@ The methodology for characterizing LLM personality and quantifying its ability t
 
 表征LLM人格并量化其连贯地模拟人类人格特征的能力的方法包括两个步骤: 1. 法学硕士进行心理测试并收集分数；2. 这些分数用于建立结构效度。
 
-<figure><img src="../../.gitbook/assets/image (4).png" alt=""><figcaption></figcaption></figure>
+<figure><img src="../../.gitbook/assets/image (4) (1).png" alt=""><figcaption></figcaption></figure>
 
 **Simulating Population Variance Through Prompting**
 

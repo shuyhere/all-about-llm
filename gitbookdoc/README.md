@@ -25,3 +25,13 @@ https://huggingface.co/hiyouga/baichuan-13b-sft https://huggingface.co/hiyouga/L
 \[2] LLaMA, LLaMA-2, BLOOM, Falcon, Baichuan, InternLM 微调: [https://github.com/hiyouga/LLaMA-Efficient-Tuning ](https://github.com/hiyouga/LLaMA-Efficient-Tuning)
 
 \[3] 大模型知识编辑工具：[https://github.com/hiyouga/FastEdit](https://github.com/hiyouga/FastEdit)
+
+### Firefly(流萤): 中文对话式大语言模型
+
+repo： [https://github.com/yangjianxin1/Firefly](https://github.com/yangjianxin1/Firefly)
+
+<mark style="background-color:red;">可以在16G显存上微调130亿的大模型，</mark>并且这套训练流程在Open LLM排行榜🤗上进行了验证，**比vicuna-13b-1.1略高0.2分，比llams-2-13b-chat略低0.5分**。
+
+post：[https://mp.weixin.qq.com/s/KsbgRNTwXE86kCGTJhu0WQ](https://mp.weixin.qq.com/s/KsbgRNTwXE86kCGTJhu0WQ)[\
+\
+](https://github.com/yangjianxin1/Firefly)
