@@ -11,3 +11,8 @@
   * [👹 Personality Traits in Large Language Models](tototolearn/personality-traits-and-bias-in-llm/personality-traits-in-large-language-models.md)
 * [🔥 openLLM](tototolearn/openllm/README.md)
   * [🌊 百川大模型](tototolearn/openllm/bai-chuan-da-mo-xing.md)
+
+## TOTOTODO
+
+* [🌚 Challenges and Applications of Large Language Models](tototodo/challenges-and-applications-of-large-language-models/README.md)
+  * [👏 Challenges and Applications of Large Language Models](tototodo/challenges-and-applications-of-large-language-models/challenges-and-applications-of-large-language-models.md)

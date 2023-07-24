@@ -47,7 +47,7 @@ description: https://github.com/baichuan-inc
 
 基于transformer 采用了和llama一样的模型设计
 
-<figure><img src="../../.gitbook/assets/image (3).png" alt="" width="563"><figcaption></figcaption></figure>
+<figure><img src="../../.gitbook/assets/image (3) (1).png" alt="" width="563"><figcaption></figcaption></figure>
 
 * **Position Embedding**：采用 [rotary-embedding](https://arxiv.org/abs/2104.09864)，是现阶段被大多数模型采用的位置编码方案，具有很好的外推性。
 * **激活层 Feedforward Layer**：采用SwiGLU，Feedforward变化为(8/3)倍的隐含层大小，即11008。
