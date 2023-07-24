@@ -10,6 +10,8 @@ description: 伦敦大学、MetaAI、StabilityAI联合发布70页综述，盘点
 
 <figure><img src="../../.gitbook/assets/image (3).png" alt="" width="375"><figcaption></figcaption></figure>
 
+## Challenges
+
 #### 挑战 1：难以理解的数据集
 
 由于各团队在扩展预训练的数据量，随着现如今预训练数据集规模的扩大，**个人难以完整阅读和检查**整个文档的质量。
