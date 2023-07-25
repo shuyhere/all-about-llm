@@ -32,6 +32,8 @@ repo： [https://github.com/yangjianxin1/Firefly](https://github.com/yangjianxin
 
 <mark style="background-color:red;">可以在16G显存上微调130亿的大模型，</mark>并且这套训练流程在Open LLM排行榜🤗上进行了验证，**比vicuna-13b-1.1略高0.2分，比llams-2-13b-chat略低0.5分**。
 
-post：[https://mp.weixin.qq.com/s/KsbgRNTwXE86kCGTJhu0WQ](https://mp.weixin.qq.com/s/KsbgRNTwXE86kCGTJhu0WQ)[\
+post：[https://mp.weixin.qq.com/s/KsbgRNTwXE86kCGTJhu0WQ](https://mp.weixin.qq.com/s/KsbgRNTwXE86kCGTJhu0WQ)
+
+3D-LLM：将 3D 世界注入大型语言模型：[https://github.com/UMass-Foundation-Model/3D-LLM](https://github.com/UMass-Foundation-Model/3D-LLM)[\
 \
 ](https://github.com/yangjianxin1/Firefly)

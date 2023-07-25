@@ -78,7 +78,7 @@ API 语言模型的定价政策（根据处理或生成的代币数量向用户�
 
 针对这个挑战，子词级别的输入则提供了词汇大小和序列长度之间的良好平衡。此外，Byte-Pair Encoding (BPE)和 WordPiece 是常用的子词分词算法。字节级输入是子词分词的一种替代方法，可以与子词分词器结合使用或定义一个有限的词汇表来编码所有可能的序列。还有一些研究提出了基于字节级输入的分词方法，在性能方面与基于子词的模型相媲美。
 
-#### ### High Pre-Training Costs
+### Challenge3：High Pre-Training Costs
 
 大型语言模型的训练需要大量的计算资源和时间，这可能会对其广泛应用产生限制--不可持续
 
@@ -142,7 +142,7 @@ Generalizes language modeling by allowing prefix tokens with a <mark style="back
 
 <figure><img src="../../.gitbook/assets/image (4).png" alt=""><figcaption><p>Figure4：Self-Supervised Data Construction by Pre-Training Objectives. 通过预训练目标进行自我监督的数据构建，用灰色矩形表示屏蔽标记，这些标记成为目标，省略了特殊的标记。</p></figcaption></figure>
 
-### Challenge3：Fine-Tuning Overhead
+### Challenge:4：Fine-Tuning Overhead
 
 对海量且多样化的文本数据集进行预训练LLM的一个潜在缺点是，生成的模型可能难以明确捕获特定于任务的数据集的分布属性。使用微调解决上述问题-->微调是指在特定于单个领域或任务的相对较小的数据集上调整预先训练的模型参数。 LLM fine-tuning对于使 LLM 适应下游任务非常有效 。
 
@@ -198,6 +198,8 @@ Generalizes language modeling by allowing prefix tokens with a <mark style="back
 [LoRA: Low-Rank Adaptation of Large Language Models](./)
 
 
+
+### Challenge5：
 
 相关解读：
 
