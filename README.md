@@ -6,6 +6,8 @@
 - 👋🏽2023 -07-21 [ACL2023 Tutorial 关于检索增强型大语言模型以及应用(未完待续)](https://bbb-fullstack-aier.gitbook.io/all-about-llm/tototolearn/Tutorial&Workshop/acl2023-retrieval-lm)
 - 👋🏽2023-07-23 [baichuan系列模型总结](https://bbb-fullstack-aier.gitbook.io/all-about-llm/tototolearn/openllm/bai-chuan-da-mo-xing)
 - 👋🏽2023-07-24 [Personality Traits in Large Language Models -Google DeepMind](https://bbb-fullstack-aier.gitbook.io/all-about-llm/tototolearn/personality-traits-and-bias-in-llm/personality-traits-in-large-language-models)
+- 👋🏽2023-07-25 [炼丹工具箱--模型的训练量化推理部署工具总结](https://bbb-fullstack-aier.gitbook.io/all-about-llm/tototodo/lian-dan-gong-ju-xiang)
+- 👋🏽2023-07-25 [大模型综述总结](https://bbb-fullstack-aier.gitbook.io/all-about-llm/tototolearn/surveys)
 
 
 ## 目录
