@@ -144,6 +144,61 @@ Generalizes language modeling by allowing prefix tokens with a <mark style="back
 
 ### Challenge3：Fine-Tuning Overhead
 
+对海量且多样化的文本数据集进行预训练LLM的一个潜在缺点是，生成的模型可能难以明确捕获特定于任务的数据集的分布属性。使用微调解决上述问题-->微调是指在特定于单个领域或任务的相对较小的数据集上调整预先训练的模型参数。 LLM fine-tuning对于使 LLM 适应下游任务非常有效 。
+
+从技术上讲，可以通过在较小的数据集上进一步训练模型来实现微调。根据模型架构，可以通过以下方式完成的：(i) 使用标准语言建模目标直接微调预训练模型，(ii) 将单独的可学习层添加到预训练语言模型的输出表示中，这些层旨在在模型的输出表示和各个下游任务的输出格式（例如，用于文本分类或序列标记）之间创建兼容性。然而，<mark style="background-color:red;">拥有数十亿参数的LLM需要大量内存来存储（i）the model parameters，（ii）the model activations，以及（iii）gradients and corresponding statistics。由于设备内存（例如 GPU 或 TPU）有限，需要访问具有许多设备的大型集群来微调完整的 LLM。</mark>
+
+#### Large Memory Requirements
+
+<mark style="background-color:red;">微调整个 LLM 需要与预训练相同数量的内存</mark>，这对于许多从业者来说是不可行的。
+
+此外，虽然完整的模型微调可以有效地使 LLM 在特定的下游任务上表现良好，但需要为各个任务存储和加载微调后的 LLM 的各个副本，这在计算上效率低下，（见fig5）
+
+<figure><img src="../../.gitbook/assets/image (5).png" alt="" width="365"><figcaption><p>Figure 5: Fine-tuning an LLM for a specific downstream task. (a) illustrates vanilla fine-tuning, which requires updating the entire model, resulting in a new model for each task. In (b), PEFT instead learns a small subset of model parameters for each task with a fixed base LLM. The same base model can be re-used during inference for different tasks. <strong>将传统finetuning和peft做了对比。</strong></p></figcaption></figure>
+
+#### **Parameter-efficient fine-tuning**
+
+参数高效微调使LLM适应特定数据集/领域的另一种方法是通过参数高效微调（PEFT）。 PEFT 是指通过仅更新一小部分模型参数来适应 LLM 的一类方法。 [Adapters](https://arxiv.org/abs/1902.00751)是 PEFT 最早的工作之一。该方法将额外的可学习层合并到 Transformer 架构中，这些层在微调期间进行更新，同时保持网络的其余部分不变。 26 个文本分类任务（包括 GLUE 基准 ）的实验结果表明，通过 Adapter 训练的模型在仅更新 3% 的模型参数的情况下可以与full fine-tuning 竞争。同时，[BIt-Fit](https://aclanthology.org/2022.acl-short.1/)建议仅更新模型的偏差项进行微调，这些偏差项占模型参数的比例不到 1%。
+
+目前Adapter合并到语言模型微调中的三个通用框架AdapterHub：[https://adapterhub.ml/](https://adapterhub.ml/)
+
+* LLM-Adapters：[https://github.com/AGI-Edgerunners/LLM-Adapters](https://github.com/AGI-Edgerunners/LLM-Adapters)
+* HuggingFace  PEFT  ：[https://github.com/huggingface/peft](https://github.com/huggingface/peft)
+
+针对较大模型引入的 PEFT 方法包括prefix-tuning和prompt-tuning，它们都是通过在输入前面添加一组可学习的token embeddings来进行操作。这些token embeddings（也称为soft prompt）是在微调阶段学习的，而模型参数的其余部分保持固定。最值得注意的是，这种软提示包含数千个而不是数百万个参数，并且存储效率更高。在微调令牌的同时仍然需要通过网络进行反向传播
+
+仅具有API 访问权限的黑盒模型的替代方案：[Black-Box Prompt Learning for Pre-trained Language Models](https://arxiv.org/abs/2201.08531) & [Black-Box Tuning for Language-Model-as-a-Service](https://proceedings.mlr.press/v162/sun22e.html)
+
+[Few-Shot Parameter-Efficient Fine-Tuning is Better and Cheaper than In-Context Learning](https://arxiv.org/abs/2205.05638) 引入 $$(IA)^3$$ ，它使用可学习向量来缩放各个 Transformer 层中的激活。作者通过证明使用$$(IA)^3$$ 训练的模型优于各种数据集上的完整模型微调，同时仅更新 0.01% 的模型参数，证明了其有效性。
+
+[Fine-Tuning Language Models with Just Forward Passes](https://arxiv.org/abs/2305.17333)提出了一种内存高效的零阶（MeZO）优化器，它只需要与推理期间相同的内存占用（而不是存储梯度或优化器状态）。此外，它还可以优化不可微分的目标，例如准确性或 F1 分数，传统的基于梯度的调整方法则无法做到这一点。
+
+[LoRA: Low-Rank Adaptation of Large Language Models](./)提出低秩适应（LoRA），它将各个 Transformer 层权重矩阵的参数更新作为加法低秩分解。这种重新参数化避免了计算密集矩阵乘法的需要。QL0RA将 LoRA 扩展到量化的 LLM，大大减少了内存使用量，使他们能够在单个 48GB GPU 上微调 65B 模型，同一模型的常规训练需要超过 780 GB 的 GPU 内存。
+
+**Compute Requirements**  针对特定任务微调 LLM 所需的内存复杂度有了显着提高，剩下的挑战是时间复杂度。使用 PEFT 方法对 LLM 进行微调，<mark style="background-color:red;">仍然需要完整的梯度计算</mark>。适应LLM所需的计算基础设施阻碍了小型设备上的个性化等潜在应用。
+
+**Reference**
+
+[Parameter-Efficient Transfer Learning for NLP](https://arxiv.org/abs/1902.00751)
+
+[BitFit: Simple Parameter-efficient Fine-tuning for Transformer-based Masked Language-models](https://aclanthology.org/2022.acl-short.1.pdf)
+
+[Prefix-Tuning: Optimizing Continuous Prompts for Generation](https://aclanthology.org/2021.acl-long.353.pdf)
+
+[The Power of Scale for Parameter-Efficient Prompt Tuning](https://aclanthology.org/2021.emnlp-main.243.pdf)
+
+[Black-Box Tuning for Language-Model-as-a-Service](https://proceedings.mlr.press/v162/sun22e.html)
+
+[Black-Box Prompt Learning for Pre-trained Language Models](https://arxiv.org/abs/2201.08531)
+
+[Few-Shot Parameter-Efficient Fine-Tuning is Better and Cheaper than In-Context Learning](https://arxiv.org/abs/2205.05638)
+
+[Fine-Tuning Language Models with Just Forward Passes](https://arxiv.org/abs/2305.17333)
+
+[LoRA: Low-Rank Adaptation of Large Language Models](./)
+
+
+
 相关解读：
 
 * [https://mp.weixin.qq.com/s/JsCoUcuCg4ylKkPMvNouEw](https://mp.weixin.qq.com/s/JsCoUcuCg4ylKkPMvNouEw)
