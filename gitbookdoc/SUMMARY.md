@@ -20,3 +20,4 @@
 * [😃 炼丹工具箱](tototodo/lian-dan-gong-ju-xiang/README.md)
   * [🙆♂ BMInf -- 一个用于PLM推理阶段的低资源工具包](tototodo/lian-dan-gong-ju-xiang/bminf-yi-ge-yong-yu-plm-tui-li-jie-duan-de-di-zi-yuan-gong-ju-bao.md)
   * [🦈 LLaMA-Efficient-Tuning\&text-generation-webui](tototodo/lian-dan-gong-ju-xiang/llama-efficient-tuning-and-text-generation-webui.md)
+  * [🪐 Paramters and Definations](tototodo/lian-dan-gong-ju-xiang/paramters-and-definations.md)
