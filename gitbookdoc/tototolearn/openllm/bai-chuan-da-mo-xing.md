@@ -140,9 +140,9 @@ baichuan13b-chat 在 <mark style="color:red;">8 \* Nvidia A100 80 GB</mark> + de
 7. [MedicalGPT](https://github.com/shibing624/MedicalGPT/blob/main/README.md)训练医疗大模型，实现包括二次预训练、有监督微调、奖励建模、强化学习训练。支持baichuan系列
 8. [openai-api](https://github.com/xusenlinzy/api-for-open-llm) 套壳启动baichuan-13bchat
 
-## Issues：
+## Issues+<mark style="background-color:red;">个人实践中遇到的一些问题</mark>：
 
-1. 7B预训练模型续写的句子:
+1. **7B预训练模型续写的句子:**
 
 {% code overflow="wrap" %}
 ```json
@@ -158,3 +158,6 @@ baichuan13b-chat 在 <mark style="color:red;">8 \* Nvidia A100 80 GB</mark> + de
 输出：
 在Unix中，passwd命令位于____目录中的。 A. /etc/ B. /usr/ C. /bin/ D. /usr/bin/ 答案：A</s>
 ```
+
+3. **baichuan-13B-chat**
+

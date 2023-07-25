@@ -1,10 +1,16 @@
-# 🙆♂ LLM量化推理部署
+---
+description: https://github.com/OpenBMB/BMInf
+---
 
-## [BMInf](https://github.com/OpenBMB/BMInf/tree/master)&#x20;
+# 🙆♂ BMInf -- 一个用于PLM推理阶段的低资源工具包
 
-BMInf(Big Model Inference) 是一个用于大规模预训练语言模型（pretrained language models, PLM）推理阶段的低资源工具包。BMInf最低支持在NVIDIA GTX 1060单卡运行百亿大模型。在此基础上，使用更好的gpu运行会有更好的性能。在显存支持进行大模型推理的情况下（如V100或A100显卡），BMInf的实现较现有PyTorch版本仍有较大性能提升。
+[BMInf(Big Model Inference)](https://github.com/OpenBMB/BMInf) 是一个用于大规模预训练语言模型（pretrained language models, PLM）推理阶段的低资源工具包。BMInf最低支持在NVIDIA GTX 1060单卡运行百亿大模型。在此基础上，使用更好的gpu运行会有更好的性能。在显存支持进行大模型推理的情况下（如V100或A100显卡），BMInf的实现较现有PyTorch版本仍有较大性能提升。
 
-运行BMInf的最低配置与推荐配置：
+**安装：**
+
+`pip install bminf`
+
+**运行BMInf的最低配置与推荐配置：**
 
 |       | 最低配置                        | 推荐配置                   |
 | ----- | --------------------------- | ---------------------- |
@@ -18,3 +24,7 @@ BMInf(Big Model Inference) 是一个用于大规模预训练语言模型（pretr
 2. [CPM: A Large-scale Generative Chinese Pre-trained Language Model.](https://arxiv.org/abs/2012.00413) Zhengyan Zhang, Xu Han, Hao Zhou, Pei Ke, Yuxian Gu, Deming Ye, Yujia Qin, Yusheng Su, Haozhe Ji, Jian Guan, Fanchao Qi, Xiaozhi Wang, Yanan Zheng, Guoyang Zeng, Huanqi Cao, Shengqi Chen, Daixuan Li, Zhenbo Sun, Zhiyuan Liu, Minlie Huang, Wentao Han, Jie Tang, Juanzi Li, Xiaoyan Zhu, Maosong Sun.
 3. [EVA: An Open-Domain Chinese Dialogue System with Large-Scale Generative Pre-Training.](https://arxiv.org/abs/2108.01547) Hao Zhou, Pei Ke, Zheng Zhang, Yuxian Gu, Yinhe Zheng, Chujie Zheng, Yida Wang, Chen Henry Wu, Hao Sun, Xiaocong Yang, Bosi Wen, Xiaoyan Zhu, Minlie Huang, Jie Tang.
 4. [Language Models are Unsupervised Multitask Learners.](http://www.persagen.com/files/misc/radford2019language.pdf) Alec Radford, Jeffrey Wu, Rewon Child, David Luan, Dario Amodei, and Ilya Sutskever.
+
+##
+
+##

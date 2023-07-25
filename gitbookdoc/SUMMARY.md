@@ -18,4 +18,5 @@
 * [🌚 Challenges and Applications of Large Language Models](tototodo/challenges-and-applications-of-large-language-models/README.md)
   * [👏 Challenges and Applications of Large Language Models](tototodo/challenges-and-applications-of-large-language-models/challenges-and-applications-of-large-language-models.md)
 * [😃 炼丹工具箱](tototodo/lian-dan-gong-ju-xiang/README.md)
-  * [🙆♂ LLM量化推理部署](tototodo/lian-dan-gong-ju-xiang/llm-liang-hua-tui-li-bu-shu.md)
+  * [🙆♂ BMInf -- 一个用于PLM推理阶段的低资源工具包](tototodo/lian-dan-gong-ju-xiang/bminf-yi-ge-yong-yu-plm-tui-li-jie-duan-de-di-zi-yuan-gong-ju-bao.md)
+  * [🦈 LLaMA-Efficient-Tuning\&text-generation-webui](tototodo/lian-dan-gong-ju-xiang/llama-efficient-tuning-and-text-generation-webui.md)
