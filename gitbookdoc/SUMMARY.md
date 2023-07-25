@@ -12,6 +12,7 @@
 * [🔥 openLLM](tototolearn/openllm/README.md)
   * [🦅 Aquila 悟道天鹰系列](tototolearn/openllm/aquila-wu-dao-tian-ying-xi-lie.md)
   * [🌊 百川大模型](tototolearn/openllm/bai-chuan-da-mo-xing.md)
+* [📃 Surveys](tototolearn/surveys.md)
 
 ## 🤖 TOTOTODO
 
