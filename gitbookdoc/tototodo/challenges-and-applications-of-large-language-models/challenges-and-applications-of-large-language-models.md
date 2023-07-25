@@ -48,7 +48,7 @@ description: 伦敦大学、MetaAI、StabilityAI联合发布70页综述，盘点
 
 一些研究主张预训练语料库的多样性，许多流行的语料库都遵循这一点，将来自不同来源的数据集连接起来，然而，对于强大的下游性能需要多少不同来源的数据量仍然没有得到充分探索。
 
-<figure><img src="../../.gitbook/assets/image.png" alt=""><figcaption><p>Table 1: <strong>Overview of Selected Pre-Training Datasets.</strong> Over the years, pre-training datasets have become more unfathomable: they grew rapidly in size and diversity, and not all datasets are publicly available (we do not include datasets that have very little or no information available about them). Unless stated otherwise, the natural language is in English. ∗ We report the number of tokens as provided by the respective paper based on their proposed tokenization scheme.预训练数据集变得更加深不可测：它们的大小和多样性迅速增长，并且并非所有数据集都是公开可用的.</p></figcaption></figure>
+<figure><img src="../../.gitbook/assets/image (2).png" alt=""><figcaption><p>Table 1: <strong>Overview of Selected Pre-Training Datasets.</strong> Over the years, pre-training datasets have become more unfathomable: they grew rapidly in size and diversity, and not all datasets are publicly available (we do not include datasets that have very little or no information available about them). Unless stated otherwise, the natural language is in English. ∗ We report the number of tokens as provided by the respective paper based on their proposed tokenization scheme.预训练数据集变得更加深不可测：它们的大小和多样性迅速增长，并且并非所有数据集都是公开可用的.</p></figcaption></figure>
 
 #### **Fine-Tuning Task Mixtures**
 

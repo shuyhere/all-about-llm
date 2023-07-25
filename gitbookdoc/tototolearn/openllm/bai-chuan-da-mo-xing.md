@@ -22,7 +22,7 @@ description: https://github.com/baichuan-inc
 
 处理流程：
 
-<figure><img src="../../.gitbook/assets/image (2).png" alt="" width="563"><figcaption></figcaption></figure>
+<figure><img src="../../.gitbook/assets/image (2) (1).png" alt="" width="563"><figcaption></figcaption></figure>
 
 * 开源的中英文数据+自行抓取的中文互联网数据+高质量知识性数据。
 * 数据过滤：参考相关数据工作，频率和质量是数据处理环节重点考虑的两个维度。基于启发式规则[（heuristic rules](https://en.wikipedia.org/wiki/Heuristic\_\(computer\_science\))）和质量模型打分，对原始数据集进行篇章和句子粒度的过滤。在全量数据上，利用[局部敏感哈希](https://zhuanlan.zhihu.com/p/225949044)方法，对篇章和句子粒度做滤重。
@@ -137,8 +137,8 @@ baichuan13b-chat 在 <mark style="color:red;">8 \* Nvidia A100 80 GB</mark> + de
 4. [Efficient-Tuning-LLMs](https://github.com/jianzhnie/Efficient-Tuning-LLMs) 支持Baichuan-7B使用Qlora进行Finetune和4bit inference。
 5. [fastllm](https://github.com/ztxz16/fastllm) fastllm是纯c++实现，无第三方依赖的大模型库，支持Baichuan-7B在手机端运行。
 6. [TheBloke/baichuan-7B-GPTQ](https://huggingface.co/TheBloke/baichuan-7B-GPTQ) 对Baichuan-7B的GPTQ 4bit量化。
-7. [MedicalGPT](https://github.com/shibing624/MedicalGPT/blob/main/README.md)训练医疗大模型，实现包括二次预训练、有监督微调、奖励建模、强化学习训练。支持baichuan系列
-8. [openai-api](https://github.com/xusenlinzy/api-for-open-llm) 套壳启动baichuan-13bchat
+7. [MedicalGPT](https://github.com/shibing624/MedicalGPT/blob/main/README.md) 训练医疗大模型，实现包括二次预训练、有监督微调、奖励建模、强化学习训练。支持baichuan系列
+8. [openai-api](https://github.com/xusenlinzy/api-for-open-llm) 套壳启动baichuan-13b-chat
 
 ## Issues+<mark style="background-color:red;">个人实践中遇到的一些问题</mark>：
 
@@ -160,4 +160,14 @@ baichuan13b-chat 在 <mark style="color:red;">8 \* Nvidia A100 80 GB</mark> + de
 ```
 
 3. **baichuan-13B-chat**
+
+下面均是8bit运行产生的结果：
+
+<mark style="background-color:red;">自己脑补整个session</mark>
+
+<figure><img src="../../.gitbook/assets/image.png" alt=""><figcaption></figcaption></figure>
+
+<mark style="background-color:red;">太有个性</mark>
+
+<figure><img src="../../.gitbook/assets/image (1).png" alt=""><figcaption></figcaption></figure>
 

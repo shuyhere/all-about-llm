@@ -110,7 +110,7 @@ LM推动了大量关于密集检索的更好算法的研究，例如，DPR，Col
 
 **sim**：a similarity score between two pieces of text 下面是similarity score的一些例子
 
-<figure><img src="../.gitbook/assets/image (1) (1).png" alt="" width="375"><figcaption></figcaption></figure>
+<figure><img src="../.gitbook/assets/image (1) (1) (1).png" alt="" width="375"><figcaption></figcaption></figure>
 
 index：给定query，通过fast nearest neighbor search（这也是一个研究方向-如何更加快快速和准确），输出sim最大的k个元素
 
