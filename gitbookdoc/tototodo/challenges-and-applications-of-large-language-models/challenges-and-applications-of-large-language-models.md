@@ -177,6 +177,8 @@ Generalizes language modeling by allowing prefix tokens with a <mark style="back
 
 **Compute Requirements**  针对特定任务微调 LLM 所需的内存复杂度有了显着提高，剩下的挑战是时间复杂度。使用 PEFT 方法对 LLM 进行微调，<mark style="background-color:red;">仍然需要完整的梯度计算</mark>。适应LLM所需的计算基础设施阻碍了小型设备上的个性化等潜在应用。
 
+
+
 **Reference**
 
 [Parameter-Efficient Transfer Learning for NLP](https://arxiv.org/abs/1902.00751)
@@ -199,9 +201,62 @@ Generalizes language modeling by allowing prefix tokens with a <mark style="back
 
 
 
-### Challenge5：
+### Challenge5：High Inference Latency 推理延迟
 
-相关解读：
+目前根据研究，LLM 表现出高推理延迟的两个原因：
+
+(1) **low parallelizability** 并行性低，因为推理过程一次只进行一个token；
+
+(2) **large memory footprints** 内存占用较大--due to the model size and the transient states needed during decoding (e.g., attention key and value tensors).
+
+此外， Transformers 中注意力机制的二次缩放也是值得讨论的，见challlenge6。
+
+#### **Techniques used to address these challenges eg.** 减少内存占用（大小和/或带宽&加速特定的计算操作
+
+<mark style="background-color:blue;">**Efficient Attention   --加速attention机制的计算**</mark>
+
+<mark style="color:green;">Two lines of work： (i) lower-level hardware-aware modifications 较低级别的硬件感知modifications (ii) higher-level sub-quadratic approximations of the attention mechanism 注意力机制更高层次的次二次方近似</mark>
+
+**Lower-level hardware-aware modifications**
+
+1. [Fast Transformer Decoding: One Write-Head is All You Need](https://arxiv.org/abs/1911.02150) 提出 <mark style="color:blue;">multi-query attention</mark> 旨在通过为键和值张量仅保留一个注意力头，在使用 Transformer 解码器层顺序生成token序列时减少内存带宽瓶颈。
+2.  [FlashAttention](https://arxiv.org/abs/2205.14135) 的多头自注意力替代计算方法来减少内存带宽，以最大限度地减少 I/O 操作的数量，从而加快现代 GPU 上的计算速度。作为一种优化的注意力， FlashAttention 利用算子融合来减少内存带宽瓶颈。&#x20;
+
+    [FlashAttention: Fast and Memory-Efficient Exact Attention with IO-Awareness](https://arxiv.org/abs/2205.14135) 提出`FlashAttention`
+
+    [Faster Causal Attention Over Large Sequences Through Sparse Flash Attention](../lian-dan-gong-ju-xiang/paramters-and-definations.md) 构建在 FlashAttention 之上，并结合注意力稀疏模式--key/query dropping and hashing-based attention。
+
+    [Efficiently Scaling Transformer Inference](https://arxiv.org/abs/2211.05102) 实施不同的sharding技术，以有效地跨设备传播前馈和注意力计算，同时优化设备间通信成本，**使用muli-query attention实现高达 43,000 个token的上下文长度。**
+
+**Higher-level sub-quadratic approximations of the attention mechanism**
+
+提高注意力机制的计算或内存复杂度的一个共同主题是稀疏注意力矩阵或引入（线性）近似。
+
+然而，一些有效的注意力近似的可扩展性受到了质疑。比如例如，有研究发现发现Performer attention approximation 近似的表现严重低于普通的自注意力机制，特别是当扩展到大型模型时。
+
+<mark style="background-color:blue;">**Quantization**</mark>
+
+量化是一种post-training技术，可通过降低权重和激活的计算精度来减少内存占用和/或增加模型的吞吐量。[ nuQmm](https://arxiv.org/abs/2206.09557) 和 [ZeroQuant ](https://arxiv.org/abs/2206.01861)使用非均匀量化方法来量化权重并应用自定义 CUDA 内核以获得计算优势。 [LLM.int8() ](https://arxiv.org/abs/2208.07339) 是一种无降级量化方案，通过利用 Int8 量化来有效推断数十亿参数 LLM，并针对某些outlier特征回退到更高的精度，而无需重新训练。
+
+类似地，[GLM-130B](https://arxiv.org/abs/2210.02414) 使用无降级8位量化方案，以8位存储权重并以16位精度执行矩阵乘法。[GPTQ](https://arxiv.org/abs/2210.17323)是一种高效的一次性量化技术，将 LLM 权重压缩至每个权重 3 到 4 位，从而使 175B 参数模型能够在单 个 GPU 上运行。[SpQR](https://arxiv.org/abs/2306.03078) 通过结合异常值权重的更高精度表示和分组量化来进一步改进这一点。
+
+<mark style="background-color:blue;">**Pruning**</mark>
+
+Pruning是用于量化的complementary post-training 技术，要删除给定模型的部分权重（不会降低其性能）。一个重要的区别是修剪是遵循结构化模式还是非结构化模式。结构化稀疏模型用明显更小但仍然密集的组件的集合来替代模型的密集部分。非结构化稀疏模型包含的权重为零，这不会影响网络的行为，因此理论上可以接受。然而，在实践中，在当前硬件上将理论转化为实际计算节省更具挑战性。
+
+
+
+**Reference**
+
+[Efficiently Scaling Transformer Inference](https://arxiv.org/abs/2211.05102)
+
+[Large Transformer Model Inference Optimization](https://lilianweng.github.io/posts/2023-01-10-inference-optimization/)
+
+
+
+### 相关解读：
 
 * [https://mp.weixin.qq.com/s/JsCoUcuCg4ylKkPMvNouEw](https://mp.weixin.qq.com/s/JsCoUcuCg4ylKkPMvNouEw)
+
+
 
