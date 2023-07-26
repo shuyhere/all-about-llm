@@ -23,3 +23,5 @@
   * [🦈 LLaMA-Efficient-Tuning\&text-generation-webui](tototodo/lian-dan-gong-ju-xiang/llama-efficient-tuning-and-text-generation-webui.md)
   * [🪐 Paramters and Definations](tototodo/lian-dan-gong-ju-xiang/paramters-and-definations.md)
   * [🦙 Chinese-Vicuna: A Chinese Instruction-following LLaMA-based Model —— 一个中文低资源的llama+lora方案](tototodo/lian-dan-gong-ju-xiang/chinesevicunaachinese-instructionfollowing-llamabased-model-yi-ge-zhong-wen-di-zi-yuan-de-llama+lora.md)
+  * [🥳 PEFT doc-cn](tototodo/lian-dan-gong-ju-xiang/peft-doc-cn/README.md)
+    * [🥳 Quictour](tototodo/lian-dan-gong-ju-xiang/peft-doc-cn/quictour.md)
