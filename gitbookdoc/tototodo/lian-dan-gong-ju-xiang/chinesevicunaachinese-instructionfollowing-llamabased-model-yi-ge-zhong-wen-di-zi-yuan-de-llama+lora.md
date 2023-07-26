@@ -94,7 +94,7 @@ LLAMA-7B
 * 推理：一张2080Ti即可（7B）,同时支持多卡推理（差不多均匀负载，某张卡会负载高一点）。
 * 我们对纯CPU上推理也进行了支持，详情见[`tools`](https://github.com/Facico/Chinese-Vicuna/blob/master/tools)
 
-### 训练操作
+### 使用方法
 
 **8bit**
 
@@ -161,11 +161,10 @@ bash scripts/generate.sh
 bash scripts/chat.sh
 ```
 
-* 使用gradio构造的一个简单的交互界面，可以根据自己的机器设置max\_memory（它会截取历史对话的后面max\_memory部分）
-* 这个脚本使用的prompt和generate.sh中使用的不太一样，这个脚本的prompt为对话形式的，如下
-  * ```
-    The following is a conversation between an AI assistant called Bot and a human user called User.
-    ```
+*   使用gradio构造的一个简单的交互界面，可以根据自己的机器设置max\_memory（它会截取历史对话的后面max\_memory部分）
+
+
+* 这个脚本使用的prompt和generate.sh中使用的不太一样，这个脚本的prompt为对话形式的，如下`The following is a conversation between an AI assistant called Bot and a human user called User.`
 
 同时，为了更好的交互体验，我们自己实现了流式输出（打字机式）交互的chatbot，支持beam search、repetiion penalty的设置，能清空历史记录，选择不同的全局instruction等。
 
