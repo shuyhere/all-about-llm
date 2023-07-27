@@ -342,7 +342,17 @@ Efficient attention using a fixed-size memory representation 提供了一种基�
 
 #### Length Generalization
 
-###
+由于基于 Transformer 的 LLM 所需的计算量随序列长度呈二次方增长，因此可以在短序列上进行训练但是推理过程中可以很好地推广到更长的序列是LLM 的一个理想属性。
+
+Transformer 架构的基本构建块是自注意力机制。它是排列不变的；因此，输出与输入序列顺序无关。通常注入位置信息以使模型尊重roken在序列中的位置，即捕获令牌出现位置的语义，而不仅仅是它是否出现。输入越长，位置嵌入就变得越重要，因为模型需要有效地使用来自输入不同部分的信息，这些部分可能覆当前token周围的很大范围。
+
+如果没有位置嵌入，Transformer 就会以相等的概率对任意两个标记之间的关系进行建模。因此，位置嵌入引入了类似 LSTM 的归纳偏差，即（通常）序列中彼此更接近的标记彼此更相关。根据所选择的位置嵌入方案，这可以被学习或有效地硬编码。然而，目前还不清楚对于长输入最有效的位置嵌入方案是什么。此外，**由于引入了对序列位置的依赖，模型在泛化到不可见的序列长度方面面临着困难**。这是位置嵌入的不良产物，因为**语义本质上并不依赖于长度**。
+
+虽然位置编码方案（例如相对位置编码或最近的 ALiBi）在构建更通用的方式来将位置信息注入 Transformer 方面取得了进展，但泛化到比训练期间看到的更长的序列的挑战在很大程度上仍未得到解决。T[ransformer language models without positional encodings still learn positional information](https://arxiv.org/abs/2203.16634).中发现，与具有位置编码的模型相比，不具有位置编码的因果LLM更加具有竞争力，并将这一现象归功于causal attention mask将位置信息泄漏到模型中。
+
+<mark style="background-color:blue;">接下来首先总结一些标准的Absolute Positional Embeddings技术，然后讨论旨在提高长度泛化的更高级方案。</mark>
+
+
 
 ###
 
