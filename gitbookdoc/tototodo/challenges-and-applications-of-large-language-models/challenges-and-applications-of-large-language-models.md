@@ -330,13 +330,17 @@ Efficient attention 和Linear attention mechanism提出了与dot-product attenti
 
 [Transient Global (LongT5)](https://huggingface.co/docs/transformers/model\_doc/longt5) 注意力机制，它是局部注意力的扩展，其中每个令牌都可以关注附近的令牌和一组全局令牌，它能够处理多达 12,000 个标记的序列。
 
-###
+[CoLT5](https://arxiv.org/abs/2303.09752) 通过将计算分成具有局部注意力的轻分支、较少注意力头和具有完全注意力的重分支，实现了高达 64,000 个令牌的上下文长度。 CoLT5 将轻分支应用于每个令牌，将重分支应用于由可学习路由函数选择的令牌子集。
 
-###
+[Synthesizer](https://proceedings.mlr.press/v139/tay21a.html) 是一种新的架构，可以在没有 token-token 交互的情况下学习合成注意力权重，表明它在各种基于语言的任务上始终优于 Transformer。
 
-###
+Efficient attention using a fixed-size memory representation 提供了一种基于固定大小内存表示的替代注意力机制，该机制更高效，推理速度提高了 20%，而不会显着损害性能。
 
-###
+[Transformer Quality in Linear Time](https://proceedings.mlr.press/v162/hua22a.html) 将单头注意力机制与线性注意力近似相结合，以实现自回归语言建模 4.9 倍到 12.1 倍的加速，同时获得与标准 Transformer 模型类似的困惑度。
+
+[LongNet](https://arxiv.org/abs/2307.02486) 提出dilated attention，将序列分割成等长的片段，并使用稀疏注意力机制并行处理每个片段。dilated attention在序列长度上提供了线性计算复杂性，并且分层应用，可以输入多达 1B 个令牌。
+
+#### Length Generalization
 
 ###
 
