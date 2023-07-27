@@ -36,6 +36,6 @@ repo： [https://github.com/yangjianxin1/Firefly](https://github.com/yangjianxin
 
 post：[https://mp.weixin.qq.com/s/KsbgRNTwXE86kCGTJhu0WQ](https://mp.weixin.qq.com/s/KsbgRNTwXE86kCGTJhu0WQ)
 
-3D-LLM：将 3D 世界注入大型语言模型：[https://github.com/UMass-Foundation-Model/3D-LLM](https://github.com/UMass-Foundation-Model/3D-LLM)[\
-\
-](https://github.com/yangjianxin1/Firefly)
+3D-LLM：将 3D 世界注入大型语言模型：[https://github.com/UMass-Foundation-Model/3D-LLM](https://github.com/UMass-Foundation-Model/3D-LLM)
+
+### LIMA: Less Is More for Alignment, by Meta AI[&#xD; &#xD; ](https://github.com/yangjianxin1/Firefly)

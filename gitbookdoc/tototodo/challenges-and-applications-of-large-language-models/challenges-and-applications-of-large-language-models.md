@@ -248,10 +248,6 @@ Pruning是用于量化的complementary post-training 技术，要删除给定模
 
 **在非结构化方面，**[SparseGPT](https://arxiv.org/abs/2301.00774)是一种非结构化剪枝方法，为了快速在几个小时内在具有数千亿参数的 LLM 上运行而开发，能够将参数数量剪枝高达 60%，同时保持大致相同的模型性能。[Wanda](https://arxiv.org/abs/2306.11695)（按Weights and activations进行剪枝），它根据每个权重的大小和相应输入激活的范数的乘积来应用magnitude pruning，在性能上与SparseGPT匹配，同时只需要一次前向传递来prune网络。SparseGPT 和 Wanda 可以拓展到simi-structured pruning，实现 n:m 稀疏性并在最新的 GPU 上实现相应的加速 。
 
-<mark style="background-color:blue;">**Mixture-of-Experts MoE**</mark><mark style="background-color:blue;">混合专家</mark>
-
-
-
 **Reference**
 
 [Efficiently Scaling Transformer Inference](https://arxiv.org/abs/2211.05102)
@@ -264,11 +260,83 @@ Pruning是用于量化的complementary post-training 技术，要删除给定模
 
 [Accelerating Sparse Deep Neural Networks](https://arxiv.org/abs/2306.11695) --NVIDIA 2021
 
+<mark style="background-color:blue;">**Mixture-of-Experts  MoE**</mark><mark style="background-color:blue;">混合专家</mark>
+
+架构通常由一组 专家（modules）组成，每个专家都有独特的权重，以及一个router（或gating）网络，该网络确定哪个专家模块处理输入。 MoE 模型不会同时使用所有专家，而是仅激活其中的一部分，从而减少推理时间。MoE可以通过将每个专家放置在独立加速器上来减少模型分布式设置中跨设备的通信；只有托管路由器和相关专家模型的加速器必须进行通信
+
+然而，MoE 模型仍然面临专家崩溃等独特问题（所有专家都学习相同的知识），这可能是由路由功能约束不足引起的 ，[Hash Layers For Large Sparse Models](https://arxiv.org/abs/2106.04426)表明学习的专家任务并不总是优于随机任务。
+
+[The Lazy Neuron Phenomenon: On Emergence of Activation Sparsity in Transformers](https://arxiv.org/abs/2210.06313) 中提到默认 Transformer 模型的激活图通常非常稀疏；模型越大，以非零条目的百分比衡量的稀疏性就越大。
+
+[MoEfication](https://arxiv.org/abs/2110.01786)论文中提出将整体模型转换为等效的 MoE 模型，可以将推理速度提高 2 倍。
+
+**reference**
+
+[Outrageously Large Neural Networks: The Sparsely-Gated Mixture](https://arxiv.org/abs/1701.06538)[-of-Exper](https://arxiv.org/abs/1701.06538)论文中提出了第一个在语言模型中嵌入的MoE layers--稀疏门控 MoE（SG-MoE）
+
+[GShard: Scaling Giant Models with Conditional Computation and Automatic Sharding](https://arxiv.org/abs/2006.16668)
+
+<mark style="background-color:blue;">**Cascading**</mark>
+
+[FrugalGPT: How to Use Large Language Models While Reducing Cost and Improving Performance.](https://arxiv.org/abs/2305.05176)
+
+大致思想是：先将不同LLM API按价格从低到高排列，每次查询从价格最低的LLM API开始，如果评分器判断此次响应可用就直接输出，否则查询价格第二低的LLM API，以此类推。评分器可以是一个简单的回归模型（比如DistilBERT）。从本质上讲，这个想法类似于专家混合模型，但我们不是学习路由模块，而是采用级联的多个不同大小的整体模型（这些模型甚至可以是黑盒 API 模型）并学习评分决定哪个模型接收哪个查询的函数。
+
+<mark style="background-color:blue;">**Decoding Strategies**</mark> <mark style="background-color:blue;"></mark><mark style="background-color:blue;">解码策略</mark>
+
+解码策略可以极大地影响执行推理的计算成本。例如，beam search会牺牲计算能力以获得更高质量的结果，样本排序的计算成本也很高昂。
+
+面向延迟的策略，例如speculative sampling，首先使用较小的（draft）模型自回归生成长度为的 $$K$$的草稿；然后，较大的（(target)模型对草稿进行评分，然后是修改后的拒绝采样方案，以从左到右接受令牌的子集。在各种情况下都提出了类似的想法，例如分块并行生成、语法错误校正，[Big Little Transformer Decoder](https://arxiv.org/abs/2302.07863)中的大小模型协作等。
+
+[SkipDecode: Autoregressive Skip Decoding with Batching and Caching for Efficient LLM Inference](https://arxiv.org/abs/2307.02628)中发现由于更多的上下文信息，序列末尾的标记更容易预测，从而激发了一种新的解码策略，该策略会跳过网络中此类标记的较早层。
+
+**Software**
+
+人们设计了各种框架来有效训练数十亿到万亿参数的语言模型，例如[ DeepSpeed](https://github.com/microsoft/DeepSpeed)和 [Megatron-LM ](https://github.com/NVIDIA/Megatron-LM)，以应对训练此类模型时出现的独特挑战。这是因为大多数 LLM 不适合单个设备（GPU、TPU）内存，并且需要跨 GPU 和 TPU 进行扩展。跨 GPU 和 1计算节点扩展需要考虑通信和同步成本。 [FlexGen](https://github.com/FMInference/FlexGen)  通过聚合来自 GPU、CPU 和磁盘的内存和计算资源并利用 4 位量化等技术来进一步提高速度，从而能够在单个 GPU 上使用 175B 参数模型进行推理。
+
+这些框架通常结合现有的并行策略来弥补缺陷，并跨多组计算节点、计算节点内以及每个节点的多个 GPU 扩展模型训练。
+
+Tutel  和 MegaBlocks 等提供高效的稀疏 MoE 训练，而 Alpa为用 Jax 编写的 LLM 提供自动数据和模型并行性。
+
+[FasterTransformer ](https://github.com/NVIDIA/FasterTransformer)库包括针对 TensorFlow、PyTorch 和 Triton 的高度优化的 Transformer 编码器和解码器实现。
+
+[vLLM](https://github.com/vllm-project/vllm)，一个用于高效推理和 LLM 服务的开源库。 vLLM 采用 PagedAttention，它将每个序列的 KV 缓存划分为固定大小的块。执行注意力计算时，从非连续内存中获取块。这可以实现内存共享，减少内存消耗和波束搜索等解码策略中的传输，最终提高吞吐量。
+
+[Petals](https://github.com/bigscience-workshop/petals) 允许用户通过将模型参数子集分配到各个机器来协作微调和运行 LLM
+
+所有这些库都通过提供更高效的实现、降低内存需求或使用分布式或去中心化计算策略来解决与训练和运行 LLM 相关的巨大计算成本。
 
 
 
+### Challenge 6：Limited Context Length 有限的上下文长度
 
-### 相关解读：
+处理日常 NLP 任务通常需要了解更广泛的背景。例如，如果手头的任务是辨别小说中的一段话或学术论文的一个片段中的情感，那么仅仅单独分析几个单词或句子是不够的。必须考虑整个输入（或上下文），它可能包含整个部分甚至整个文档。同样，在会议记录中，对特定评论的解释可能会在sarcasm and seriousness,之间摇摆，具体取决于讨论情景。
+
+<mark style="color:red;">有限的上下文长度是很好地处理长输入以促进小说或教科书写作或总结等应用的障碍。</mark>
+
+**最近实验发现：**
+
+<mark style="background-color:red;">**在架构上能够处理长输入和实际表现良好之间存在差异**</mark><mark style="background-color:red;">。拥有可以推断长输入的架构并不能保证 LLM 在这些输入上的表现与在较短输入上的表现一样好。</mark>
+
+<mark style="background-color:red;">改变输入中</mark><mark style="background-color:red;">**相关信息的位置**</mark><mark style="background-color:red;">会降低模型性能</mark>。有趣的是，像 GPT-3.5 这样的仅解码器 LLM 可以很好地处理输入上下文开头或结尾的此类信息；他们无法很好地获取中间的信息，从而导致 <mark style="background-color:red;">U 形的性能曲线。</mark>
+
+###
+
+###
+
+###
+
+###
+
+###
+
+###
+
+###
+
+###
+
+### 相关解读
 
 * [https://mp.weixin.qq.com/s/JsCoUcuCg4ylKkPMvNouEw](https://mp.weixin.qq.com/s/JsCoUcuCg4ylKkPMvNouEw)
 
