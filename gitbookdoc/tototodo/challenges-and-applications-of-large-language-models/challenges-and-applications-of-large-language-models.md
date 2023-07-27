@@ -1,5 +1,5 @@
 ---
-description: 伦敦大学、MetaAI、StabilityAI联合发布70页综述，盘点大模型的16大挑战
+description: 伦敦大学、MetaAI、StabilityAI联合发布
 ---
 
 # 👏 Challenges and Applications of Large Language Models
@@ -234,15 +234,21 @@ Generalizes language modeling by allowing prefix tokens with a <mark style="back
 
 然而，一些有效的注意力近似的可扩展性受到了质疑。比如例如，有研究发现发现Performer attention approximation 近似的表现严重低于普通的自注意力机制，特别是当扩展到大型模型时。
 
-<mark style="background-color:blue;">**Quantization**</mark>
+<mark style="background-color:blue;">**Quantization （量化）**</mark>
 
 量化是一种post-training技术，可通过降低权重和激活的计算精度来减少内存占用和/或增加模型的吞吐量。[ nuQmm](https://arxiv.org/abs/2206.09557) 和 [ZeroQuant ](https://arxiv.org/abs/2206.01861)使用非均匀量化方法来量化权重并应用自定义 CUDA 内核以获得计算优势。 [LLM.int8() ](https://arxiv.org/abs/2208.07339) 是一种无降级量化方案，通过利用 Int8 量化来有效推断数十亿参数 LLM，并针对某些outlier特征回退到更高的精度，而无需重新训练。
 
 类似地，[GLM-130B](https://arxiv.org/abs/2210.02414) 使用无降级8位量化方案，以8位存储权重并以16位精度执行矩阵乘法。[GPTQ](https://arxiv.org/abs/2210.17323)是一种高效的一次性量化技术，将 LLM 权重压缩至每个权重 3 到 4 位，从而使 175B 参数模型能够在单 个 GPU 上运行。[SpQR](https://arxiv.org/abs/2306.03078) 通过结合异常值权重的更高精度表示和分组量化来进一步改进这一点。
 
-<mark style="background-color:blue;">**Pruning**</mark>
+<mark style="background-color:blue;">**Pruning （剪枝）**</mark>
 
 Pruning是用于量化的complementary post-training 技术，要删除给定模型的部分权重（不会降低其性能）。一个重要的区别是修剪是遵循结构化模式还是非结构化模式。结构化稀疏模型用明显更小但仍然密集的组件的集合来替代模型的密集部分。非结构化稀疏模型包含的权重为零，这不会影响网络的行为，因此理论上可以接受。然而，在实践中，在当前硬件上将理论转化为实际计算节省更具挑战性。
+
+**在结构化方面，**剪枝语言模型的早期工作主要针对相对较小的 MLM 类型模型。[LLM-Pruner](https://arxiv.org/abs/2305.11627)，旨在以任务无关的方式修剪LLM，同时保留模型的零样本能力。为此，LLM-Pruner 采用三阶段pruning procedure -- 1) 识别模型内的相互依赖结构并对其进行分组，2) 估计每个组对整体性能的贡献，并修剪低性能组，3）使用 LoRA通过参数高效的微调过程恢复性能。
+
+**在非结构化方面，**[SparseGPT](https://arxiv.org/abs/2301.00774)是一种非结构化剪枝方法，为了快速在几个小时内在具有数千亿参数的 LLM 上运行而开发，能够将参数数量剪枝高达 60%，同时保持大致相同的模型性能。[Wanda](https://arxiv.org/abs/2306.11695)（按Weights and activations进行剪枝），它根据每个权重的大小和相应输入激活的范数的乘积来应用magnitude pruning，在性能上与SparseGPT匹配，同时只需要一次前向传递来prune网络。SparseGPT 和 Wanda 可以拓展到simi-structured pruning，实现 n:m 稀疏性并在最新的 GPU 上实现相应的加速 。
+
+<mark style="background-color:blue;">**Mixture-of-Experts MoE**</mark><mark style="background-color:blue;">混合专家</mark>
 
 
 
@@ -251,6 +257,14 @@ Pruning是用于量化的complementary post-training 技术，要删除给定模
 [Efficiently Scaling Transformer Inference](https://arxiv.org/abs/2211.05102)
 
 [Large Transformer Model Inference Optimization](https://lilianweng.github.io/posts/2023-01-10-inference-optimization/)
+
+[Accelerated Sparse Neural Training: A Provable and Efficient Method to Find N:M Transposable Masks](https://arxiv.org/abs/2102.08124)
+
+[Learning N:M Fine-grained Structured Sparse Neural Networks From Scratch](https://openreview.net/forum?id=K9bw7vqp\_s)
+
+[Accelerating Sparse Deep Neural Networks](https://arxiv.org/abs/2306.11695) --NVIDIA 2021
+
+
 
 
 
