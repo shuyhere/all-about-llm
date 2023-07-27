@@ -384,11 +384,13 @@ $$\text{softmax}\left(\frac{1}{\sqrt{d}}\sum_{i,j}x_i^\top W_q^\top R_{\Theta,(i
 
 $$\text{softmax}\left(\frac{1}{\sqrt{d}}\sum_{i,j}x_i^\top W_q^\top W_kx_j+b_{i-j}\right)$$
 
-[**Train Short, Test Long**](https://arxiv.org/abs/2108.12409) 中遵循类似的方法，但使用heuristics来定义 ALiBi（Attention with Linear Biases），这是一种非学习偏差，用于惩罚ong-range interactions中的注意力分数，recency-bias被back到模型中。 $$m$$ 是一个预先定义的、特定于头部的斜率——默认情况下， $$n$$ 个头部的slopes集形成一个几何序列。
+[**Train Short, Test Long**](https://arxiv.org/abs/2108.12409) 中遵循类似的方法，但使用heuristics来定义 ALiBi（Attention with Linear Biases），这是一种非学习偏差，用于惩罚ong-range interactions中的注意力分数，recency-bias被back到模型中。 $$m$$ 是一个预先定义的、特定于头部的斜率——默认情况下， $$n$$ 个头部的slopes集形成一个几何序列。本文通过将 ALiBi 设计为能够很好地泛化到未见过的序列长度来激励 ALiBi，发现在最大序列长度为 1, 024 个标记的训练序列上训练模型，在最大序列长度为 2, 048 的测试集上实现与在序列上使用正弦位置编码训练的模型相同的困惑度到 2, 048 个令牌。因此，它不仅可以实现更大的上下文长度，<mark style="color:green;">还可以潜在地降低预训练成本。</mark>
 
+$$\mathrm{softmax}\left(\frac{1}{\sqrt{d}}\sum_{i,j}x_{i}^{\top}W_{q}^{\top}W_{k}x_{j}+m\cdot-(i-j)\right)$$
 
+<mark style="background-color:red;">现有的位置编码方案比其他方案对长序列具有更好的泛化能力，但仍不清楚它们的可靠性如何。--实践检验一切</mark>
 
-###
+[Exploring Length Generalization in Large Language Models](https://arxiv.org/abs/2207.04901) 建议将上下文学习和暂存器/思维链推理相结合，使LLM能够泛化到分布内和分布外未见过的序列长度，并根据模型大小调整性能。
 
 ###
 
