@@ -56,7 +56,7 @@ description: 伦敦大学、MetaAI、StabilityAI联合发布
 
 如何很好地平衡任务数据集仍然不清楚。现在的一些做法是去模仿闭源model的数据配比，但是经过微调的开源模型和闭源模型之间仍然存在巨大的能力差距，这激励了未来研究更好的模仿（闭源模型）数据的工作。
 
-### Challenge2：Tokenizer-Reliance 大语言模型的训练和运行通常依赖于特定的分词器，这可能对其性能和适应性产生影响。 --分词器带来了一些挑战，例如计算开销、语言依赖性、新词的处理、固定词汇量、信息丢失和低人类可解释性。
+### Challenge 2：Tokenizer-Reliance 大语言模型的训练和运行通常依赖于特定的分词器，这可能对其性能和适应性产生影响。 --分词器带来了一些挑战，例如计算开销、语言依赖性、新词的处理、固定词汇量、信息丢失和低人类可解释性。
 
 #### The number of tokens necessary to convey the same information varies significantly across languages 不同语言传递出相同的信息所需要的token数差距很大&#x20;
 
@@ -78,7 +78,7 @@ API 语言模型的定价政策（根据处理或生成的代币数量向用户�
 
 针对这个挑战，子词级别的输入则提供了词汇大小和序列长度之间的良好平衡。此外，Byte-Pair Encoding (BPE)和 WordPiece 是常用的子词分词算法。字节级输入是子词分词的一种替代方法，可以与子词分词器结合使用或定义一个有限的词汇表来编码所有可能的序列。还有一些研究提出了基于字节级输入的分词方法，在性能方面与基于子词的模型相媲美。
 
-### Challenge3：High Pre-Training Costs
+### Challenge 3：High Pre-Training Costs
 
 大型语言模型的训练需要大量的计算资源和时间，这可能会对其广泛应用产生限制--不可持续
 
@@ -142,7 +142,7 @@ Generalizes language modeling by allowing prefix tokens with a <mark style="back
 
 <figure><img src="../../.gitbook/assets/image (4).png" alt=""><figcaption><p>Figure4：Self-Supervised Data Construction by Pre-Training Objectives. 通过预训练目标进行自我监督的数据构建，用灰色矩形表示屏蔽标记，这些标记成为目标，省略了特殊的标记。</p></figcaption></figure>
 
-### Challenge:4：Fine-Tuning Overhead
+### Challenge 4：Fine-Tuning Overhead
 
 对海量且多样化的文本数据集进行预训练LLM的一个潜在缺点是，生成的模型可能难以明确捕获特定于任务的数据集的分布属性。使用微调解决上述问题-->微调是指在特定于单个领域或任务的相对较小的数据集上调整预先训练的模型参数。 LLM fine-tuning对于使 LLM 适应下游任务非常有效 。
 
@@ -201,7 +201,7 @@ Generalizes language modeling by allowing prefix tokens with a <mark style="back
 
 
 
-### Challenge5：High Inference Latency 推理延迟
+### Challenge 5：High Inference Latency 推理延迟
 
 目前根据研究，LLM 表现出高推理延迟的两个原因：
 
@@ -352,11 +352,27 @@ Transformer 架构的基本构建块是自注意力机制。它是排列不变�
 
 <mark style="background-color:blue;">接下来首先总结一些标准的Absolute Positional Embeddings技术，然后讨论旨在提高长度泛化的更高级方案。</mark>
 
+[<mark style="background-color:blue;">**Absolute Positional Embeddings -- Attention is all you need**</mark>](https://arxiv.org/abs/1706.03762)
+
+通过基于序列中绝对位置的sinusoidal embeddings来注入位置信息，将其与learned positional embeddings进行比较，发现没有显着的性能差异。相比之下，正弦位置编码不需要可训练的参数，作者假设它们能够外推到比训练集中包含的序列长度更长的序列长度。然而，这个功能并不能得到保证，因为网络中的后续层需要能够处理这种extrapolated positional embeddings。
+
+<mark style="background-color:blue;">**Learned positional encodings**</mark>不具备对未知序列长度的固有泛化能力。出现这种限制的原因是，与训练期间未遇到的绝对位置相关的嵌入要么不存在，要么保持未经训练（随机）。
+
+<mark style="background-color:blue;">**Relative Positional Embeddings**</mark>
+
+将绝对位置嵌入扩展到令牌位置之间的相对偏移量。与绝对位置编码相比，它们对不可见的序列长度提供了更好的泛化能力。所有看不见的绝对位置都将转换为先前观察到的位置之间的相对偏移量，从而能够在推理时更好地泛化到长输入序列。
+
+[<mark style="background-color:blue;">**Rotary Position Embeddings (RoPE) 旋转位置嵌入**</mark>](https://arxiv.org/abs/2104.09864)
+
+通过将绝对位置信息合并到旋转矩阵中并通过旋转对相对位置偏移进行建模，将绝对方法和相对方法结合起来。直接修改自注意力计算，而不是将位置信息注入到embeddings中。
+
+RoPE将自注意力机制定义为
 
 
-###
 
 ### 相关解读
+
+
 
 * [https://mp.weixin.qq.com/s/JsCoUcuCg4ylKkPMvNouEw](https://mp.weixin.qq.com/s/JsCoUcuCg4ylKkPMvNouEw)
 
