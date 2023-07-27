@@ -350,7 +350,7 @@ Transformer 架构的基本构建块是自注意力机制。它是排列不变�
 
 虽然位置编码方案（例如相对位置编码或最近的 ALiBi）在构建更通用的方式来将位置信息注入 Transformer 方面取得了进展，但泛化到比训练期间看到的更长的序列的挑战在很大程度上仍未得到解决。T[ransformer language models without positional encodings still learn positional information](https://arxiv.org/abs/2203.16634).中发现，与具有位置编码的模型相比，不具有位置编码的因果LLM更加具有竞争力，并将这一现象归功于causal attention mask将位置信息泄漏到模型中。
 
-<mark style="background-color:blue;">接下来首先总结一些标准的Absolute Positional Embeddings技术，然后讨论旨在提高长度泛化的更高级方案。</mark>
+<mark style="background-color:blue;">**接下来首先总结一些标准的Absolute Positional Embeddings技术，然后讨论旨在提高长度泛化的更高级方案。**</mark>
 
 [<mark style="background-color:blue;">**Absolute Positional Embeddings -- Attention is all you need**</mark>](https://arxiv.org/abs/1706.03762)
 
@@ -370,9 +370,23 @@ RoPE将自注意力机制定义为
 
 $$\text{softmax}\left(\frac{1}{\sqrt{d}}\sum_{i,j}x_i^\top W_q^\top R_{\Theta,(i-j)}^dW_kx_j\right)$$
 
-虽然 RoPE 已在许多LLM中得到采用 ，也有研究表明了 RoPE 在长文本任务上具有更好的性能，[Train Short, Test Long](https://arxiv.org/abs/2108.12409) 一文提到了这种encode方案很难推断出看不见的序列长度
+虽然 RoPE 已在许多LLM中得到采用 ，也有研究表明了 RoPE 在长文本任务上具有更好的性能，[Train Short, Test Long](https://arxiv.org/abs/2108.12409) 一文提到了这种encode方案很难推断出看不见的序列长度。
 
-###
+[<mark style="background-color:blue;">**Extending Context Window of Large Language Models via Positional Interpolation**</mark>](https://arxiv.org/abs/2306.15595)
+
+提出了位置插值(PI)方法，可以将RoPE-based预训练LLM(如LLaMA模型)的上下文窗口大小扩展到32768，同时只需要最少的微调(在1000步内)，并在各种需要长上下文的任务上展示了强大的实证结果，包括密钥检索、语言建模和长文档摘要。
+
+优势：位置插值可以轻松启用非常长的上下文窗口(例如，32768)，只需要在Pile上微调1000步就可以达到良好的质量。微调的成本与预训练成本相比可以忽略不计。这证实了本文的假设，即模型适应插值位置编码相对容易。
+
+<mark style="background-color:blue;">**Relative Positional Bias**</mark> &#x20;
+
+使用每个相对位置偏移和注意力头的学习偏差直接偏置注意力计算，而不是向token embeddings添加信息
+
+$$\text{softmax}\left(\frac{1}{\sqrt{d}}\sum_{i,j}x_i^\top W_q^\top W_kx_j+b_{i-j}\right)$$
+
+[**Train Short, Test Long**](https://arxiv.org/abs/2108.12409) 中遵循类似的方法，但使用heuristics来定义 ALiBi（Attention with Linear Biases），这是一种非学习偏差，用于惩罚ong-range interactions中的注意力分数，recency-bias被back到模型中。 $$m$$ 是一个预先定义的、特定于头部的斜率——默认情况下， $$n$$ 个头部的slopes集形成一个几何序列。
+
+
 
 ###
 
