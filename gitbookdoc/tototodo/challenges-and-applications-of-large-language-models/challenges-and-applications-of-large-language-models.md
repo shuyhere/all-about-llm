@@ -320,9 +320,15 @@ Tutel  和 MegaBlocks 等提供高效的稀疏 MoE 训练，而 Alpa为用 Jax �
 
 <mark style="background-color:red;">改变输入中</mark><mark style="background-color:red;">**相关信息的位置**</mark><mark style="background-color:red;">会降低模型性能</mark>。有趣的是，像 GPT-3.5 这样的仅解码器 LLM 可以很好地处理输入上下文开头或结尾的此类信息；他们无法很好地获取中间的信息，从而导致 <mark style="background-color:red;">U 形的性能曲线。</mark>
 
-###
+**下面讨论允许更长上下文长度的三项工作：**1. 有效的注意力机制，有助于减轻长输入对 Transformer 模型计算要求的影响。2. 根据对比训练期间使用的序列长度更长的序列长度的泛化来检查positional embedding方案。3. 修改Transformer 替代方案，它既不需要注意力也不需要pe。
 
-###
+#### Efficient Attention Mechanisms 高效的注意力机制
+
+[Luna ](https://arxiv.org/abs/2106.01540)一种线性统一嵌套注意力机制，用两个嵌套线性注意力函数来近似 softmax 注意力，仅产生线性（as opposed to quadratic）时间和空间复杂度，使其能够处理更长的输入。
+
+Efficient attention 和Linear attention mechanism提出了与dot-product attention等效的替代注意力机制，需要的内存和计算资源要少得多。
+
+[Transient Global (LongT5)](https://huggingface.co/docs/transformers/model\_doc/longt5) 注意力机制，它是局部注意力的扩展，其中每个令牌都可以关注附近的令牌和一组全局令牌，它能够处理多达 12,000 个标记的序列。
 
 ###
 
