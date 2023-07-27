@@ -368,11 +368,33 @@ Transformer 架构的基本构建块是自注意力机制。它是排列不变�
 
 RoPE将自注意力机制定义为
 
+$$\text{softmax}\left(\frac{1}{\sqrt{d}}\sum_{i,j}x_i^\top W_q^\top R_{\Theta,(i-j)}^dW_kx_j\right)$$
 
+虽然 RoPE 已在许多LLM中得到采用 ，也有研究表明了 RoPE 在长文本任务上具有更好的性能，[Train Short, Test Long](https://arxiv.org/abs/2108.12409) 一文提到了这种encode方案很难推断出看不见的序列长度
+
+###
+
+###
+
+###
+
+###
+
+###
+
+###
+
+###
+
+###
+
+###
+
+###
+
+###
 
 ### 相关解读
-
-
 
 * [https://mp.weixin.qq.com/s/JsCoUcuCg4ylKkPMvNouEw](https://mp.weixin.qq.com/s/JsCoUcuCg4ylKkPMvNouEw)
 
