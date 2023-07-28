@@ -390,9 +390,17 @@ $$\mathrm{softmax}\left(\frac{1}{\sqrt{d}}\sum_{i,j}x_{i}^{\top}W_{q}^{\top}W_{k
 
 <mark style="background-color:red;">现有的位置编码方案比其他方案对长序列具有更好的泛化能力，但仍不清楚它们的可靠性如何。--实践检验一切</mark>
 
-[Exploring Length Generalization in Large Language Models](https://arxiv.org/abs/2207.04901) 建议将上下文学习和暂存器/思维链推理相结合，使LLM能够泛化到分布内和分布外未见过的序列长度，并根据模型大小调整性能。
+[Exploring Length Generalization in Large Language Models](https://arxiv.org/abs/2207.04901) 建议将上下文学习和scratchpad/chain-of-thought reasoning相结合，使LLM能够泛化到分布内和分布外未见过的序列长度，并根据模型大小调整性能。
 
-###
+#### Transformer Alternatives  transformer的替代方案
+
+虽然 Transformer 因其强大的性能而成为当今LLM的主导范式，但也存在几种更高效的替代架构。
+
+有研究试图使用**state space models（SSM）**来取代注意力机制，该模型提供了近线性的计算复杂性。序列长度。
+
+[Hungry Hungry Hippos: Towards Language Modeling with State Space Mode ](https://arxiv.org/abs/2212.14052)一文中研究了SSM的弱点，发现现有方法很难回忆先前的tokens并比较序列中的tokens，基于这一发现提出了带有移位矩阵的 $$H3$$ **-**-with a shift matrix to recall previous tokens and multiplicative interactions for token comparisons. $$H3$$与基于 Transformer 的 LLM 的语言建模非常接近，与注意力相结合时可以提供进一步的改进。
+
+
 
 ###
 
