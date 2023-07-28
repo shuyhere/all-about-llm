@@ -17,10 +17,10 @@
 ## 🤖 TOTOTODO
 
 * [🌚 Challenges and Applications of Large Language Models](tototodo/challenges-and-applications-of-large-language-models/README.md)
-  * [💦 Brain in a Vat: On Missing Pieces Towards Artificial General Intelligence in Large Language Models](tototodo/challenges-and-applications-of-large-language-models/brain-in-a-vat-on-missing-pieces-towards-artificial-general-intelligence-in-large-language-models.md)
+  * [👏 Challenges and Applications of Large Language Models](tototodo/challenges-and-applications-of-large-language-models/challenges-and-applications-of-large-language-models.md)
   * [🙆 模型安全--A Watermark for Large Language Models](tototodo/challenges-and-applications-of-large-language-models/mo-xing-an-quanawatermark-for-large-language-models.md)
   * [🏸 Inword： Bring games to life with AI NPCs](tototodo/challenges-and-applications-of-large-language-models/inword-bring-games-to-life-with-ai-npcs.md)
-  * [👏 Challenges and Applications of Large Language Models](tototodo/challenges-and-applications-of-large-language-models/challenges-and-applications-of-large-language-models.md)
+  * [💦 Brain in a Vat: On Missing Pieces Towards Artificial General Intelligence in Large Language Models](tototodo/challenges-and-applications-of-large-language-models/brain-in-a-vat-on-missing-pieces-towards-artificial-general-intelligence-in-large-language-models.md)
 * [😃 炼丹工具箱](tototodo/lian-dan-gong-ju-xiang/README.md)
   * [🌐 Megatron-LM -nvidia](tototodo/lian-dan-gong-ju-xiang/megatron-lm-nvidia.md)
   * [🌸 Colossal-AI: 让AI大模型更低成本、方便易用、高效扩展](tototodo/lian-dan-gong-ju-xiang/colossalai-rang-ai-da-mo-xing-geng-di-cheng-ben-fang-bian-yi-yong-gao-xiao-kuo-zhan.md)
