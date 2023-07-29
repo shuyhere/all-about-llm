@@ -392,15 +392,57 @@ $$\mathrm{softmax}\left(\frac{1}{\sqrt{d}}\sum_{i,j}x_{i}^{\top}W_{q}^{\top}W_{k
 
 [Exploring Length Generalization in Large Language Models](https://arxiv.org/abs/2207.04901) 建议将上下文学习和scratchpad/chain-of-thought reasoning相结合，使LLM能够泛化到分布内和分布外未见过的序列长度，并根据模型大小调整性能。
 
-#### Transformer Alternatives  transformer的替代方案
+#### Transformer Alternatives  --transformer的替代方案
 
 虽然 Transformer 因其强大的性能而成为当今LLM的主导范式，但也存在几种更高效的替代架构。
 
 有研究试图使用**state space models（SSM）**来取代注意力机制，该模型提供了近线性的计算复杂性。序列长度。
 
-[Hungry Hungry Hippos: Towards Language Modeling with State Space Mode ](https://arxiv.org/abs/2212.14052)一文中研究了SSM的弱点，发现现有方法很难回忆先前的tokens并比较序列中的tokens，基于这一发现提出了带有移位矩阵的 $$H3$$ **-**-with a shift matrix to recall previous tokens and multiplicative interactions for token comparisons. $$H3$$与基于 Transformer 的 LLM 的语言建模非常接近，与注意力相结合时可以提供进一步的改进。
+[Hungry Hungry Hippos: Towards Language Modeling with State Space Mode ](https://arxiv.org/abs/2212.14052)一文中研究了SSM的弱点，发现现有方法很难回忆先前的tokens并比较序列中的tokens，基于这一发现提出了带有移位矩阵的 $$H3$$ **-**-with a shift matrix to recall previous tokens and multiplicative interactions for token comparisons. $$H3$$在语言建模上与基于 Transformer 的 LLM 非常接近，与注意力相结合可以提供进一步的改进。
+
+[Hyena Hierarchy: Towards Larger Convolutional Language Models](https://arxiv.org/abs/2302.10866) 中提出了 **Hyena operator,**专为长序列设计的基于卷积的次二次方（sub-quadratic）注意力替代品。Hyena 试图通过引入数据控制计算来模拟注意力机制的动态性质（dynamic nature），即 Hyena 应用基于操作员输入的逐元素门控（ element-wise gating operation）来模拟注意力的语境化（contextualization）。基于Hyena的模型已用于自然语言，序列长度高达 131, 000 tokens，在基因组学背景下则高达 1, 000, 000 tokens。
+
+[Block-State Transformer](https://arxiv.org/abs/2306.09539)，建立在hybrid layer基础上，该混合层结合了用于long-range contextualization的 SSM 和用于token之间短程交互的 Transformer。作者发现其性能与基于 Transformer 的基线相似，同时在序列级别上获得高达 10 倍的加速，从而支持具有超过 65, 000 个token序列长度的模型。
+
+另一些工作利用循环神经网络（**RNN**），满足了LLM 关于序列长度的线性计算复杂性和内存要求。
+
+[RWKV: Reinventing RNNs for the Transformer Era](https://arxiv.org/abs/2305.13048) 将训练期间基于 Transformer 的 LLM 的并行化优势与 RNN 的快速推理和低计算要求相结合，通过利用线性注意力机制，将非 Transformer LLM 增大为为 14B 参数，并与类似大小的 Transformer LLM 的性能相匹配。
+
+### Challenge 7：Prompt Brittleness 提示的脆弱性
+
+Prompt的语法（例如长度、空格、示例顺序）和语义（例如措辞、示例选择、说明）可能对模型的输出产生重大影响，而且这种语法语义的改变在人类看来通常并不那么直观。
+
+设计自然语言查询来引导模型的输出达到期望的结果通常被称为prompt engineering，<mark style="background-color:blue;">以下总结一些常见的提示工程方法</mark>
+
+#### <mark style="background-color:blue;">**Single-Turn Prompting ：**</mark>以各种方式改进输入提示，以便一次性获得更好的答案
+
+**In-Context Learning (ICL)** 是指LLM通过将训练数据串联作为演示，仅通过推理（无需任何参数更新）来学习新任务的能力.各种现有的研究研究了为什么 ICL 在 NLP 任务中表现出如此有竞争力的结果, 很多研究给出的一种解释是 ICL 模拟基于梯度的元学习，即它通过前向传播中的梯度下降隐式地微调模型。
+
+[Rethinking the Role of Demonstrations: What Makes In-Context Learning Work](https://arxiv.org/abs/2202.12837)?一文表明，少样本提示中的输入标签关联对于模型性能并不是决定性的：随机翻转少样本演示的标签表明，几乎不会损害LLM解决 NLP 任务的能力。然而，少样本学习（有或没有随机标签）远远优于零样本学习（即提示中没有提供演示）。作者认为，这些演示有助于任务表现，因为LLM 可以学习任务的label space和输入分布。
+
+[What In-Context Learning "Learns" In-Context: Disentangling Task Recognition and Task Learning](https://arxiv.org/abs/2305.09731) 一文说明了LLM利用样本示例的两种方式：1. task recognition：通过示例来识别任务的能力（可能没有真实标签，甚至可能是错误的标签）。在此识别阶段之后，它会应用其预先训练的功能。2. task learning：获取预训练中未见的新输入标签映射。
+
+虽然input-label associations 至少在任务识别的情况下似乎不会驱动小样本性能，但是少样本示例的顺序很重要，因为LLM对提供少样本演示的顺序的排列高度敏感。
+
+ICL 现象的解释围绕贝叶斯推理 （Bayesian inference）、稀疏线性回归 （sparse linear regression）、结构归纳（structure induction） 、保持一致性 （maintaining coherence）、核回归 （kernel regression）和克隆结构因果图（clone-structured causal graphs） 进行。
+
+**Instruction-Following** 会在challenge9中详细解释，因为它需要监督微调。这种方式是在前面添加任务描述指令（例如，“这是一个用于电影评论文本分类任务。这里有一些例子： ...”）
+
+**Chain-of-Thought (CoT**) 描述了一种用于通过一系列中间推理步骤构建小样本提示并产生最终输出的技术。解决代数问题的答案原理最初是在LM之前的时代提出的，后来作为llm的激励策略而大受欢迎。思想链提示的扩展包括零样本变体和自动生成的一系列推理步骤。
+
+**Impersonation**  要求LLM在回答特定领域的问题时假装是领域专家。
+
+#### Multi-Turn Prompting 将提示及其答案迭代地链接在一起。
+
+[Ask Me Anything ](https://arxiv.org/abs/2210.02441)使用多个提示模板（称为提示链），用于将少数示例输入重新格式化为开放式问答格式。最终输出是通过多数投票汇总每个重新格式化输入的LLM预测而获得的。
+
+<figure><img src="../../.gitbook/assets/Screenshot 2023-07-29 at 10.12.39 PM.png" alt=""><figcaption><p>Overview of Selected Prompting Methods, categorized into Single-Turn and Multi-Turn Prompting.</p></figcaption></figure>
 
 
+
+### &#x20;
+
+###
 
 ###
 
