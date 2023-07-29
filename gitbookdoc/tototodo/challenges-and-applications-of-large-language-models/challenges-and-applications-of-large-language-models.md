@@ -432,15 +432,43 @@ ICL 现象的解释围绕贝叶斯推理 （Bayesian inference）、稀疏线性
 
 **Impersonation**  要求LLM在回答特定领域的问题时假装是领域专家。
 
-#### Multi-Turn Prompting 将提示及其答案迭代地链接在一起。
+#### <mark style="background-color:blue;">Multi-Turn Prompting 将提示及其答案迭代地链接在一起。</mark>
 
-[Ask Me Anything ](https://arxiv.org/abs/2210.02441)使用多个提示模板（称为提示链），用于将少数示例输入重新格式化为开放式问答格式。最终输出是通过多数投票汇总每个重新格式化输入的LLM预测而获得的。
+[**Ask Me Anything** ](https://arxiv.org/abs/2210.02441)使用多个提示模板（称为提示链），用于将少数示例输入重新格式化为开放式问答格式。最终输出是通过多数投票汇总每个重新格式化输入的LLM预测而获得的。
+
+[**Self-consistency** ](https://arxiv.org/abs/2203.11171)通过对多个推理路径进行采样并通过多数投票选择最一致的答案来扩展思维链prompt。
+
+[**Least-to-Most**](https://arxiv.org/abs/2205.10625) 使用一组常量提示来使用 LLM 将给定的复杂问题分解为一系列子问题。 LLM 按顺序解决子问题，并提示包含先前生成的解决方案的后期子问题，迭代构建最终输出。
+
+[**Scratchpad**](https://arxiv.org/abs/2112.00114) 是一种在多步骤计算任务上微调 LLM 的方法，以便它们在生成最终结果之前将中间推理步骤（例如，执行加法时的中间计算）输出到“暂存器”中。
+
+[**ReAct**](https://arxiv.org/abs/2210.03629) 通过提示 LLM 生成推理轨迹（例如，CoT）和行动计划来将推理和行动结合起来，执行这些轨迹可以让模型与维基百科等外部环境交互以合并知识。
+
+[**Automatic Reasoning and Tool-Use**](https://arxiv.org/abs/2303.09014) (ART) 是一种自动生成多步骤推理提示的方法，包括对外部工具（例如搜索和代码生成或执行）的符号调用。为此，ART 从任务库中检索相关任务的演示以及伴随的推理步骤，并使用冻结的语言模型生成中间推理步骤。
+
+[**Self-refine**](https://arxiv.org/abs/2303.17651)基于迭代精炼的概念，即通过多个步骤改进初始解决方案。为此，单ge'bLLM会生成初始输出，然后迭代地提供有关先前输出的反馈，然后进行细化步骤，将反馈合并到修订后的输出中。
+
+[**Tree of Thoughts**](https://arxiv.org/abs/2305.10601)  整合CoT 形成了 tree of thoughts（具有多个不同的路径），其中每个思想都是充当中间步骤的语言序列。这样做使LLM能够自我评估中间思想在解决问题和合并搜索算法（例如广度优先或深度优先搜索）方面取得的进展，从而允许通过lookahead 和 backtracking系统地探索树。
+
+**Controlled Generation** 上述方法主要修改提示文本以引导模型输出。然而，可以通过在给定一组固定提示的情况下直接修改推理过程的方法来控制输出，而不是重新表述输入文本。在法学硕士出现之前，这一工作被称为受控生成
 
 <figure><img src="../../.gitbook/assets/Screenshot 2023-07-29 at 10.12.39 PM.png" alt=""><figcaption><p>Overview of Selected Prompting Methods, categorized into Single-Turn and Multi-Turn Prompting.</p></figcaption></figure>
 
 
 
-### &#x20;
+### &#x20;Challenge 8：Hallucinations 幻觉
+
+生成的文本流畅自然，但不忠实于源内容（(intrinsic）和/或不确定(intrinsic）。
+
+[Exposing Attention Glitches with Flip-Flop Language Modeling](https://arxiv.org/abs/2306.00946) 将LLM中常见的幻觉归因于 Transformer 模型的架构缺陷，同时观察到循环神经网络完美地解决了minimalistic synthetic benchmarks，旨在隔离算法推理背景下的幻觉情况。
+
+接下来重点关注在不改变模型架构本身的情况下解决LLM中的幻觉的方法，包括（i）提供相关来源（retrieval augmentation）或（ii）解码策略（decoding strategies）。
+
+#### How to Measure Hallucinations
+
+[Factuality Enhanced Language Models for Open-Ended Text Generation ](https://arxiv.org/abs/2206.04624)提供了由事实和非事实输入提示组成的 FactualityPrompts 数据集，它允许人们隔离提示的现实性对模型延续的影响。此外，他们使用基于命名实体和文本蕴涵的指标来测量幻觉。
+
+###
 
 ###
 
