@@ -7,6 +7,8 @@
 * [🙇♂ Lossless Compression](tototolearn/lossless-compression/README.md)
   * [Page 1](tototolearn/lossless-compression/page-1.md)
 * [👼 Tutorials\&Workshops](Tutorial\&Workshop/README.md)
+  * [🥰 Introduction to Algorithms](tototolearn/tutorial-and-workshop/introduction-to-algorithms/README.md)
+    * [🐶 The Role of Algorithms in Computing](tototolearn/tutorial-and-workshop/introduction-to-algorithms/the-role-of-algorithms-in-computing.md)
   * [🧎♀ ACL 2023 Tutorial: Retrieval-based Language Models and Applications](Tutorial\&Workshop/acl2023-retrieval-lm.md)
   * [🐧 Real\_PEFT](Tutorial\&Workshop/real\_PEFT.md)
 * [🧕 Personality Traits\&Bias in LLM](tototolearn/personality-traits-and-bias-in-llm/README.md)
