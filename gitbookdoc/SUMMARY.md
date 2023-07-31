@@ -4,6 +4,8 @@
 
 ## 🐰 TOTOTOlearn
 
+* [🙇♂ Lossless Compression](tototolearn/lossless-compression/README.md)
+  * [Page 1](tototolearn/lossless-compression/page-1.md)
 * [👼 Tutorials\&Workshops](Tutorial\&Workshop/README.md)
   * [🧎♀ ACL 2023 Tutorial: Retrieval-based Language Models and Applications](Tutorial\&Workshop/acl2023-retrieval-lm.md)
   * [🐧 Real\_PEFT](Tutorial\&Workshop/real\_PEFT.md)
