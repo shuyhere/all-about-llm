@@ -4,6 +4,8 @@ description: Jack Rae
 
 # 🧠 Compressing for AGI
 
+[https://www.youtube.com/watch?v=dO4TPJkeaaU\&t=161s](https://www.youtube.com/watch?v=dO4TPJkeaaU\&t=161s)
+
 ## Theme of talk
 
 * Think deeply about the <mark style="background-color:red;">training objective of foundation models</mark>
