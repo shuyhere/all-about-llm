@@ -5,7 +5,7 @@
 ## 🐰 TOTOTOlearn
 
 * [🙇♂ Lossless Compression](tototolearn/lossless-compression/README.md)
-  * [Page 1](tototolearn/lossless-compression/page-1.md)
+  * [🧠 Compressing for AGI](tototolearn/lossless-compression/compressing-for-agi.md)
 * [👼 Tutorials\&Workshops](Tutorial\&Workshop/README.md)
   * [🥰 Introduction to Algorithms](tototolearn/tutorial-and-workshop/introduction-to-algorithms/README.md)
     * [🐶 The Role of Algorithms in Computing](tototolearn/tutorial-and-workshop/introduction-to-algorithms/the-role-of-algorithms-in-computing.md)
