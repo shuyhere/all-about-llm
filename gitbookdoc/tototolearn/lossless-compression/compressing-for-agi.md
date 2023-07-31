@@ -4,7 +4,9 @@ description: Jack Rae
 
 # 🧠 Compressing for AGI
 
-[https://www.youtube.com/watch?v=dO4TPJkeaaU\&t=161s](https://www.youtube.com/watch?v=dO4TPJkeaaU\&t=161s)
+相关解读：[https://zhuanlan.zhihu.com/p/619511222](https://zhuanlan.zhihu.com/p/619511222)
+
+原视频：[https://www.youtube.com/watch?v=dO4TPJkeaaU\&t=161s](https://www.youtube.com/watch?v=dO4TPJkeaaU\&t=161s)
 
 ## Theme of talk
 
