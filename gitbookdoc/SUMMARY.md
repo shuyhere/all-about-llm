@@ -4,6 +4,7 @@
 
 ## 🐰 TOTOTOlearn
 
+* [⚒ Evaluate](tototolearn/evaluate.md)
 * [🙇♂ Lossless Compression](tototolearn/lossless-compression/README.md)
   * [🧠 Compressing for AGI](tototolearn/lossless-compression/compressing-for-agi.md)
 * [👼 Tutorials\&Workshops](Tutorial\&Workshop/README.md)
