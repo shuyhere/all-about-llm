@@ -318,3 +318,128 @@ What happens behind the scene might be:
 | <p>+ 遵循人类价值观 </p><p>+ 包含更多细节的生成</p><p>+ 上下文学习</p><p>+ 零样本生成</p>                                                                           | 经过RLHF训练的Instruct-GPT**和002模型相比，和人类更加对齐，并且更少的性能损失** | 强化学习版的指令微调          | Text-Davinci-003                      | Instruct-GPT论文, RLHF部分，从人类反馈中的学习摘要。 | <p>DeepMind Sparrow 论文 </p><p>AI2 RL4LMs</p> |
 | <p>++ 遵循人类价值观 ++ 包含更多细节的生成 </p><p>++ <mark style="background-color:red;">拒绝知识范围外的问题 (为什么?)</mark> </p><p>++ 建模对话历史的能力 </p><p>-- 上下文学习</p> | ChatGPT **通过牺牲上下文学习的能力取取建模对话历史的能力**                 | 使用对话数据进行强化学习指令微调    |                                       |                                     | <p>DeepMind Sparrow论文</p><p>AI2 RL4LMs</p>   |
 
+我们可以得出结论：
+
+* 语言生成能力 + 基础世界知识 + 上下文学习都是来自于预训练（`davinci`）
+* 存储大量知识的能力来自 1750 亿的参数量。
+* 遵循指令和泛化到新任务的能力来自于扩大指令学习中指令的数量（`Davinci-instruct-beta`)
+* 执行复杂推理的能力很可能来自于代码训练（`code-davinci-002`）
+* 生成中立、客观的能力、安全和翔实的答案来自与人类的对齐。具体来说：
+  * 如果是监督学习版，得到的模型是`text-davinci-002`
+  * 如果是强化学习版 (RLHF) ，得到的模型是`text-davinci-003`
+  * 无论是有监督还是 RLHF ，模型在很多任务的性能都无法超过 code-davinci-002 ，这种因为对齐而造成性能衰退的现象叫做对齐税。
+* 对话能力也来自于 RLHF（`ChatGPT`），具体来说它牺牲了上下文学习的能力，来换取：
+  * 建模对话历史
+  * 增加对话信息量
+  * 拒绝模型知识范围之外的问题
+
+We have concluded:
+
+* The language generation ability + basic world knowledge + in-context learning are from pretraining (`davinci`)
+* The ability to store a large amount of knowledge is from the 175B scale.
+* The ability to follow instructions and generalizing to new tasks are from scaling instruction tuning (`davinci-instruct-beta`)
+* The ability to perform complex reasoning is likely to be from training on code (`code-davinci-002`)
+* The ability to generate neutral, objective, safe, and informative answers are from alignment with human. Specifically:
+  * If supervised tuning, the resulting model is `text-davinci-002`
+  * If RLHF, the resulting model is `text-davinci-003`
+  * Either supervised or RLHF, the models cannot outperform code-davinci-002 on many tasks, which is called the alignment tax.
+* The dialog ability is also from RLHF (`ChatGPT`), specifically it tradeoffs in-context learning for:
+  * Modeling dialog history
+  * Increased informativeness
+  * Rejecting questions outside the model’s knowledge scope
+
+###
+
+###
+
+### 六、GPT-3.5 目前不能做什么
+
+虽然GPT-3.5是自然语言处理研究中的重要一步，但它并没有完全包含许多研究人员（包括 AI2）设想的所有理想属性。以下是GPT-3.5不具备的某些重要属性：
+
+* **实时改写模型的信念**：当模型表达对某事的信念时，如果该信念是错误的，我们可能很难纠正它：
+  * 我最近遇到的一个例子是：ChatGPT 坚持认为 3599 是一个质数，尽管它承认 3599 = 59 \* 61。另外，请参阅Reddit上关于游得最快的海洋哺乳动物的例子。
+  * 然而，模型信念的强度似乎存在不同的层次。一个例子是即使我告诉它达斯·维达（星球大战电影中的人物）赢得了2020年大选，模型依旧会认为美国现任总统是拜登。但是如果我将选举年份改为 2024 年，它就会认为总统是达斯·维达是 2026 年的总统。
+* **形式推理**：GPT-3.5系列不能在数学或一阶逻辑等形式严格的系统中进行推理：
+  * 在自然语言处理的文献中， “推理” 一词的定义很多时候不太明确。但如果我们从模糊性的角度来看，例如一些问题 (a) 非常模棱两可，没有推理；(b) 有点儿逻辑在里面，但有些地方也可以模糊；(c) 非常严谨，不能有任何歧义。那么，
+  * 模型可以很好地进行 (b) 类的带模糊性的推理，例子有：
+    * 生成如何做豆腐脑的方法。做豆腐脑的时候，中间很多步骤模糊一点是可以接受的，比如到底是做咸的还是做甜的。只要整体步骤大致正确，做出来的豆腐脑儿就能吃。
+    * 数学定理的证明思路。证明思路是用语言表达的非正式的逐步解法，其中每一步的严格推导可以不用太具体。证明思路经常被用到数学教学：只要老师给一个大致正确的整体步骤，学生就可以大概明白。然后老师把具体的证明细节作为作业布置给学生，答案略。
+  * GPT-3.5 不能进行类型 (c) 的推理（推理不能容忍歧义）。
+    * 一个例子是严格的数学证明，要求中间步骤中不能跳，不能模糊，不能错。
+    * 但这种严格推理到底是应该让语言模型做还是让符号系统做还有待讨论。一个例子是，与其努力让 GPT 做三位数加法，不如直接调 Python。
+* **从互联网进行检索**：GPT-3.5 系列（暂时）不能直接搜索互联网
+  * 但是有一篇 WebGPT 论文发表于2021年12月，里面就让 GPT 调用了搜索引擎。所以检索的能力已经在 OpenAI 内部进行了测试。
+  * 这里需要区分的一点是，GPT-3.5 的两个重要但不同的能力是 **知识** 和 **推理**。一般来说，如果我们能够 **将知识部分卸载到外部的检索系统，让语言模型只专注于推理，这就很不错了。** 因为：
+    * 模型的内部知识总是在某个时间被切断。模型始终需要最新的知识来回答最新的问题。
+    * 回想一下，我们已经讨论过 1750 亿的参数大量用于存储知识。如果我们可以将知识卸载到模型之外，那么模型参数可能会大大减少，最终它甚至可以在手机上运行（疯狂的想法，但 ChatGPT 已经足够科幻了，谁知道未来会怎样呢).
+
+Although it is a major step in NLP research, GPT-3.5 does not fully contain all the ideal properties envisaged by many NLP researchers (including AI2). Below are certain important properties that GPT-3.5 does not have:
+
+* **On-the-fly overwriting the model’s belief**: when the model expresses its belief in something, it might be hard to correct it when the belief is wrong:
+  * One recent example I encountered is that ChatGPT insists that 3599 is a prime number even though it acknowledged that 3599 = 59 \* 61. Also, see the fastest marine mammal example on Reddit.
+  * Yet there seems to be a hierarchy of how strong the belief is. One example is that the model believes the current president of the US is Biden, even if I told it Darth Vader won the 2020 election. Yet if I change the election year to 2024, it believes that the president is Darth Vader in 2026.
+* **Formal reasoning**: the GPT-3.5 series cannot do reasoning within formal, strict systems like math or first-order logic
+  * In the NLP literature, the word “reasoning” is less well-defined. Yet if we view there is a spectrum of ambiguity like (a) very ambiguous, no reasoning; (b) mixture of logic and ambiguous statements; (c). no ambiguity has to be very rigorous, then,
+  * The model can do very well on type (b) reasoning with ambiguity; examples include:
+    * Generating a procedure of how to cook pizza. It is acceptable if there exist ambiguities in the intermediate steps, like using sausage or pineapple. As long as the overall steps are approximately correct, the pizza is eatable (sorry if you are Italian).
+    * Generating proof sketch of a theorem. Proof sketches are informal step-by-step procedures expressed in language, where the strict derivation of one step can be left unspecified. This is a useful math teaching and thinking tool. As long as the overall steps are approximately correct, the students can fill in the details as homework.
+  * The model cannot do type (c) reasoning (reasoning does not tolerate ambiguity).
+    * One example is deriving strict proofs that require no mistakes in intermediate steps.
+    * Yet whether such reasoning should be done by a language model or a symbolic system is up for discussion. For example, instead of trying hard to make GPT do three digits addition, one might simply call Python.
+* **Retrieval from the Internet**: the GPT-3.5 series cannot directly search the internet (for now)
+  * Yet there was a WebGPT paper published in Dec 2021. It is likely that this is already tested internally within OpenAI.
+  * The two important but different abilities of GPT-3.5 are **knowledge** and **reasoning**. Generally, it would be ideal if we could **offload the knowledge part to the outside retrieval system and let the language model only focus on reasoning.** This is because:
+    * The model’s internal knowledge is always cut off at a certain time. The model always needs up-to-date knowledge to answer up-to-date questions.
+    * Recall we have discussed that is 175B parameter is heavily used for storing knowledge. If we could offload knowledge to be outside the model, then the model parameter might be significantly reduced such that eventually, it can run on a cellphone (call this crazy here, but ChatGPT is already science fiction enough, who knows what the future will be).
+
+## 七、结论
+
+在这篇博文中，我们仔细检查了GPT-3.5系列的能力范围，并追溯了它们所有突现能力的来源。初代GPT-3模型通过预训练获得生成能力、世界知识和in-context learning。然后通过instruction tuning的模型分支获得了遵循指令和能泛化到没有见过的任务的能力。经过代码训练的分支模型则获得了代码理解的能力，作为代码训练的副产品，模型同时潜在地获得了复杂推理的能力。结合这两个分支，code-davinci-002似乎是具有所有强大能力的最强GPT-3.5模型。接下来通过有监督的instruction tuning和 RLHF通过牺牲模型能力换取与人类对齐，即对齐税。 RLHF 使模型能够生成更翔实和公正的答案，同时拒绝其知识范围之外的问题。
+
+我们希望这篇文章能够帮助提供一个清晰的GPT评估图，并引发一些关于语言模型、instruction tuning和code tuning的讨论。最重要的是， **我们希望这篇文章可以作为在开源社区内复现GPT-3.5的路线图。**
+
+> “因为山就在那里。”——乔治·马洛里，珠穆朗玛峰探险先驱
+
+In this post, we scrutinize the spectrum of abilities of the GPT-3.5 series and trace back to the sources of all their emergent abilities. The initial GPT-3 model gains its generation ability, world knowledge, and in-context learning from pretraining. Then the instruction tuning branch gains the ability to follow instructions and generalization to unseen tasks. The training on code branch gains the ability of code understanding, and potentially the side product of complex reasoning. Combining the two branches, code-davinci-002 seems to be the most capable GPT-3.5 model with all the powerful abilities. The following supervised instruction tuning and RLHF trades model ability for alignment with humans, i.e., the alignment tax. RLHF enables the model to generate more informative and impartial answers while rejecting questions outside its knowledge scope.
+
+We hope this article can help provide a clear picture of the evaluation of GPT, and stir some discussion about language models, instruction tuning, and code tuning. Most importantly, **we hope this article can serve as the roadmap for reproducing GPT-3.5 within the open-source community.**
+
+> “Because it's there” — George Mallory, the pioneer of the Mount Everest expedition
+
+## **常见问题**
+
+* 这篇文章中的这些说法更像是假设 (hypothesis) 还是结论 (conclusion)？
+  * **复杂推理的能力来自于代码训练**是我们倾向于相信的假设 (hypothesis)
+  * **对没有见过的任务泛化能力来自大规模指令学习** 是至少 4 篇论文的结论 (conclusion)
+  * **GPT-3.5来自于其他大型基础模型，而不是1750亿参数的GPT-3** 是有根据的猜测 (educated guess)。
+  * **所有这些能力都已经存在了，通过instruction tuning，无论是有监督学习或强化学习的方式来解锁而不是注入这些能力** 是一个比较强的假设 (strong assumption)。 主要是因为instruction tuning数据量比预训练数据量少了几个数量级。
+  * 结论 (conclusion) = 许多证据支持这些说法的正确性；假设 (hypothesis) = 有正面证据但不够有力；有根据的猜测 (educated guess) = 没有确凿的证据，但某些因素会指向这个方向
+*   为什么其他模型（如 OPT 和 BLOOM）没有那么强大？
+
+    * OPT大概是因为训练过程太不稳定
+    * BLOOM的情况则未知。如果您有更多意见，请与我联系
+
+
+* Are these claims in this article more like hypothesis or conclusions?
+  * **Complex reasoning is from training on code** is a hypothesis we tend to believe
+  * **Generalization on unseen tasks is from scaling instruction tuning** is a conclusion from at least 4 papers
+  * **GPT-3.5 is from a large base model than GPT-3 175B** is an educated guess.
+  * **All these abilities are there, instruction tuning, either supervised or reinforce, unlocks, but not inject, these abilities** is a strong hypothesis, very strong such that it is hard not to believe. Mostly because instruction tuning data are orders of magnitudes less than pretraining data
+  * Conclusion = many evidences supporting its correctness; Hypothesis = there are positive evidences but not strong enough; Educated guess = no hard evidence but certain factors indicate so
+* Why other models like OPT and BLOOM are not so strong?
+  * OPT probably because training process too unstable
+  * BLOOM do not know. Do contact me if you have more comments
+
+## 附录 - 中英术语对照表
+
+| 英文                                                | 中文          | 释义                                     |
+| ------------------------------------------------- | ----------- | -------------------------------------- |
+| Emergent Ability                                  | 突现能力        | 小模型没有，只在模型大到一定程度才会出现的能力                |
+| Prompt                                            | 提示词         | 把 prompt 输入给大模型，大模型给出 completion       |
+| In-Context Learning                               | 上下文学习       | 在 prompt 里面写几个例子，模型就可以照着这些例子做生成        |
+| Instruction Tuning                                | 指令微调        | 用 instruction 来 fine-tune 大模型          |
+| Code Tuning                                       | 在代码上微调      | 用代码来 fine-tune 大模型                     |
+| Reinforcement Learning with Human Feedback (RLHF) | 基于人类反馈的强化学习 | 让人给模型生成的结果打分，用人打的分来调整模型                |
+| Chain-of-Thought                                  | 思维链         | 在写 prompt 的时候，不仅给出结果，还要一步一步地写结果是怎么推出来的 |
+| Scaling Laws                                      | 缩放法则        | 模型的效果的线性增长要求模型的大小指数增长                  |
+| Alignment                                         | 与人类对齐       | 让机器生成符合人类期望的，符合人类价值观的句子                |
