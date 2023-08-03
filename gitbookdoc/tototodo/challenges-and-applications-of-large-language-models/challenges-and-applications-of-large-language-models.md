@@ -468,25 +468,55 @@ ICL 现象的解释围绕贝叶斯推理 （Bayesian inference）、稀疏线性
 
 [Factuality Enhanced Language Models for Open-Ended Text Generation ](https://arxiv.org/abs/2206.04624)提供了由事实和非事实输入提示组成的 FactualityPrompts 数据集，它允许人们隔离提示的现实性对模型延续的影响。此外，他们使用基于命名实体和文本蕴涵的指标来测量幻觉。
 
-###
+[FActScore ](https://arxiv.org/abs/2305.14251)中提出到评估事实性可能很困难，因为生成的文字可能是supported and unsupported的信息的混合，使得质量的二元判断不充分并且人类评估非常耗时。这篇论文中提出了一个框架，首先将生辰的信息分解为原子（atomic）事实，然后计算由维基百科等外部知识源支持的原子事实的百分比。
 
-###
+[hallucination snowballing](https://arxiv.org/abs/2305.13534) 论文中提出了大模型幻觉的滚雪球行为
 
-###
+<mark style="background-color:blue;">**Retrieval Augmentation（RA） 检索增强**</mark>
 
-###
+减轻幻觉的一种方法是将模型的输入建立在外部知识的基础上，这通常称为检索增强。换句话说，我们可以将（i）知识的内存存储（例如数据库或搜索索引）和（ii）知识的处理解耦，以获得更加模块化的架构。对于 (i)，检索器模块从大型文本语料库中检索查询的前 k 个相关文档（或段落）。然后，对于 (ii)，我们将这些检索到的文档与初始提示一起输入到语言模型中。理论上，使用外部数据源还可以更轻松地解释检索和更新哪些知识，而无需繁琐地微调模型。
 
-###
+相关工作可以参考：
 
-###
+[acl2023-retrieval-lm.md](../../Tutorial\&Workshop/acl2023-retrieval-lm.md "mention")
 
-###
+<mark style="background-color:blue;">**Decoding Strategies**</mark>
 
-###
+减轻幻觉的另一种方法是在推理时间内完善解码策略。  -- 多样性和质量之间的权衡。
 
-###
+[<mark style="background-color:blue;">**Uncertainty-Aware Beam Search**</mark>](https://arxiv.org/abs/2103.15025)
 
-###
+较高的预测不确定性对应于产生幻觉的较大机会。因此，该方法在波束搜索中引入惩罚项，以惩罚解码期间的高预测不确定性。
+
+[<mark style="background-color:blue;">**Confident Decoding**</mark>](https://arxiv.org/abs/1910.08684)
+
+提出了基于注意力的置信度分数来衡量模型对源的关注程度，并提出了变分贝叶斯训练程序以确保模型生成高置信度的答案。
+
+### Challenge 9：Misaligned Behavior
+
+LLM常会产生与人类价值观或意图不太相符的成果，这可能会产生意想不到的或负面的后果。
+
+大多数现有的对齐工作可以分为 **1. detecting misaligned behavior（例如模型评估和审计、mechanistic interpretability或red teaming）2. aligning model behavior（例如根据人类反馈进行预训练, instruction fine-tuning,或 RLHF）**。（这里不展开，原文有很详细的当前工作总结）
+
+<figure><img src="../../.gitbook/assets/image (9).png" alt=""><figcaption></figcaption></figure>
+
+<mark style="background-color:blue;">**Pre-Training With Human Feedback**</mark>
+
+[Pretraining Language Models with Human Preferences](https://arxiv.org/abs/2302.08582)中引入了人类反馈预训练（PHF）的概念，其中人类反馈是在预训练阶段而不是在微调期间纳入的。作者比较了五种不同的 PHF 方法，filtering , conditional training , unlikelihood , reward-weighted regression, and advantage-weighted regression，并发现[conditional training ](#user-content-fn-1)[^1]有可以实现一致性和能力之间的最佳平衡。&#x20;
+
+<mark style="background-color:blue;">**Instruction Fine-Tuning**</mark>
+
+<mark style="background-color:blue;">**Reinforcement Learning From Human Feedback (RLHF)**</mark>
+
+RLHF 的工作原理是使用预训练的 LM 生成文本，然后由人类进行评估，例如对同一提示的两个模型生成进行排名。然后收集这些数据以学习奖励模型，该模型可以预测给定任何生成文本的标量奖励。奖励捕捉了人类在判断模型输出时的偏好。最后，我们使用[ PPO](https://arxiv.org/search/cs?searchtype=author\&query=Klimov%2C+O) 等 RL 策略梯度算法针对此类奖励模型优化 LM。 RLHF 可以直接应用于通过自监督学习预训练的通用 LM。然而，在预训练后立即应用 RLHF 可能不足以完成更复杂的任务。
+
+<mark style="color:blue;">Superficial Alignment Hypothesis:</mark> The knowledge and skills of a model are primarily acquired during the pre-training phase, while alignment instructs it on the appropriate subdistribution of formats to use in user interactions.
+
+由于 RLHF 涉及许多不同的组件，例如（1）从人类收集的偏好数据，（2）学习人类偏好的奖励模型，以及（3）策略优化算法（例如 PPO），[Secrets of RLHF in Large Language Models Part I: PPO ](https://arxiv.org/abs/2307.04964)系列将剖析每一个的部分。最近的部分重点关注步骤（3），并发现可以应用各种 RL 技巧来使 vanilla PPO 更加稳定。
+
+<mark style="background-color:blue;">**Self-improvement**</mark>&#x20;
+
+根据自己生成的数据对LM进行微调
 
 ### 相关解读
 
@@ -494,3 +524,6 @@ ICL 现象的解释围绕贝叶斯推理 （Bayesian inference）、稀疏线性
 
 
 
+
+
+[^1]: 根据 阈值奖励函数 添加good bad token
