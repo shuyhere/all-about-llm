@@ -354,9 +354,7 @@ We have concluded:
   * Increased informativeness
   * Rejecting questions outside the model’s knowledge scope
 
-###
 
-###
 
 ### 六、GPT-3.5 目前不能做什么
 
