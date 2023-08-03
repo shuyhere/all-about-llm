@@ -92,14 +92,14 @@ Although the initial GPT-3 might be superficially weak, it turns out later that 
 
 <figure><img src="../../.gitbook/assets/image (8).png" alt=""><figcaption></figcaption></figure>
 
-在 **2020 年 7 月**，OpenAI 发布了模型索引为的 `davinci` 的初代 GPT-3 论文，从此它就开始不断进化。在 **2021 年 7 月**，Codex 的论文发布，其中初始的 Codex 是根据（可能是内部的）120 亿参数的 GPT-3 变体进行微调的。后来这个 120 亿参数的模型演变成 OpenAI API 中的`code-cushman-001`。在 **2022 年 3 月**，OpenAI 发布了指令微调 (instruction tuning) 的论文，其监督微调 (supervised instruction tuning) 的部分对应了`davinci-instruct-beta`和`text-davinci-001`。在 **2022 年 4 月至 7 月的**，OpenAI 开始对`code-davinci-002`模型进行 Beta 测试，也称其为 Codex。然后`code-davinci-002`、`text-davinci-003`和`ChatGPT` 都是从`code-davinci-002`进行指令微调得到的。详细信息请参阅 OpenAI的模型索引文档。
+在 **2020 年 7 月**，OpenAI 发布了模型索引为的 `davinci` 的初代 [GPT-3 论文](https://arxiv.org/abs/2005.14165)，从此它就开始不断进化。在 **2021 年 7 月**，[Codex 的论文](https://arxiv.org/abs/2107.03374)发布，其中初始的 Codex 是根据（可能是内部的）120 亿参数的 GPT-3 变体进行微调的。后来这个 120 亿参数的模型演变成 OpenAI API 中的`code-cushman-001`。在 **2022 年 3 月**，OpenAI 发布了[指令微调 (instruction tuning) ](https://arxiv.org/abs/2203.02155)的论文，其监督微调 (supervised instruction tuning) 的部分对应了`davinci-instruct-beta`和`text-davinci-001`。在 **2022 年 4 月至 7 月的**，OpenAI 开始对`code-davinci-002`模型进行 Beta 测试，也称其为 Codex。然后text`-davinci-002`、`text-davinci-003`和`ChatGPT` 都是从`code-davinci-002`进行指令微调得到的。详细信息请参阅 OpenAI的模型索引文档。
 
-尽管 Codex 听着像是一个只管代码的模型，但`code-davinci-002`可能是最强大的针对**自然语言**的GPT-3.5 变体（优于 `text-davinci-002`和 `-003`）。`code-davinci-002`很可能在文本和代码上都经过训练，然后根据指令进行调整（将在下面解释）。然后**2022 年 5-6 月**发布的`text-davinci-002`是一个基于`code-davinci-002`的有监督指令微调 (supervised instruction tuned) 模型。在`text-davinci-002`上面进行**指令微调**很可能**降低**了模型的**上下文学习**能力\*\*，**但是**增强了**模型的**零样本能力\*\*（将在下面解释）。然后是`text-davinci-003`和 `ChatGPT`，它们都在 **2022 年 11 月**发布，是使用的基于人类反馈的强化学习的版本指令微调 (instruction tuning with reinforcement learning from human feedback) 模型的两种不同变体。`text-davinci-003` 恢复了（但仍然比`code-davinci-002`差）一些在`text-davinci-002` 中丢失的部分**上下文学习能**力（大概是因为它在微调的时候混入了语言建模） 并进一步改进了零样本能力（得益于RLHF）。另一方面，ChatGPT 似乎**牺牲了几乎所有的上下文学习的能力**来**换取**建模对话历史的能力。
+尽管 Codex 听着像是一个只管代码的模型，但`code-davinci-002`可能是最强大的针对**自然语言**的GPT-3.5 变体（优于 `text-davinci-002`和 `-003`）。`code-davinci-002`很可能在文本和代码上都经过训练，然后根据指令进行调整（将在下面解释）。然后**2022 年 5-6 月**发布的`text-davinci-002`是一个基于`code-davinci-002`的有监督指令微调 (supervised instruction tuned) 模型。<mark style="background-color:red;">在</mark><mark style="background-color:red;">`text-davinci-002`</mark><mark style="background-color:red;">上面进行</mark><mark style="background-color:red;">**指令微调**</mark><mark style="background-color:red;">很可能</mark><mark style="background-color:red;">**降低**</mark><mark style="background-color:red;">了模型的</mark><mark style="background-color:red;">**上下文学习**</mark><mark style="background-color:red;">能力，</mark><mark style="background-color:red;">**但是**</mark><mark style="background-color:red;">增强了</mark><mark style="background-color:red;">**模型的**</mark><mark style="background-color:red;">零样本能力（将在下面解释）</mark>。然后是`text-davinci-003`和 `ChatGPT`，它们都在 **2022 年 11 月**发布，是使用的基于人类反馈的强化学习的版本指令微调 (instruction tuning with reinforcement learning from human feedback) 模型的两种不同变体。`text-davinci-003` 恢复了（但仍然比`code-davinci-002`差）一些在`text-davinci-002` 中丢失的部分**上下文学习能**力（大概是因为它在微调的时候混入了语言建模） 并进一步改进了零样本能力（得益于RLHF）。另一方面，[<mark style="background-color:red;">ChatGPT 似乎</mark><mark style="background-color:red;">**牺牲了几乎所有的上下文学习的能力**</mark><mark style="background-color:red;">来</mark><mark style="background-color:red;">**换取**</mark><mark style="background-color:red;">建模对话历史的能力。</mark>](#user-content-fn-2)[^2]
 
 总的来说，在 2020 - 2021 年期间，在`code-davinci-002`之前，OpenAI 已经投入了大量的精力通过代码训练和指令微调来增强GPT-3。当他们完成`code-davinci-002`时，所有的能力都已经存在了。很可能后续的指令微调，无论是通过有监督的版本还是强化学习的版本，都会做以下事情（稍后会详细说明）：
 
-* 指令微调**不会为模型注入新的能力** —— 所有的能力都已经存在了。指令微调的作用是**解锁 / 激发这些能力**。这主要是因为指令微调的数据量比预训练数据量少几个数量级（基础的能力是通过预训练注入的）。
-* 指令微调\*\*将 GPT-3.5 的分化到不同的技能树。\*\*有些更擅长上下文学习，如`text-davinci-003`，有些更擅长对话，如`ChatGPT`。
+* 指令微调**不会为模型注入新的能力** —— <mark style="background-color:red;">所有的能力都已经存在了。指令微调的作用是</mark><mark style="background-color:red;">**解锁 / 激发这些能力**</mark><mark style="background-color:red;">。这主要是因为指令微调的数据量比预训练数据量少几个数量级（基础的能力是通过预训练注入的）。</mark>
+* 指令微调**将 GPT-3.5 的分化到不同的技能树**。有些更擅长上下文学习，如`text-davinci-003`，有些更擅长对话，如`ChatGPT`。
 * 指令微调**通过牺牲性能换取与人类的对齐（alignment）**。 OpenAI 的作者在他们的指令微调论文中称其为 “对齐税” (alignment tax)。许多论文都报道了`code-davinci-002`在基准测试中实现了最佳性能（但模型不一定符合人类期望）。 在`code-davinci-002`上进行指令微调后，模型可以生成更加符合人类期待的反馈（或者说模型与人类对齐），例如：零样本问答、生成安全和公正的对话回复、拒绝超出模型它知识范围的问题。
 
 In **Jul 2020**. OpenAI released the initial GPT-3 paper with the `davinci` model index, and it started to evolve. In **Jul 2021**, the Codex paper was released, where the initial Codex is fine-tuned from a (presumably internal) 12B GPT-3 variant. Later this 12B model evolved to be the `code-cushman-001` in OpenAI API. In **Mar 2022**, OpenAI released the instruction tuning paper, and its supervised tuning part corresponds to the `davinci-instruct-beta` and `text-davinci-001`. At some point in **Apr-Jul 2022**, OpenAI started to beta test the `code-davinci-002` model, also calling it Codex. Then `text-davinci-002`, `text-davinci-003`, and `ChatGPT` are all instruction-tuned from `code-davinci-002`. See OpenAI’s Model Index document for more details.
@@ -122,11 +122,11 @@ Before code-davinci-002 and text-davinci-002, there are two intermediate models,
 
 我们关注`code-davinci-002`和`text-davinci-002`，这两兄弟是第一版的 GPT3.5 模型，一个用于代码，另一个用于文本。它们表现出了四种与初代 GPT-3 不同的重要能力：
 
-* **响应人类指令**：以前，GPT-3 的输出主要训练集中常见的句子。现在的模型会针对指令 / 提示词生成更合理的答案（而不是相关但无用的句子）。
+* **响应人类指令**：以前，GPT-3 的输出主要是训练集中常见的句子。现在的模型会针对指令 / 提示词生成更合理的答案（而不是相关但无用的句子）。
 * **泛化到没有见过的任务**：当用于调整模型的指令数量超过一定的规模时，模型就可以自动在从没见过的新指令上也能生成有效的回答。 **这种能力对于上线部署至关重要**，因为用户总会提新的问题，模型得答得出来才行。
 * **代码生成和代码理解**：这个能力很显然，因为模型用代码训练过。
 * **利用思维链 (chain-of-thought) 进行复杂推理**：初代 GPT3 的模型思维链推理的能力很弱甚至没有。 **code-davinci-002 和 text-davinci-002 是两个拥有足够强的思维链推理能力的模型。**
-  * 思维链推理之所以重要，是因为思维链可能是解锁突现能力和超越缩放法则 (scaling laws) 的关键。请参阅上一篇博文。
+  * 思维链推理之所以重要，是因为思维链可能是解锁突现能力和超越缩放法则 (scaling laws) 的关键。请参阅[上一篇博文](https://yaofu.notion.site/A-Closer-Look-at-Large-Language-Models-Emergent-Abilities-493876b55df5479d80686f68a1abd72f)。
 
 Now let’s look at code-davinci-002 and text-davinci-002, the two first GPT3.5 models, one for code and the other for text. There are three important abilities they exhibit that differentiate them from the initial GPT-3
 
@@ -141,17 +141,17 @@ Now let’s look at code-davinci-002 and text-davinci-002, the two first GPT3.5 
 与之前的模型相比，两个主要区别是**指令微调**和**代码训练**。具体来说
 
 * 能够**响应人类指令**的能力是**指令微调**的直接产物。
-* **对没有见过的指令做出反馈**的泛化能力是在指令数量超过一定程度之后**自动出现的**，T0、Flan 和 FlanPaLM 论文进一步证明了这一点
-* 使用**思维链**进行**复杂推理**的能力很可能是**代码训练**的**一个神奇的副产物**。对此，我们有以下的事实作为一些支持：
+* <mark style="background-color:red;">**对没有见过的指令做出反馈**</mark><mark style="background-color:red;">的泛化能力是在指令数量超过一定程度之后</mark><mark style="background-color:red;">**自动出现的**</mark><mark style="background-color:red;">，T0、Flan 和 FlanPaLM 论文进一步证明了这一点</mark>
+* <mark style="background-color:red;">使用</mark><mark style="background-color:red;">**思维链**</mark><mark style="background-color:red;">进行</mark><mark style="background-color:red;">**复杂推理**</mark><mark style="background-color:red;">的能力很可能是</mark><mark style="background-color:red;">**代码训练**</mark><mark style="background-color:red;">的</mark><mark style="background-color:red;">**一个神奇的副产物**</mark><mark style="background-color:red;">。对此，我们有以下的事实作为一些支持：</mark>
   * 最初的 GPT-3 没有接受过代码训练，它不能做**思维链**。
   * text-davinci-001 模型，虽然经过了指令微调，但第一版思维链论文报告说，它的它思维链推理的能力非常弱 —— **所以指令微调可能不是思维链存在的原因，代码训练才是模型能做思维链推理的最可能原因。**
   * PaLM 有 5% 的代码训练数据，可以做思维链。
   * Codex论文中的代码数据量为 159G ，大约是初代 GPT-3 5700 亿训练数据的28%。code-davinci-002 及其后续变体可以做思维链推理。
   * 在 HELM 测试中，Liang et al. (2022) 对不同模型进行了大规模评估。 他们发现了针对代码训练的模型具有很强的语言推理能力，包括 120亿参数的code-cushman-001.。
   * 我们在 AI2 的工作也表明，当配备复杂的思维链时，code-davinci-002 在 GSM8K 等重要数学基准上是目前表现最好的模型
-  * 直觉来说，**面向过程的编程 (procedure-oriented programming)** 跟人类**逐步解决任务**的过程很类似，**面向对象编程 (object-oriented programming)** 跟人类**将复杂任务分解为多个简单任务**的过程很类似。
-  * 以上所有观察结果都是代码与推理能力 / 思维链 之间的相关性，但不一定是因果性。这种相关性很有趣，但现在还是一个待研究的开放性问题。目前看来，我们**没有非常确凿的证据证明代码就是思维链和复杂推理的原因**。
-* 此外， **代码训练**另一个可能的副产品是\*\*长距离依赖，\*\*正如Peter Liu所指出：“语言中的下个词语预测通常是非常局部的，而代码通常需要更长的依赖关系来做一些事情，比如前后括号的匹配或引用远处的函数定义”。这里我想进一步补充的是：由于面向对象编程中的类继承，代码也可能有助于模型建立编码层次结构的能力。我们将对这一假设的检验留给未来的工作。
+  * <mark style="background-color:green;">直觉来说，</mark><mark style="background-color:green;">**面向过程的编程 (procedure-oriented programming)**</mark> <mark style="background-color:green;"></mark><mark style="background-color:green;">跟人类</mark><mark style="background-color:green;">**逐步解决任务**</mark><mark style="background-color:green;">的过程很类似，</mark><mark style="background-color:green;">**面向对象编程 (object-oriented programming)**</mark> <mark style="background-color:green;"></mark><mark style="background-color:green;">跟人类</mark><mark style="background-color:green;">**将复杂任务分解为多个简单任务**</mark><mark style="background-color:green;">的过程很类似。</mark>
+  * <mark style="background-color:red;">以上所有观察结果都是代码与推理能力 / 思维链 之间的相关性，但不一定是因果性。这种相关性很有趣，但现在还是一个待研究的开放性问题。目前看来，我们</mark><mark style="background-color:red;">**没有非常确凿的证据证明代码就是思维链和复杂推理的原因**</mark><mark style="background-color:red;">。</mark>
+* 此外， **代码训练**另一个可能的副产品是长距离依赖，正如Peter Liu所指出：“语言中的下个词语预测通常是非常局部的，而代码通常需要更长的依赖关系来做一些事情，比如前后括号的匹配或引用远处的函数定义”。这里我想进一步补充的是：由于面向对象编程中的类继承，代码也可能有助于模型建立编码层次结构的能力。我们将对这一假设的检验留给未来的工作。
 
 
 
@@ -194,7 +194,13 @@ There are certain detailed differences we would like to note:
 
 #### 3.2 **这些能力是在预训练之后已经存在还是在之后通过微调注入？**
 
-在这个阶段，我们已经确定了指令微调和代码训练的关键作用。一个重要的问题是如何进一步分析代码训练和指令微调的影响？具体来说： 上述三种能力是否**已经存在于初代的GPT-3**中，只是**通过指令和代码训练触发 / 解锁**？ 或者这些能力在初代的 GPT-3 中**并不存在**，是通过指令和代码训练**注入？** 如果答案已经在初代的 GPT-3 中，**那么这些能力也应该在 OPT 中。 因此，要复现这些能力，或许可以直接通过指令和代码调整 OPT。** 但是，code-davinci-002 也可能不是基于最初的 GPT-3 davinci，而是基于比初代 GPT-3 更大的模型。如果是这种情况，可能就没办法通过调整 OPT 来复现了。研究社区需要进一步弄清楚 OpenAI 训练了什么样的模型作为 code-davinci-002 的基础模型。
+在这个阶段，我们已经确定了指令微调和代码训练的关键作用。一个重要的问题是如何进一步分析代码训练和指令微调的影响？具体来说：&#x20;
+
+<mark style="background-color:orange;">上述三种能力是否</mark><mark style="background-color:orange;">**已经存在于初代的GPT-3**</mark><mark style="background-color:orange;">中，只是</mark><mark style="background-color:orange;">**通过指令和代码训练触发 / 解锁**</mark><mark style="background-color:orange;">？</mark>&#x20;
+
+或者这些能力在初代的 GPT-3 中**并不存在**，是通过指令和代码训练**注入？**&#x20;
+
+如果答案已经在初代的 GPT-3 中，**那么这些能力也应该在 OPT 中。 因此，要复现这些能力，或许可以直接通过指令和代码调整 OPT。** 但是，code-davinci-002 也可能不是基于最初的 GPT-3 davinci，而是基于比初代 GPT-3 更大的模型。如果是这种情况，可能就没办法通过调整 OPT 来复现了。研究社区需要进一步弄清楚 OpenAI 训练了什么样的模型作为 code-davinci-002 的基础模型。
 
 我们有以下的假设和证据：
 
@@ -205,12 +211,12 @@ There are certain detailed differences we would like to note:
   * 这主要是因为 OpenAI 的论文报告的指令数据量大小只有 77K，比预训练数据少了几个数量级。
   * 其他指令微调论文进一步证明了数据集大小对模型性能的对比，例如 Chung et al. (2022) 的工作中， Flan-PaLM 的指令微调仅为预训练计算的 0.4%。一般来说，指令数据会显著少于预训练数据。
 * 然而 **，模型的复杂推理能力可能是在预训练阶段通过代码数据注入**
-  * 代码数据集的规模与上述指令微调的情况不同。这里的代码数据量足够大，可以占据训练数据的重要部分（例如，PaLM 有 8% 的代码训练数据）
+  * 代码数据集的规模与上述指令微调的情况不同。这里的代码数据量足够大，可以占据训练数据的重要部分（例如，PaLM 有 5% 的代码训练数据）
   * 如上所述，在 code-davinci-002 之前的模型 text-davinci-001 大概没有在代码数据上面微调过，所以它的推理 / 思维链能力是非常差的，正如第一版思维链论文中所报告的那样，有时甚至比参数量更小的 code-cushman-001 还差。
-*   **区分代码训练和指令微调效果的最好方法**可能是**比较 code-cushman-001、T5 和 FlanT5**
+*   <mark style="background-color:red;">**区分代码训练和指令微调效果的最好方法**</mark><mark style="background-color:red;">可能是</mark><mark style="background-color:red;">**比较 code-cushman-001、T5 和 FlanT5**</mark>
 
     * 因为它们具有相似的模型大小（110亿 和 120亿），相似的训练数据集 (C4)，它们最大的区别就是有没有在代码上训练过 / 有没有做过指令微调。
-    * 目前还没有这样的比较。我们把这个留给未来的研究。
+    * <mark style="background-color:red;">目前还没有这样的比较。我们把这个留给未来的研究。</mark>
 
 
 
@@ -238,7 +244,7 @@ We have the following hypothesis and evidence:
 
 ### 四、text-davinci-003 和 ChatGPT，基于人类反馈的强化学习(Reinforcement Learning from Human Feedback, RLHF) 的威力
 
-在当前阶段（2022 年 12 月）， text-davinci-002、text-davinci-003 和 ChatGPT之间**几乎没有严格的统计上的比较** ，主要是因为
+<mark style="background-color:red;">在当前阶段（2022 年 12 月）， text-davinci-002、text-davinci-003 和 ChatGPT之间</mark><mark style="background-color:red;">**几乎没有严格的统计上的比较**</mark> <mark style="background-color:red;"></mark><mark style="background-color:red;">，主要是因为</mark>
 
 * text-davinci-003 和 ChatGPT 在撰写本文时才发布不到一个月。
 * ChatGPT 不能通过 OpenAI API 被调用，所以想要在标准基准上测试它很麻烦。
@@ -262,10 +268,10 @@ So the comparison between these models is more **based on the collective experie
 
 那么让我们看看 RLHF 触发的能力：
 
-* **翔实的回应：** text-davinci-003 的生成通常比 text-davinci-002长。 ChatGPT 的回应则更加冗长，以至于用户必须明确要求“用一句话回答我”，才能得到更加简洁的回答。这是 RLHF 的直接产物。
-* \*\*公正的回应：\*\*ChatGPT 通常对涉及多个实体利益的事件（例如政治事件）给出非常平衡的回答。这也是RLHF的产物。
-* \*\*拒绝不当问题：\*\*这是内容过滤器和由 RLHF 触发的模型自身能力的结合，过滤器过滤掉一部分，然后模型再拒绝一部分。
-* \*\*拒绝其知识范围之外的问题：\*\*例如，拒绝在2021 年 6 月之后发生的新事件（因为它没在这之后的数据上训练过）。这是 RLHF 最神奇的部分，因为它使模型能够隐式地区分哪些问题在其知识范围内，哪些问题不在其知识范围内。
+* **详实的回应：** text-davinci-003 的生成通常比 text-davinci-002长。 ChatGPT 的回应则更加冗长，以至于用户必须明确要求“用一句话回答我”，才能得到更加简洁的回答。这是 RLHF 的直接产物。
+* **公正的回应**：ChatGPT 通常对涉及多个实体利益的事件（例如政治事件）给出非常平衡的回答。这也是RLHF的产物。
+* **拒绝不当问题：**这是内容过滤器和由 RLHF 触发的模型自身能力的结合，过滤器过滤掉一部分，然后模型再拒绝一部分。
+* **拒绝其知识范围之外的问题**：例如，拒绝在2021 年 6 月之后发生的新事件（因为它没在这之后的数据上训练过）。这是 RLHF 最神奇的部分，因为它使模型能够隐式地区分哪些问题在其知识范围内，哪些问题不在其知识范围内。
 
 We first note that the following comparisons between text-davinci-002 v.s. text-davinci-003 v.s. ChatGPT:
 
@@ -285,7 +291,7 @@ So let’s look at the abilities triggered by RLHF:
 有两件事情值得注意：
 
 * 所有的能力都是模型本来就有的， **而不是通过RLHF 注入的**。 RLHF 的作用是**触发 / 解锁突现能力**。这个论点主要来自于数据量大小的比较：因为与预训练的数据量相比，RLHF 占用的计算量 / 数据量要少得多。
-* 模型**知道它不知道什么不是通过编写规则来实现的，** 而是通过RLHF解锁的。这是一个非常令人惊讶的发现，因为 RLHF 的最初目标是让模型生成符合人类期望的回答，这更多是让模型生成安全的句子，而不是让模型知道它不知道的内容。
+* 模型[**知道它不知道什么不是通过编写规则来实现的**](#user-content-fn-3)[^3]**，** 而是通过RLHF解锁的。这是一个非常令人惊讶的发现，因为 RLHF 的最初目标是让模型生成符合人类期望的回答，这更多是让模型生成安全的句子，而不是让模型知道它不知道的内容。
 
 幕后发生的事情可能是：
 
@@ -324,7 +330,7 @@ What happens behind the scene might be:
 * 存储大量知识的能力来自 1750 亿的参数量。
 * 遵循指令和泛化到新任务的能力来自于扩大指令学习中指令的数量（`Davinci-instruct-beta`)
 * 执行复杂推理的能力很可能来自于代码训练（`code-davinci-002`）
-* 生成中立、客观的能力、安全和翔实的答案来自与人类的对齐。具体来说：
+* <mark style="background-color:green;">生成中立、客观的能力、安全和翔实的答案来自与人类的对齐。具体来说：</mark>
   * 如果是监督学习版，得到的模型是`text-davinci-002`
   * 如果是强化学习版 (RLHF) ，得到的模型是`text-davinci-003`
   * 无论是有监督还是 RLHF ，模型在很多任务的性能都无法超过 code-davinci-002 ，这种因为对齐而造成性能衰退的现象叫做对齐税。
@@ -444,13 +450,15 @@ We hope this article can help provide a clear picture of the evaluation of GPT, 
 | Scaling Laws                                      | 缩放法则        | 模型的效果的线性增长要求模型的大小指数增长                  |
 | Alignment                                         | 与人类对齐       | 让机器生成符合人类期望的，符合人类价值观的句子                |
 
-[^1]: 补充最近的一些研究：&#x20;
+[^1]: * &#x20;[https://thegradient.pub/in-context-learn](https://thegradient.pub/in-context-learning-in-context/)
 
+    <!---->
 
-
-    * &#x20;[https://thegradient.pub/in-context-learn](https://thegradient.pub/in-context-learning-in-context/)
     * [Min et. al. 2022. Rethinking the Role of Demonstrations: What Makes In-Context Learning Work?](https://arxiv.org/abs/2202.12837)
     * [An Explanation of In-context Learning as Implicit Bayesian Inference](https://arxiv.org/abs/2111.02080)
+
+    <!---->
+
     *
 
     <img src="https://s3-us-west-2.amazonaws.com/secure.notion-static.com/b9f99cde-06ab-473c-b67d-f08447a7f3ce/Untitled.png" alt="Untitled" data-size="original">
@@ -465,3 +473,10 @@ We hope this article can help provide a clear picture of the evaluation of GPT, 
 
 
 
+
+
+[^2]: ?
+
+
+
+[^3]: GPT4的解释：对于一个系统（如人工智能或个体），要意识到自己所不知道的信息或知识，并非通过制定一系列规则来达到这一目标。换句话说，通过规则编写可能无法使一个系统完全了解自己的知识边界和不足之处。实现这一目标可能需要更为复杂的方法，如动态学习和自我调整。
