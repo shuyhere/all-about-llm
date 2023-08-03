@@ -58,8 +58,8 @@ We hope this post can promote the transparency of large language models and serv
 
 * **语言生成**的能力来自于语言建模的**训练目标** (language modeling)。
 * **世界知识**来自 3000 亿单词的**训练语料库**（不然还能是哪儿呢）。
-* **模型的 1750 亿参数**是为了**存储知识**，Liang et al. (2022) 的文章进一步证明了这一点。 他们的结论是，知识密集型任务的性能与模型大小息息相关。
-* 上下文学习的能力来源及为什么上下文学习可以泛化，\*\*仍然难以溯源。\*\*直觉上，这种能力可能来自于同一个任务的数据点在训练时按顺序排列在同一个 batch 中。然而，很少有人研究为什么语言模型预训练会促使上下文学习，以及为什么上下文学习的行为与微调 (fine-tuning) 如此不同。
+* **模型的 1750 亿参数**是为了**存储知识**，Liang et al. (2022) 的文章进一步证明了这一点。 他们的结论是，[知识密集型任务的性能与模型大小息息相关](https://crfm.stanford.edu/helm/v0.2.2/?group=knowledge)。
+* 上下文学习的能力来源及为什么上下文学习可以泛化**仍然难以溯源** 直觉上，<mark style="background-color:yellow;">这种能力可能来自于同一个任务的数据点在训练时按顺序排列在同一个 batch 中</mark>。然而，[<mark style="background-color:red;">很少有人研究为什么语言模型预训练会促使上下文学习，以及为什么上下文学习的行为与微调 (fine-tuning) 如此不同。</mark>](#user-content-fn-1)[^1]
 
 There are three important abilities that the initial GPT-3 exhibit:
 
@@ -443,3 +443,25 @@ We hope this article can help provide a clear picture of the evaluation of GPT, 
 | Chain-of-Thought                                  | 思维链         | 在写 prompt 的时候，不仅给出结果，还要一步一步地写结果是怎么推出来的 |
 | Scaling Laws                                      | 缩放法则        | 模型的效果的线性增长要求模型的大小指数增长                  |
 | Alignment                                         | 与人类对齐       | 让机器生成符合人类期望的，符合人类价值观的句子                |
+
+[^1]: 补充最近的一些研究：&#x20;
+
+
+
+    * &#x20;[https://thegradient.pub/in-context-learn](https://thegradient.pub/in-context-learning-in-context/)
+    * [Min et. al. 2022. Rethinking the Role of Demonstrations: What Makes In-Context Learning Work?](https://arxiv.org/abs/2202.12837)
+    * [An Explanation of In-context Learning as Implicit Bayesian Inference](https://arxiv.org/abs/2111.02080)
+    *
+
+    <img src="https://s3-us-west-2.amazonaws.com/secure.notion-static.com/b9f99cde-06ab-473c-b67d-f08447a7f3ce/Untitled.png" alt="Untitled" data-size="original">
+
+
+
+
+
+
+
+
+
+
+
