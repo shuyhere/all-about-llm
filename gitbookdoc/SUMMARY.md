@@ -17,6 +17,8 @@
 * [🔥 openLLM](tototolearn/openllm/README.md)
   * [🦅 Aquila 悟道天鹰系列](tototolearn/openllm/aquila-wu-dao-tian-ying-xi-lie.md)
   * [🌊 百川大模型](tototolearn/openllm/bai-chuan-da-mo-xing.md)
+* [👾 MLLM](tototolearn/mllm/README.md)
+  * [🐐 LLaVA: Large Language and Vision Assistant](tototolearn/mllm/llava-large-language-and-vision-assistant.md)
 * [📃 Surveys](tototolearn/surveys.md)
 * [🙇♀ POSTS](tototolearn/posts/README.md)
   * [🔆 拆解追溯 GPT-3.5 各项能力的起源](tototolearn/posts/chai-jie-zhui-su-gpt3.5-ge-xiang-neng-li-de-qi-yuan.md)
